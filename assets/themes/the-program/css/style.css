@@ -368,9 +368,6 @@ No styleguide reference.
   float: left;
   margin-right: 14px;
 }
-.media .img img {
-  display: block;
-}
 .media .media-right {
   float: right;
   margin-left: 14px;
@@ -451,8 +448,7 @@ h4,
 p,
 ul,
 ol,
-dl,
-img {
+dl {
   margin-top: 0;
   margin-bottom: 1.625em;
 }
@@ -724,11 +720,6 @@ pre {
   padding: 2px 5px;
   white-space: nowrap;
   background-color: #fff04a;
-}
-.unit-article img {
-  display: block;
-  margin-left: auto;
-  margin-left: auto;
 }
 .unit-article img.left {
   margin-right: 16px;
