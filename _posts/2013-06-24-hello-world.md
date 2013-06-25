@@ -23,3 +23,12 @@ Hello World!
 	}
 
 Testing codes.
+
+{% highlight cpp %}
+#include <stdio.h>
+
+int main(void)
+{
+	return 0;
+}
+{% endhighlight %}
