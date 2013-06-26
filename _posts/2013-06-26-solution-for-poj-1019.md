@@ -22,13 +22,13 @@ If we want to know what digit is on specified position, we need to locate the ![
 
 ![|S_{S_k}|=\sum_{1 \leq l \leq k}{|S_l|}](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|=\sum_{1%20\leq%20l%20\leq%20k}{|S_l|})
 
-We can firstly calculate some of ![|S_k|](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|), and then the ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) until the maximum value less than [**INT_MAX**](http://msdn.microsoft.com/en-us/library/296az74e(v=vs.110).aspx). We can use this predication to examine the overflow of add operator: <code>sum + k < sum</code>. As the arrays containing ![|S_k|](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|) and ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) are naturally sorted, we can use binary search to improve the performance. Finally, we just need to know the digit in specified position of a number *k*. It's a easy job and can be approached by converting *k* into string and seek its specified position.
+We can firstly calculate some of ![|S_k|](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|), and then the ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) until the maximum value less than [**INT_MAX**](http://msdn.microsoft.com/en-us/library/296az74e%28v=vs.110%29.aspx). We can use this predication to examine the overflow of add operator: `sum + k < sum`. As the arrays containing ![|S_k|](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|) and ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) are naturally sorted, we can use binary search to improve the performance. Finally, we just need to know the digit in specified position of a number *k*. It's a easy job and can be approached by converting *k* into string and seek its specified position.
 
 ## Solution
 
 After some experiences, I know only first 31267 of ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) need to be calculated.
 
-{% highligh cpp %}
+{% highlight cpp %}
 #include <algorithm>
 #include <iostream>
 #include <iterator>
