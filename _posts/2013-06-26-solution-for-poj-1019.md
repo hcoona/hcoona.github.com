@@ -12,13 +12,13 @@ The problem is on [here](http://poj.org/problem?id=1019).
 
 ## Analysis
 
-![S_k=\bar{123\dots%20k}](http://chart.apis.google.com/chart?cht=tx&chl=S_k=\bar{123\dots%20k})
+![S_k=\bar{123\dots k}](http://chart.apis.google.com/chart?cht=tx&chl=S_k=\bar{123\dots%20k})
 
-![S_{S_k}=\bar{S_1S_2\dots%20S_k}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_k}=\bar{S_1S_2\dots%20S_k})
+![S_{S_k}=\bar{S_1S_2\dots S_k}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_k}=\bar{S_1S_2\dots%20S_k})
 
 If we want to know what digit is on specified position, we need to locate the ![S_{S_n}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_n}) which contains what we want, and further need to locate the ![S_m](http://chart.apis.google.com/chart?cht=tx&chl=S_m) in ![S_{S_n}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_n}) which contains what we want, and finally the *k* in ![S_m](http://chart.apis.google.com/chart?cht=tx&chl=S_m). As a result, we need the length of ![S_{S_k}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_k}) and the length of ![S_k](http://chart.apis.google.com/chart?cht=tx&chl=S_k).
 
-![|S_k|=\sum_{1 \leq l \leq k}{l \times \text{Counts of number with $l$ digits}}](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|=\sum_{1\leq%20l\leq%20k}{l\times\text{Counts%20of%20number%20with%20$l$%20digits}})
+![|S_k|=\sum_{1 \leq l \leq k}{l \times \text{Counts of number with %24l%24 digits}}](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|=\sum_{1\leq%20l\leq%20k}{l\times\text{Counts%20of%20number%20with%20$l$%20digits}})
 
 ![|S_{S_k}|=\sum_{1 \leq l \leq k}{|S_l|}](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|=\sum_{1%20\leq%20l%20\leq%20k}{|S_l|})
 
