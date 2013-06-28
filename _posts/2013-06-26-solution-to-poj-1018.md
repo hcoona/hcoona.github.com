@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Solution for POJ 1018"
+title: "Solution to POJ 1018"
 description: ""
 category: ACM
 tags: [ACM, POJ]
