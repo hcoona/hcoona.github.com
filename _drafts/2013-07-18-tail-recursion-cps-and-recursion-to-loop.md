@@ -134,16 +134,49 @@ let factorial_cps n =
 
 CPS的好处就是，能够将原本不是尾递归的普通递归调用转化为尾递归形式。至此，如何将一般递归转化为循环的方法，就比较明朗了。
 
-接下来，我们来看一个比较复杂的例子：Fibonacci。（这里不考虑使用[动态规划 (Dynamic Programming)](http://en.wikipedia.org/wiki/Dynamic_Programming)对其进行优化的情况）
+接下来，我们来看一个比较复杂的例子[^lambda]：Fibonacci。（这里不考虑使用[动态规划 (Dynamic Programming)](http://en.wikipedia.org/wiki/Dynamic_Programming)对其进行优化的情况）
 
 {% highlight fsharp %}
 let fibonacci_cps n =
     let rec fibonacci_aux n cont =
         match n with
         | 1 | 2 -> cont 1
-        | _ -> fibonacci_aux (n - 1) (fun acc1 acc2 -> 
+        | _ -> fibonacci_aux
+                    (n - 1)
+                    (fun acc1 -> fibonacci_aux
+                                    (n - 2)
+                                    (fun acc2 -> cont (acc1 + acc2)))
+    in
+    match n with
+    | _ when n <= 0 -> 0
+    | 1 | 2 -> 1
+    | _ -> fibonacci_aux n (fun x -> x)
+;;
 {% endhighlight %}
+
+回顾一下我们之前写的`fibonacci`函数，我们容易发现，唯一的不同之处就在于，我们使用`fibonacci_aux`函数来完成以前`fibonacci`函数的主要功能（递归）。而`fibonacci_aux`函数与原来的`fibonacci`函数的不同之处，除了没有处理`n <= 0`的情况以外，主要在于使用匿名函数将完成当前语句之后要做的事情作为参数进行传递。这样一来，通过将递归调用之后所做的操作通过参数进行传递，在执行完了所有的递归步骤之后，再进行计算，使得我们将一个复杂的普通递归调用转换成为了尾递归调用。
+
+对于这点不明白的听众，不妨手工展开`n = 4`的情况。
+
+    以下将fibonacci_aux简写为f
+       f 4 (fun x -> x)
+    => f 3 (fun x -> f 2 (fun y -> (fun xx -> xx) (x + y)))
+    => f 3 (fun x -> f 2 (fun y -> x + y))
+    => f 3 (fun x -> (fun y -> x + y) 1)
+    => f 3 (fun x -> x + 1)
+    => f 2 (fun x -> f 1 (fun y -> (fun xx -> xx + 1) (x + y)))
+    => f 2 (fun x -> (fun y -> (fun xx -> xx + 1) (x + y)) 1)
+    => f 2 (fun x -> (fun xx -> xx + 1) (x + 1))
+    => (fun x -> (fun xx -> xx + 1) (x + 1)) 1
+    => (fun xx -> xx + 1) 2
+    => 3
 
 ## 递归转为循环
 
-[^tail-recursion-optimization]: Tail call elimination allows procedure calls in tail position to be implemented as efficiently as goto statements, thus allowing efficient structured programming. In the words of Guy L. Steele "in general procedure calls may be usefully thought of as GOTO statements which also pass parameters, and can be uniformly coded as \[machine code\] JUMP instructions". [See wikipedia](http://en.wikipedia.org/wiki/Tail_call#History)
+到这里，我们至少知道了在函数式编程语言中，如何将一个一般递归调用转换为尾递归调用。下面，我们讨论在C++和C语言中，应该怎么做。
+
+对于C++11而言，由于引入了Lambda[^C++11-lambda]，使得做这件事的难度和函数式编程语言差不多。
+
+[^tail-recursion-optimization]: Tail call elimination allows procedure calls in tail position to be implemented as efficiently as goto statements, thus allowing efficient structured programming. In the words of Guy L. Steele "in general procedure calls may be usefully thought of as GOTO statements which also pass parameters, and can be uniformly coded as \[machine code\] JUMP instructions". [See wikipedia](http://en.wikipedia.org/wiki/Tail_call#History).
+[^lambda]: F#使用`fun`关键字来创建一个匿名函数。[See MSDN](http://msdn.microsoft.com/en-us/library/dd233201.aspx).
+[^C++11-lambda]: [See C++11 FAQ](http://www.stroustrup.com/C++11FAQ.html#lambda).
