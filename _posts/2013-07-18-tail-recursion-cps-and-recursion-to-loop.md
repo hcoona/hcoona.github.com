@@ -175,6 +175,8 @@ let fibonacci_cps n =
 
 到这里，我们至少知道了在函数式编程语言中，如何将一个一般递归调用转换为尾递归调用。下面，我们讨论在C++和C语言中，应该怎么做。
 
+### C++中的尝试
+
 对于C++11而言，由于引入了Lambda[^C++11-lambda]，使得理论上做这件事的难度和函数式编程语言差不多。
 
 {% highlight cpp %}
@@ -199,6 +201,224 @@ int fibonacci(int n)
 {% endhighlight %}
 
 但是实际上，这段代码无论是使用最新版本的Visual Studio[^latest-vs]或者是最新版本的G++[^latest-g++]都无法编译（表现为长时间无响应，占用内存疯狂增长）。但是这并不是编译器的Bug，而是因为这段递归程序在编译时期转换成仿函数(Functor)时会产生一个无穷递归，感兴趣的听众手工模拟一下编译器的工作就能发现这一点。况且实际上最好的情况下，也会有两个fibonacci_aux函数产生（因为有两个不同的lambda作为参数cont），使得生成的代码实际上不是尾递归调用（而是间接尾递归调用）。
+
+编译器不够聪明，没办法处理好这件事，不过我们可以手工来处理这种情况。使用继承和多态的特性，我们可以统一`cont`的类型。
+
+{% highlight cpp %}
+#include <memory>
+
+using namespace std;
+
+class ContF {
+protected:
+    virtual int Imp(int x) const = 0;
+public:
+    int operator()(int x) const { return Imp(x); }
+};
+
+static int f(int n, shared_ptr<ContF> cont);
+
+class ContIdentityF : public ContF {
+protected:
+    virtual int Imp(int x) const override { return x; }
+};
+
+class ContInnerF : public ContF {
+private:
+    int x;
+    shared_ptr<ContF> cont;
+protected:
+    virtual int Imp(int y) const override {
+        return cont(x + y);
+    }
+public:
+    ContInnerF(int x, shared_ptr<ContF> cont) : x(x), cont(cont) { }
+};
+
+class ContOuterF : public ContF {
+private:
+    int n;
+    shared_ptr<ContF> cont;
+protected:
+    virtual int Imp(int x) const override {
+        return f(n - 1, make_shared<ContInnerF>(x, cont));
+    }
+public:
+    ContOuterF(int n, shared_ptr<ContF> cont) : n(n), cont(cont) { }
+};
+
+static int f(int n, shared_ptr<ContF> cont) {
+    if (n == 1 || n == 2) {
+        return cont(1);
+    } else {
+        return f(n - 1, make_shared<ContOuterF>(n, cont));
+    }
+}
+
+int fibonacci(int n) {
+    if (n <= 0) {
+        return 0;
+    } else {
+        return f(n, make_shared<ContIdentityF>());
+    }
+}
+{% endhighlight %}
+
+但是即便是这样，由于我们在仿函数中调用了函数`f`，编译器仍然不会“智能的”帮我们优化这一间接尾递归调用。因此我们还需要更进一步的调整，将仿函数中的函数和数据分开，为进一步整合函数创造条件。
+
+{% highlight cpp %}
+#include <memory>
+
+using namespace std;
+
+enum class ContDataType { Identity, Outer, Inner };
+
+struct ContData {
+    const ContDataType type;
+    const int x;
+    const shared_ptr<ContData> p;
+
+    ContData(ContDataType type, int x, shared_ptr<ContData> p)
+        : type(type), x(x), p(p)
+    {
+        _ASSERT(type == ContDataType::Outer
+             || type == ContDataType::Inner);
+    }
+    ContData()
+        : type(ContDataType::Identity), x(0), p(nullptr)
+    { }
+};
+
+static int f(int n, shared_ptr<ContData> data);
+
+static int f_cont(int x, shared_ptr<ContData> data) {
+    switch (data->type)
+    {
+    case ContDataType::Identity:
+        return x;
+    case ContDataType::Outer:
+        return f(
+            data->x - 2,
+            make_shared<ContData>(ContDataType::Inner, x, data->p));
+    case ContDataType::Inner:
+        return f_cont(data->x + x, data->p);
+    }
+}
+
+static int f(int n, shared_ptr<ContData> cont) {
+    if (n == 1 || n == 2) {
+        return f_cont(1, cont);
+    } else {
+        return f(
+            n - 1,
+            make_shared<ContData>(ContDataType::Outer, n, cont));
+    }
+}
+
+int fib(int n) {
+    if (n <= 0) {
+        return 0;
+    } else {
+        return f(n, make_shared<ContData>());
+    }
+}
+{% endhighlight %}
+
+接下来，我们将函数`f`和函数`f_cont`手工合并，并且进行尾递归优化。
+
+{% highlight cpp %}
+static int f(int n, shared_ptr<ContData> cont) {
+F_START:
+    if (n == 1 || n == 2) {
+        n = 1;
+        goto CONT_START;
+    } else {
+        cont = make_shared<ContData>(ContDataType::Outer, n, cont);
+        n--;
+        goto F_START;
+    }
+
+CONT_START:
+    switch (cont->type)
+    {
+    case ContDataType::Identity:
+        return n;
+    case ContDataType::Outer: {
+            int nn = n;
+            n = cont->x - 2;
+            cont = make_shared<ContData>(ContDataType::Inner, nn, cont->p);
+            goto F_START;
+        }
+    case ContDataType::Inner:
+        n = cont->x + n;
+        cont = cont->p;
+        goto CONT_START;
+    }
+}
+{% endhighlight %}
+
+至此，我们完成了C++版本的一般递归调用函数转换为尾递归调用函数的过程。
+
+### C语言实现
+
+C语言甚至还要更困难一些，因为C语言没有`shared_ptr`这样的东西，也没有带有构造函数的`struct`。不过这都不是什么大问题了，下面给出一个C语言的实现。
+
+{% highlight cpp %}
+enum { Identity, Outer, Inner };
+
+struct ContData {
+    int type;
+    int x;
+    int pIdx;
+};
+
+static const int STACK_SIZE = 10000;
+
+static int f(int n, ContData stack[], int stackTop) {
+F_START:
+    if (n == 1 || n == 2) {
+        n = 1;
+        goto CONT_START;
+    } else {
+        stackTop++;
+        stack[stackTop].type = Outer;
+        stack[stackTop].x = n;
+        stack[stackTop].pIdx = stackTop - 1;
+        n--;
+        goto F_START;
+    }
+
+CONT_START:
+    switch (stack[stackTop].type)
+    {
+    case Identity:
+        return n;
+    case Outer: {
+            int nn = n;
+            n = stack[stackTop].x - 2;
+            stackTop++;
+            stack[stackTop].type = Inner;
+            stack[stackTop].x = nn;
+            stack[stackTop].pIdx = stack[stackTop - 1].pIdx;
+            goto F_START;
+        }
+    case Inner:
+        n = stack[stackTop].x + n;
+        stackTop = stack[stackTop].pIdx;
+        goto CONT_START;
+    }
+}
+
+int fib(int n) {
+    if (n <= 0) {
+        return 0;
+    } else {
+        ContData stack[STACK_SIZE];
+        stack[0].type = Identity;
+        return f(n, stack, 0);
+    }
+}
+{% endhighlight %}
 
 [^tail-recursion-optimization]: Tail call elimination allows procedure calls in tail position to be implemented as efficiently as goto statements, thus allowing efficient structured programming. In the words of Guy L. Steele "in general procedure calls may be usefully thought of as GOTO statements which also pass parameters, and can be uniformly coded as \[machine code\] JUMP instructions". [See wikipedia](http://en.wikipedia.org/wiki/Tail_call#History).
 [^lambda]: F#使用`fun`关键字来创建一个匿名函数。[See MSDN](http://msdn.microsoft.com/en-us/library/dd233201.aspx).
