@@ -453,6 +453,8 @@ dl {
   margin-bottom: 1.625em;
 }
 li p { margin-bottom: 0; }
+li li { margin-left: 2em; }
+li li li { margin-left: 4em; }
 small,
 .small,
 aside {
@@ -677,8 +679,17 @@ pre {
 .unit-article ul {
   list-style: square;
 }
+.unit-article li ul {
+  list-style: circle;
+}
 .unit-article ol {
   list-style: decimal;
+}
+.unit-article li ol {
+  list-style: upper-alpha;
+}
+.unit-article li li ol {
+  list-style: lower-greek;
 }
 .unit-article li h1,
 .unit-article dt h1,
