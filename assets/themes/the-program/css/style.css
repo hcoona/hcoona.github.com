@@ -398,7 +398,7 @@ Calculation should be done via  http://j.mp/rNg5uA
 No styleguide reference.
 */
 body {
-  font-family: consolas, monaco, monospace;
+  font-family: Inconsolata, consolas, monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
   font-size: 1em;
   line-height: 1.625em;
 }
@@ -415,7 +415,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: UbuntuMono-B, consolas, monaco, monospace;
+  font-family: UbuntuMono-B, Inconsolata, consolas, monaco, 'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New', monospace;
 }
 h1,
 .h1 {
@@ -576,7 +576,7 @@ pre {
   color: #f2f2f2;
   background-color: #393939;
   border: 1px solid #393939;
-  font-family: consolas, monaco, monospace;
+  font-family: Inconsolata, consolas, monaco, 'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New', monospace;
   margin-left: 0;
   margin-right: 0;
   padding: 1.625em;
@@ -589,7 +589,7 @@ pre {
 /* HEADER
 --------------------------------------------------------------------------------- */
 .the-header .logo {
-  font-family: UbuntuMono-B, consolas, monaco, monospace;
+  font-family: UbuntuMono-B, Inconsolata, consolas, monaco, 'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New', monospace;
   margin: 0;
 }
 .the-header .logo a:visited {
