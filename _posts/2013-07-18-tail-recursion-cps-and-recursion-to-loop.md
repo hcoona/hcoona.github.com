@@ -229,7 +229,7 @@ private:
     shared_ptr<ContF> cont;
 protected:
     virtual int Imp(int y) const override {
-        return cont(x + y);
+        return cont->operator() (x + y);
     }
 public:
     ContInnerF(int x, shared_ptr<ContF> cont) : x(x), cont(cont) { }
@@ -241,7 +241,7 @@ private:
     shared_ptr<ContF> cont;
 protected:
     virtual int Imp(int x) const override {
-        return f(n - 1, make_shared<ContInnerF>(x, cont));
+        return f(n - 2, make_shared<ContInnerF>(x, cont));
     }
 public:
     ContOuterF(int n, shared_ptr<ContF> cont) : n(n), cont(cont) { }
@@ -249,7 +249,7 @@ public:
 
 static int f(int n, shared_ptr<ContF> cont) {
     if (n == 1 || n == 2) {
-        return cont(1);
+        return cont->operator() (1);
     } else {
         return f(n - 1, make_shared<ContOuterF>(n, cont));
     }
