@@ -311,3 +311,17 @@ btree<T> *Check(btree<T> *tree)
     return invalidNode;
 }
 {% endhighlight %}
+
+之前的`ToInOrder`方法也可以写成这样：
+
+{% highlight cpp %}
+template<typename T>
+std::vector<T> ToInOrder(const btree<T> *tree)
+{
+    std::vector<T> container;
+    InOrderVisit(tree, [&container](const btree<T> *node) {
+        container.push_back(node->data);
+    });
+    return container;
+}
+{$ endhighlight %}
