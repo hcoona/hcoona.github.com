@@ -38,8 +38,8 @@ type 'a btree =
 对于这样的数据结构，我们只需要考虑两种情况：
 
 <ol>
-<li>当前节点为`Nil`。</li>
-<li>当前节点为`Node`。</li>
+<li>当前节点为<code>Nil</code>。</li>
+<li>当前节点为<code>Node</code>。</li>
 </ol>
 
 对应的中序遍历程序如下：
