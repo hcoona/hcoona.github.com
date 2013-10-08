@@ -324,4 +324,4 @@ std::vector<T> ToInOrder(const btree<T> *tree)
     });
     return container;
 }
-{$ endhighlight %}
+{% endhighlight %}
