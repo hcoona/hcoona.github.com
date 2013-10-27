@@ -3,7 +3,7 @@ layout: post
 title: "重载和覆盖的区别"
 description: ""
 category: interview
-tags: [interview]
+tags: [Interview]
 excerpt: 重载和覆盖是笔试和面试中经常考的两个概念。这两个概念从概念本身到实现机理都不相同，但是表现形式却有相似之处。本文从实现机理入手，深入讲解两者的不同之处。
 ---
 {% include JB/setup %}
