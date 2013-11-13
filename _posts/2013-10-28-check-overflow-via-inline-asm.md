@@ -59,4 +59,9 @@ bool TryParseInt(const char *str, int *pn)
 PARSE_INT_FAILD:
     return false;
 }
+
+## 失效情况
+
+有时候编译器会使用LEA指令进行计算上的优化，由于LEA指令不会设置任何标志位，因此不能够使用JO来检测到运算溢出。
+
 {% endhighlight %}
