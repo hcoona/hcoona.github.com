@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: "从一道面试题看不同编程语言的表述能力"
 description: ""
