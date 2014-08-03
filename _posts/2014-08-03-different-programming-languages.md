@@ -18,7 +18,7 @@ excerpt: 很多人都不明白，不同的编程语言具有不同的表述能�
 
 首先先看看 C 语言的常规实现：
 
-```c
+{% highlight cpp %}
 for (int i = 1; i <= 100; i++) {
     if (i % 3 == 0) {
         if (i % 5 == 0) {
@@ -34,13 +34,13 @@ for (int i = 1; i <= 100; i++) {
         }
     }
 }
-```
+{% endhighlight %}
 
 省略了 `main` 函数等关系不是很大的部分。我选择逻辑最清晰的两层 `if-else` 的方式，比起其他“聪明”的方法，可读性最高，逻辑最清晰，最省计算量，同时也最容易添加、修改程序逻辑。
 
 我们再来看看 Scheme 的实现：
 
-```scheme
+{% highlight scheme %}
 #lang racket
 (require math/number-theory)
 (require racket/match)
@@ -55,7 +55,7 @@ for (int i = 1; i <= 100; i++) {
       ['(#t . #f) (printf "~A*" x)]
       ['(#f . #t) (printf "~A#" x)]
       [else (void)])))
-```
+{% endhighlight %}
 
 经过对比我们发现，Scheme 语言由于具备（由库提供）模式匹配功能，从而使得程序的逻辑较 C 语言清晰不止一筹。仔细的总结一下 Scheme 实现的优点：
 
