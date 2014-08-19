@@ -9,6 +9,6 @@ excerpt: 现在一谈到补码，很多人都会立刻说补码就是反码加�
 {% include JB/setup %}
 
 <script type="text/javascript">
-	window.location = "/assets/pdfjs/web/viewer.html?file=/assets/pdfjs/Twos Complement.pdf"
+	window.location = "/assets/pdfjs/web/viewer.html?file=/assets/pdfjs/Twos Complement.pdf";
 </script>
 
