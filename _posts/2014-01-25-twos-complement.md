@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Twos Complement"
+title: "谈补码"
 description: ""
 category: tips
 tags: [Tips,Computer System]
@@ -8,5 +8,7 @@ excerpt: 现在一谈到补码，很多人都会立刻说补码就是反码加�
 ---
 {% include JB/setup %}
 
-<iframe src="/assets/pdfjs/web/viewer.html?file=/assets/pdfjs/Twos Complement.pdf" width="100%" height="100%"></iframe>
+<script type="text/javascript">
+	window.location = "/assets/pdfjs/web/viewer.html?file=/assets/pdfjs/Twos Complement.pdf"
+</script>
 
