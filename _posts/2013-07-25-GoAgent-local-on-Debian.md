@@ -23,6 +23,7 @@ excerpt: 本文介绍如何在Debian平台上部署GoAgent客户端
 1. 设定代理服务器为自动地址：http://127.0.0.1:8086/proxy.pac。
 
 如果想要在Gnome3环境下开机自动启动代理程序：
+
 1. 修改proxy.ini文件，将visible=1改为0。
 1. 按Alt+F2输入gnome-session-properties并回车。
 1. 添加项proxy /opt/GoAgentLocal/proxy.py。
