@@ -51,8 +51,7 @@ alt="|S_{S_k}|" src="http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|" />
 
 ## Solution
 
-After some experiences, I know only first 31267 of <img alt="|S_{S_k}|"
-src="http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|" /> need to be calculated.
+After some experiences, I know only first 31267 of <img alt="|S_{S_k}|" src="http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|" /> need to be calculated.
 
 {% highlight cpp %}
 #include <algorithm>
