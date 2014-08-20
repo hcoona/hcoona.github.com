@@ -177,7 +177,7 @@ let fibonacci_cps n =
 
 ### C++中的尝试
 
-对于C++11而言，由于引入了Lambda[^C++11-lambda]，使得理论上做这件事的难度和函数式编程语言差不多。
+对于C++11而言，由于引入了Lambda[^CXX11-lambda]，使得理论上做这件事的难度和函数式编程语言差不多。
 
 {% highlight cpp %}
 template<typename _FContTy>
@@ -200,7 +200,8 @@ int fibonacci(int n)
 }
 {% endhighlight %}
 
-但是实际上，这段代码无论是使用最新版本的Visual Studio[^latest-vs]或者是最新版本的G++[^latest-g++]都无法编译（表现为长时间无响应，占用内存疯狂增长）。但是这并不是编译器的Bug，而是因为这段递归程序在编译时期转换成仿函数(Functor)时会产生一个无穷递归，感兴趣的听众手工模拟一下编译器的工作就能发现这一点。况且实际上最好的情况下，也会有两个fibonacci_aux函数产生（因为有两个不同的lambda作为参数cont），使得生成的代码实际上不是尾递归调用（而是间接尾递归调用）。
+但是实际上，这段代码无论是使用最新版本的Visual
+Studio[^latest-vs]或者是最新版本的G++[^latest-gxx]都无法编译（表现为长时间无响应，占用内存疯狂增长）。但是这并不是编译器的Bug，而是因为这段递归程序在编译时期转换成仿函数(Functor)时会产生一个无穷递归，感兴趣的听众手工模拟一下编译器的工作就能发现这一点。况且实际上最好的情况下，也会有两个fibonacci_aux函数产生（因为有两个不同的lambda作为参数cont），使得生成的代码实际上不是尾递归调用（而是间接尾递归调用）。
 
 编译器不够聪明，没办法处理好这件事，不过我们可以手工来处理这种情况。使用继承和多态的特性，我们可以统一`cont`的类型。
 
@@ -422,6 +423,6 @@ int fib(int n) {
 
 [^tail-recursion-optimization]: Tail call elimination allows procedure calls in tail position to be implemented as efficiently as goto statements, thus allowing efficient structured programming. In the words of Guy L. Steele "in general procedure calls may be usefully thought of as GOTO statements which also pass parameters, and can be uniformly coded as \[machine code\] JUMP instructions". [See wikipedia](http://en.wikipedia.org/wiki/Tail_call#History).
 [^lambda]: F#使用`fun`关键字来创建一个匿名函数。[See MSDN](http://msdn.microsoft.com/en-us/library/dd233201.aspx).
-[^C++11-lambda]: [See C++11 FAQ](http://www.stroustrup.com/C++11FAQ.html#lambda).
+[^CXX11-lambda]: [See C++11 FAQ](http://www.stroustrup.com/C++11FAQ.html#lambda).
 [^latest-vs]: Visual Studio 2012 update 3. CL版本17.00.60610.1.
-[^latest-g++]: g++ 4:4.7.2-1 in Debian jessie.
+[^latest-gxx]: g++ 4:4.7.2-1 in Debian jessie.
