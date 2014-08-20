@@ -12,21 +12,47 @@ The problem is on [here](http://poj.org/problem?id=1019).
 
 ## Analysis
 
-![S_k=\bar{123\dots k}](http://chart.apis.google.com/chart?cht=tx&chl=S_k=\bar{123\dots%20k})
+<img alt="S_k=\bar{123\dots k}"
+src="http://chart.apis.google.com/chart?cht=tx&chl=S_k=\bar{123\dots%20k}" />
 
-![S_{S_k}=\bar{S_1S_2\dots S_k}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_k}=\bar{S_1S_2\dots%20S_k})
+<img alt="S_{S_k}=\bar{S_1S_2\dots S_k}"
+src="http://chart.apis.google.com/chart?cht=tx&chl=S_{S_k}=\bar{S_1S_2\dots%20S_k}"
+/>
 
-If we want to know what digit is on specified position, we need to locate the ![S_{S_n}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_n}) which contains what we want, and further need to locate the ![S_m](http://chart.apis.google.com/chart?cht=tx&chl=S_m) in ![S_{S_n}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_n}) which contains what we want, and finally the *k* in ![S_m](http://chart.apis.google.com/chart?cht=tx&chl=S_m). As a result, we need the length of ![S_{S_k}](http://chart.apis.google.com/chart?cht=tx&chl=S_{S_k}) and the length of ![S_k](http://chart.apis.google.com/chart?cht=tx&chl=S_k).
+If we want to know what digit is on specified position, we need to locate the
+<img alt="S_{S_n}" src="http://chart.apis.google.com/chart?cht=tx&chl=S_{S_n}"
+/> which contains what we want, and further need to locate the <img alt="S_m"
+src="http://chart.apis.google.com/chart?cht=tx&chl=S_m" /> in <img alt="S_{S_n}"
+src="http://chart.apis.google.com/chart?cht=tx&chl=S_{S_n}" /> which contains
+what we want, and finally the *k* in <img alt="S_m"
+src="http://chart.apis.google.com/chart?cht=tx&chl=S_m" />. As a result, we need
+the length of <img alt="S_{S_k}"
+src="http://chart.apis.google.com/chart?cht=tx&chl=S_{S_k}" /> and the length of
+<img alt="S_k" src="http://chart.apis.google.com/chart?cht=tx&chl=S_k" />.
 
-![|S_k|=\sum_{1 \leq l \leq k}{l \times \text{Counts of number with %24l%24 digits}}](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|=\sum_{1\leq%20l\leq%20k}{l\times\text{Counts%20of%20number%20with%20$l$%20digits}})
+<img alt="|S_k|=\sum_{1 \leq l \leq k}{l \times \text{Counts of number with
+%24l%24 digits}}"
+src="http://chart.apis.google.com/chart?cht=tx&chl=|S_k|=\sum_{1\leq%20l\leq%20k}{l\times\text{Counts%20of%20number%20with%20$l$%20digits}}"
+/>
 
-![|S_{S_k}|=\sum_{1 \leq l \leq k}{|S_l|}](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|=\sum_{1%20\leq%20l%20\leq%20k}{|S_l|})
+<img alt="|S_{S_k}|=\sum_{1 \leq l \leq k}{|S_l|}"
+src="http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|=\sum_{1%20\leq%20l%20\leq%20k}{|S_l|}"
+/>
 
-We can firstly calculate some of ![|S_k|](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|), and then the ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) until the maximum value less than [**INT_MAX**](http://msdn.microsoft.com/en-us/library/296az74e%28v=vs.110%29.aspx). We can use this predication to examine the overflow of add operator: `sum + k < sum`. As the arrays containing ![|S_k|](http://chart.apis.google.com/chart?cht=tx&chl=|S_k|) and ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) are naturally sorted, we can use binary search to improve the performance. Finally, we just need to know the digit in specified position of a number *k*. It's a easy job and can be approached by converting *k* into string and seek its specified position.
+We can firstly calculate some of <img alt="|S_k|"
+src="http://chart.apis.google.com/chart?cht=tx&chl=|S_k|" />, and then the <img
+alt="|S_{S_k}|" src="http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|" />
+until the maximum value less than
+[**INT_MAX**](http://msdn.microsoft.com/en-us/library/296az74e%28v=vs.110%29.aspx).
+We can use this predication to examine the overflow of add operator: `sum + k <
+sum`. As the arrays containing <img alt="|S_k|"
+src="http://chart.apis.google.com/chart?cht=tx&chl=|S_k|" /> and <img
+alt="|S_{S_k}|" src="http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|" /> are naturally sorted, we can use binary search to improve the performance. Finally, we just need to know the digit in specified position of a number *k*. It's a easy job and can be approached by converting *k* into string and seek its specified position.
 
 ## Solution
 
-After some experiences, I know only first 31267 of ![|S_{S_k}|](http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|) need to be calculated.
+After some experiences, I know only first 31267 of <img alt="|S_{S_k}|"
+src="http://chart.apis.google.com/chart?cht=tx&chl=|S_{S_k}|" /> need to be calculated.
 
 {% highlight cpp %}
 #include <algorithm>

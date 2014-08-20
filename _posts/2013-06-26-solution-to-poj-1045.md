@@ -12,7 +12,12 @@ The problem is on [here](http://poj.org/problem?id=1045).
 
 ## Analysis
 
-It is hard to go with the direct fomular, because there is no build-in way to calculate a differential. However, we can apporach it with the defination of differential: ![\frac{df(x)}{dx} = \lim_{\Delta x \to +\infty}\frac{f(x+\Delta x)-f(x)}{\Delta x}](http://chart.apis.google.com/chart?cht=tx&chl=\frac{df%28x%29}{dx}%20=%20\lim_{\Delta%20x%20\to%2B\infty}\frac{f%28x%2B\Delta%20x%29-f%28x%29}{\Delta%20x}). Usually make ![\Delta x](http://chart.apis.google.com/chart?cht=tx&chl=\Delta%20x) equal to DOUBLE\_EPSILON.
+It is hard to go with the direct fomular, because there is no build-in way to
+calculate a differential. However, we can apporach it with the defination of
+differential: <img alt="\frac{df(x)}{dx} = \lim_{\Delta x \to
++\infty}\frac{f(x+\Delta x)-f(x)}{\Delta x}"
+src="http://chart.apis.google.com/chart?cht=tx&chl=\frac{df%28x%29}{dx}%20=%20\lim_{\Delta%20x%20\to%2B\infty}\frac{f%28x%2B\Delta%20x%29-f%28x%29}{\Delta%20x}"
+/>. Usually make ![\Delta x](http://chart.apis.google.com/chart?cht=tx&chl=\Delta%20x) equal to DOUBLE\_EPSILON.
 
 The first thing we should do is to simplification the fomulars. From ![v_1=V_S\cos{\omega t}](http://chart.apis.google.com/chart?cht=tx&chl=v_1=V_S\cos{\omega%20t}), ![v_2=V_R\cos(\omega t + \theta)](http://chart.apis.google.com/chart?cht=tx&chl=v_2=V_R\cos%28\omega%20t%2B\theta%29), ![v_2=iR](chart.apis.google.com/chart?cht=tx&chl=v_2=iR), and ![i=C\frac{d(v_1-v_2)}{dt}](http://chart.apis.google.com/chart?cht=tx&chl=i=C\frac{d%28v_1-v_2%29}{dt}), we could come out an equation shown below:
 
