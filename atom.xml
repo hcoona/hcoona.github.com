@@ -863,9 +863,9 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     <link href="http://hcoona.github.io/interview/split-nature-number-answer/"/>
     <id>http://hcoona.github.io/interview/split-nature-number-answer/</id>
     <published>2014-08-18T16:00:00.000Z</published>
-    <updated>2020-12-25T03:19:26.427Z</updated>
+    <updated>2020-12-25T06:29:17.024Z</updated>
     
-    <content type="html"><![CDATA[<script type="text/javascript">    window.location = "/assets/pdfjs/web/viewer.html?file=/assets/Split Nature Number.pdf";</script>]]></content>
+    <content type="html"><![CDATA[<div class="pdfobject-container" data-target="/assets/Split Nature Number.pdf" data-height="500px"></div>]]></content>
     
     
     <summary type="html">在老赵的博客上看到这样一道题，觉得非常有意思，难度适中，非常适合作面试题。试着用自己的方法解释清楚这道题的解法。</summary>
@@ -928,9 +928,9 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     <link href="http://hcoona.github.io/Tips/twos-complement/"/>
     <id>http://hcoona.github.io/Tips/twos-complement/</id>
     <published>2014-01-24T16:00:00.000Z</published>
-    <updated>2020-12-25T03:19:26.427Z</updated>
+    <updated>2020-12-25T06:31:02.933Z</updated>
     
-    <content type="html"><![CDATA[<script type="text/javascript">    window.location = "/assets/pdfjs/web/viewer.html?file=/assets/Twos Complement.pdf";</script>]]></content>
+    <content type="html"><![CDATA[<div class="pdfobject-container" data-target="/assets/Twos Complement.pdf" data-height="500px"></div>]]></content>
     
     
     <summary type="html">现在一谈到补码，很多人都会立刻说补码就是反码加一，虽然没说错，但是却没说到点子上。我更希望能够听到有人说补码就是负数对应原码的表示方式。这篇文章主要论述补码的本质，以及有符号整数二进制表示的原因。</summary>

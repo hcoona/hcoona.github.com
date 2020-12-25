@@ -912,7 +912,7 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
       
       
       
-      <content:encoded><![CDATA[<script type="text/javascript">    window.location = "/assets/pdfjs/web/viewer.html?file=/assets/Split Nature Number.pdf";</script>]]></content:encoded>
+      <content:encoded><![CDATA[<div class="pdfobject-container" data-target="/assets/Split Nature Number.pdf" data-height="500px"></div>]]></content:encoded>
       
       
       <category domain="http://hcoona.github.io/categories/interview/">interview</category>
@@ -983,7 +983,7 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
       
       
       
-      <content:encoded><![CDATA[<script type="text/javascript">    window.location = "/assets/pdfjs/web/viewer.html?file=/assets/Twos Complement.pdf";</script>]]></content:encoded>
+      <content:encoded><![CDATA[<div class="pdfobject-container" data-target="/assets/Twos Complement.pdf" data-height="500px"></div>]]></content:encoded>
       
       
       <category domain="http://hcoona.github.io/categories/Tips/">Tips</category>

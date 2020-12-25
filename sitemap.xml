@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hcoona.github.io/Tips/twos-complement/</loc>
+    
+    <lastmod>2020-12-25</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/interview/split-nature-number-answer/</loc>
+    
+    <lastmod>2020-12-25</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hcoona.github.io/tags/index.html</loc>
     
     <lastmod>2020-12-25</lastmod>
@@ -184,13 +198,6 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Tips/twos-complement/</loc>
-    
-    <lastmod>2020-12-25</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://hcoona.github.io/Tips/check-overflow-via-inline-asm/</loc>
     
     <lastmod>2020-12-25</lastmod>
@@ -206,13 +213,6 @@
   
   <url>
     <loc>http://hcoona.github.io/Tips/different-programming-languages/</loc>
-    
-    <lastmod>2020-12-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/interview/split-nature-number-answer/</loc>
     
     <lastmod>2020-12-25</lastmod>
     
