@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="08f5819dda6a4c3aa09b2d4ef7b0c0b3">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hcoona.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="重载和覆盖是笔试和面试中经常考的两个概念。这两个概念从概念本身到实现机理都不相同，但是表现形式却有相似之处。本文从实现机理入手，深入讲解两者的不同之处。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重载和覆盖的区别">
+<meta property="og:url" content="http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="重载和覆盖是笔试和面试中经常考的两个概念。这两个概念从概念本身到实现机理都不相同，但是表现形式却有相似之处。本文从实现机理入手，深入讲解两者的不同之处。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2013-10-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-25T03:19:26.427Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Interview">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>重载和覆盖的区别 | HCOONa's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">HCOONa's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重载和覆盖的区别
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2013-10-08 00:00:00" itemprop="dateCreated datePublished" datetime="2013-10-08T00:00:00+08:00">2013-10-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-25 11:19:26" itemprop="dateModified" datetime="2020-12-25T11:19:26+08:00">2020-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/interview/" itemprop="url" rel="index"><span itemprop="name">interview</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">重载和覆盖是笔试和面试中经常考的两个概念。这两个概念从概念本身到实现机理都不相同，但是表现形式却有相似之处。本文从实现机理入手，深入讲解两者的不同之处。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <style type="text/css">
+table {
+    margin: 0 auto;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 0 5px;
+}
+
+table, td, th {
+    border: 1px solid;
+}
+</style>
+
+<p>重载(Overloading)和覆盖(Overriding)是笔试和面试中经常考的两个概念。这两个概念从概念本身到实现机理都不相同，但是表现形式却有相似之处。本文从实现机理入手，深入讲解两者的不同之处。</p>
+<h2 id="重载和覆盖的概念"><a href="#重载和覆盖的概念" class="headerlink" title="重载和覆盖的概念"></a>重载和覆盖的概念</h2><p>重载(Overloading)主要指函数重载或方法重载。</p>
+<pre><code>Function overloading or method overloading is a feature found in various programming languages such as Ada, C++, C#, D, and Java, that allows creating several methods with the same name which differ from each other in the type of the input and the output of the function. It is simply defined as the ability of one function to perform different tasks.</code></pre><p>覆盖(Overriding)则是面向对象技术中特有的一个概念。</p>
+<pre><code>Method overriding, in object oriented programming, is a language feature that allows a subclass or child class to provide a specific implementation of a method that is already provided by one of its superclasses or parent classes. The implementation in the subclass overrides (replaces) the implementation in the superclass by providing a method that has same name, same parameters or signature, and same return type as the method in the parent class. The version of a method that is executed will be determined by the object that is used to invoke it. If an object of a parent class is used to invoke the method, then the version in the parent class will be executed, but if an object of the subclass is used to invoke the method, then the version in the child class will be executed. Some languages allow a programmer to prevent a method from beinMethod overriding, in object oriented programming, is a language feature that allows a subclass or child class to provide a specific implementation of a method that is already provided by one of its superclasses or parent classes. The implementation in the subclass overrides (replaces) the implementation in the superclass by providing a method that has same name, same parameters or signature, and same return type as the method in the parent class. The version of a method that is executed will be determined by the object that is used to invoke it. If an object of a parent class is used to invoke the method, then the version in the parent class will be executed, but if an object of the subclass is used to invoke the method, then the version in the child class will be executed. Some languages allow a programmer to prevent a method from being overridden.g overridden.</code></pre><h2 id="重载和覆盖的实现方式"><a href="#重载和覆盖的实现方式" class="headerlink" title="重载和覆盖的实现方式"></a>重载和覆盖的实现方式</h2><p>这里主要讲述重载和覆盖在C++语言中的实现方式。主要参考资料为<em>The Design and Evolution of C++</em>中的第三章。</p>
+<p>函数的重载是在编译时期确定的。几个不同的函数可以具有同样的名字，编译器通过调用参数类型的不同，来确认调用的函数；如果不能通过调用参数类型的不同来确认，编译器会报错。</p>
+<p>方法的覆盖是在运行时期确定的。在C++语言中，父类中将允许覆盖的函数标记为虚函数，子类中严格使用与父类中标记为虚函数的函数相同的函数名、参数类型和返回值类型，重新定义这一函数，通过这样一种方式，来完成方法的覆盖。编译时期，编译器生成一个虚函数指针列表，在这一列表中，存储了所有的虚函数的定义的代码所在的位置。运行时期，通过虚函数列表指针来确定虚函数指针列表的位置，进而确定所调用的虚函数的定义的代码所在的位置。</p>
+<p>假设有如下代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MA</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MB</span><span class="params">(<span class="keyword">double</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">MC</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">double</span>)</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">double</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> :</span> <span class="keyword">public</span> A</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">MC</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">double</span>)</span> <span class="keyword">override</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> c;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>此时，编译器将类<code>A</code>中三个方法的代码，以及类<code>B</code>中<code>MC</code>方法的代码放到代码段中，然后为类<code>A</code>和类<code>B</code>分别生成虚函数指针列表。类<code>A</code>或<code>B</code>的实例视分配方法而定，会分配到栈或者堆上。类<code>A</code>的实例的内存布局通常如下：</p>
+<table><tbody>
+<tr>
+    <td width="50%">vptr</td>
+    <td>a</td>
+</tr>
+<tr>
+    <td colspan="2">b</td>
+</tr>
+</tbody></table>
+
+<p>其中<code>vptr</code>指向这样一个表格：</p>
+<table><tbody><tr><td>A中MC方法的代码的地址</td></tr></tbody></table>
+
+<p>而类<code>B</code>的实例的内存布局通常如下：</p>
+<table><tbody>
+<tr>
+    <td width="50%">a</td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="2">b</td>
+</tr>
+<tr><td>vptr</td><td>c</td></tr>
+</tbody></table>
+
+<p>其中<code>vptr</code>指向这样一个表格：</p>
+<table><tbody><tr><td>B中MC方法的代码的地址</td></tr></tbody></table>
+
+<h2 id="笔试、面试中常考的一类题型"><a href="#笔试、面试中常考的一类题型" class="headerlink" title="笔试、面试中常考的一类题型"></a>笔试、面试中常考的一类题型</h2><p>重载和覆盖的概念和实现方式斗截然不同，但是为什么笔试、面试的时候还经常考呢？主要是他们的表现形式比较相近，并且还有“函数隐藏”这个东西在捣乱。“函数隐藏”不是一个好的概念，我的观点是在任何时候都不要使用“函数隐藏”，并且在一些新型的语言中，也对“函数隐藏”作出了一定限制，比如说在C#语言中，必须使用<code>new</code>关键字标注，才能够使用“函数隐藏”。我之前也发过一篇文章讨论过“函数隐藏”的不必要性，<a href="http://www.cnblogs.com/HCOONa/archive/2010/07/11/member-function-hide-is-not-necessary.html" target="_blank" rel="noopener">原文见此</a>。</p>
+<p>先说一下函数隐藏，这是重载的一种特殊情况。如果在子类中定义了一个同父类中的方法具有完全相同的函数名、参数类型和返回值类型时，如果父类中的这一方法没有标记为虚方法，则会发生函数隐藏。在子类中，必须通过特殊的语法才能够调用父类中的同名方法。由于这是重载的一种特殊情况，调用这一函数时，判断还是发生在编译时期的。</p>
+<p>下面来一个比较复杂的例子，也是笔试中比较容易考的类型：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MA</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MA</span><span class="params">(<span class="keyword">double</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MB</span><span class="params">(<span class="keyword">double</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">MC</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">double</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">MD</span><span class="params">(<span class="keyword">double</span>)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> :</span> <span class="keyword">public</span> A</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MA</span><span class="params">(<span class="keyword">double</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MB</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MD</span><span class="params">(<span class="keyword">double</span>)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">A a0;</span><br><span class="line">A a1 = B();</span><br><span class="line">B b;</span><br><span class="line"></span><br><span class="line">a0.MA(<span class="number">0.5</span>);</span><br><span class="line">a1.MA(<span class="number">0.5</span>);</span><br><span class="line">b.MA(<span class="number">0.5</span>);</span><br><span class="line">a0.MB(<span class="number">0.5</span>);</span><br><span class="line">a1.MB(<span class="number">0.5</span>);</span><br><span class="line">b.MB(<span class="number">0.5</span>);</span><br><span class="line">a0.MD(<span class="number">0.5</span>);</span><br><span class="line">a1.MD(<span class="number">0.5</span>);</span><br><span class="line">b.MD(<span class="number">0.5</span>);</span><br></pre></td></tr></table></figure>
+
+<p>问调用的这些函数分别是哪些函数？</p>
+<p>首先呢<code>a0.MA(0.5)</code>和<code>a1.MA(0.5)</code>肯定调用的是<code>void A::MA(double)</code>，因为<code>MA</code>方法没有被声明为虚函数，因此在编译时期就可以确定应该调用的方法，由于在调用<code>MA</code>方法时，<code>a0</code>和<code>a1</code>声称自己类型都是<code>A</code>因此调用的是类<code>A</code>中的<code>MA</code>方法。而<code>b.MA(0.5)</code>调用的则是<code>void B::MA(double)</code>，因为基类<code>A</code>中的方法<code>void MA(double)</code>没有被声明为虚方法，因此要做静态判断。而<code>b</code>声称自己的类型是<code>B</code>，因此要调用<code>B</code>中的<code>MA</code>方法。</p>
+<p>其次看<code>MB</code>这一组，由于只有一个<code>void A::MB(double)</code>函数定义，因此调用的都是这个函数。</p>
+<p>最后看<code>MD</code>这一组。由于基类<code>A</code>中声明<code>MD</code>方法为虚函数，因此需要动态判断。<code>a0</code>在运行时期的类型就是<code>A</code>，因此调用的是<code>void A::MD(double)</code>。<code>a1</code>在运行时期的类型是<code>B</code>，因此调用的是<code>void B::MD(double)</code>。<code>b</code>在运行时期的类型是<code>B</code>，因此调用的是<code>void B::MD(double)</code>。</p>
+<p>只要掌握好原理，牢记重载就看静态类型，覆盖就看动态类型，就能准确的判断调用的函数到底是哪一个了。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/" title="重载和覆盖的区别">http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Interview/" rel="tag"># Interview</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/interview/three-characteristics-of-object-oriented-programming/" rel="prev" title="面向对象技术中的三大特征">
+      <i class="fa fa-chevron-left"></i> 面向对象技术中的三大特征
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Tips/check-overflow-via-inline-asm/" rel="next" title="使用内嵌汇编检查溢出">
+      使用内嵌汇编检查溢出 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E8%A6%86%E7%9B%96%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">重载和覆盖的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E8%A6%86%E7%9B%96%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">重载和覆盖的实现方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%94%E8%AF%95%E3%80%81%E9%9D%A2%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%80%83%E7%9A%84%E4%B8%80%E7%B1%BB%E9%A2%98%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">笔试、面试中常考的一类题型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener" target="_blank"><i class="fa fa-fw fa-zhihu"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2011 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

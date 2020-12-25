@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="08f5819dda6a4c3aa09b2d4ef7b0c0b3">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hcoona.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="自制分布式存储系统入门篇：系统概要设计">
+<meta property="og:url" content="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://hcoona.github.io/images/系统架构图.svg">
+<meta property="og:image" content="http://hcoona.github.io/images/用户MGET请求时序图.svg">
+<meta property="og:image" content="http://hcoona.github.io/images/用户PUT请求时序图.svg">
+<meta property="article:published_time" content="2020-02-08T05:01:05.000Z">
+<meta property="article:modified_time" content="2020-12-25T03:19:26.431Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Distributed Storage">
+<meta property="article:tag" content="Hands-on Lab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://hcoona.github.io/images/系统架构图.svg">
+
+<link rel="canonical" href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>自制分布式存储系统入门篇：系统概要设计 | HCOONa's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">HCOONa's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          自制分布式存储系统入门篇：系统概要设计
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-08 13:01:05" itemprop="dateCreated datePublished" datetime="2020-02-08T13:01:05+08:00">2020-02-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-25 11:19:26" itemprop="dateModified" datetime="2020-12-25T11:19:26+08:00">2020-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Distributed-Storage-From-Scratch-Easy/" itemprop="url" rel="index"><span itemprop="name">Distributed Storage From Scratch(Easy)</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="paragraph">
+<p><a id="more"></a></p>
+</div>
+<div class="sect2">
+<h3 id="_最终用户_api">最终用户 API</h3>
+<div class="paragraph">
+<p>最简单的 Key-Value 存储只需要实现 Put 和 Get 方法就可以了，但是如果只提供这 2 个 API，在遇到一些比较复杂的场景时，就会给调用方带来比较大的负担。甚至于一些需要一致性保证的场景下，无法单靠调用方来完成这些功能。</p>
+</div>
+<div class="paragraph">
+<p>Redis 是一个比较成熟的，得到广泛应用的 NoSQL 存储，我们可以参考 Redis 的接口设计，实现其中利用率比较高的一些 API。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">方法名</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">含义</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get by key</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GETSET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set, returning old value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MGET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get multiple</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set by key</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SETNX</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if doesn&#8217;t exist</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SETXX</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if exist</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MSET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set multiple</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>除此之外再加上一个 Exists 判断给定的 Key 是否存在但不返回其内容。</p>
+</div>
+<div class="paragraph">
+<p>这里需要特别注意的是，MSET 应该具有原子性——要么都成功，要么都失败。MGET 和 MSET 这 2 个成对的操作理应满足一定的一致性原则，例如不应该出现 fractured reads <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>，但是这样做的实现难度较高，我们暂时先不考虑。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_整体架构">整体架构</h3>
+<div class="paragraph">
+<p>目标系统的架构如<a href="#architecture-diagram">系统架构图</a>所示：</p>
+</div>
+<div id="architecture-diagram" class="imageblock text-center">
+<div class="content">
+<img src="/images/系统架构图.svg" alt="系统架构图">
+</div>
+<div class="title">Figure 1. 系统架构图</div>
+</div>
+<div class="paragraph">
+<p>所有的用户请求首先进入 API Server，然后由 API Server 处理系统内部的逻辑。API Server 周期性的与 MetadataServer 同步数据的拓扑信息，例如哪些 DataServer 持有哪些数据，然后将用户的请求转发给对应的 DataServer。DataServer 是数据的真正持有者，服务的真正提供者。DataServer 与 MetadataServer 周期性的进行同步，向 MetadataServer 汇报自己的状态信息，接受 MetadataServer 的控制指令。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_主要流程">主要流程</h3>
+<div class="sect3">
+<h4 id="_用户进行_mget_请求">用户进行 MGET 请求</h4>
+<div id="mget-sequence-diagram" class="imageblock text-center">
+<div class="content">
+<img src="/images/用户MGET请求时序图.svg" alt="用户MGET请求时序图">
+</div>
+<div class="title">Figure 2. 用户MGET请求时序图</div>
+</div>
+<div class="paragraph">
+<p>用户进行 MGET 请求时，首先将请求发送给 API Server。API Server 周期性的与 Metadata Server 进行消息同步，以获取整个集群中的拓扑关系，这一关系中含有哪些数据存放在哪些 Data Server 的映射关系。API Server 将请求发送给对应的一个或多个 Data Server，将获取到的数据进行聚合后，回复给用户。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_用户进行_put_请求">用户进行 PUT 请求</h4>
+<div id="put-sequence-diagram" class="imageblock text-center">
+<div class="content">
+<img src="/images/用户PUT请求时序图.svg" alt="用户PUT请求时序图">
+</div>
+<div class="title">Figure 3. 用户PUT请求时序图</div>
+</div>
+<div class="paragraph">
+<p>用户进行 PUT 请求时，首先将请求发送给 API Server。API Server 将数据写入对应的 Data Server 中，然后向该数据分片的主节点请求提交该请求。主从节点内部协调后，向 API Server 返回协调后的结果。API Server 向用户返回该结果。</p>
+</div>
+<div class="paragraph">
+<p>如果 PUT 的 Value 特别小的话，随着控制指令进行主从协调可以节省一些消息交互。但是更多的情况下，Value 没有这么小。此时由 API Server 进行数据复制，比主节点进行复制更合理，因为 API Server 的数量是随着请求负载增长而增长的，但是主节点的数量并不具有这样的关系，因此这样做可以降低主节点的压力。</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. 见<a href="https://zhuanlan.zhihu.com/p/67077901" target="_blank" rel="noopener">论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility</a> 中的 Read Atomic 一致性模型。
+</div>
+</div>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/" title="自制分布式存储系统入门篇：系统概要设计">http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Distributed-Storage/" rel="tag"># Distributed Storage</a>
+              <a href="/tags/Hands-on-Lab/" rel="tag"># Hands-on Lab</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/" rel="prev" title="自制分布式存储系统入门篇：背景介绍">
+      <i class="fa fa-chevron-left"></i> 自制分布式存储系统入门篇：背景介绍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Paper-Note/rum-conjecture/" rel="next" title="论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture">
+      论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E6%9C%80%E7%BB%88%E7%94%A8%E6%88%B7_api"><span class="nav-number">1.</span> <span class="nav-text">最终用户 API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">主要流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#_%E7%94%A8%E6%88%B7%E8%BF%9B%E8%A1%8C_mget_%E8%AF%B7%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">用户进行 MGET 请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#_%E7%94%A8%E6%88%B7%E8%BF%9B%E8%A1%8C_put_%E8%AF%B7%E6%B1%82"><span class="nav-number">3.2.</span> <span class="nav-text">用户进行 PUT 请求</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener" target="_blank"><i class="fa fa-fw fa-zhihu"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-nd.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2011 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
