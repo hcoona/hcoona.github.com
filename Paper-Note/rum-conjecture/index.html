@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" integrity="sha256-RvRHGSuWAxZpXKV9lLDt2e+rZ+btzn48Wp4ueS3NZKs=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/config.js"></script>
+
+    <meta name="description" content="RUM 猜想指的是在 Read Overhead，Update Overhead 和 Memory (or Storage) Overhead 中，同时优化 2 项时需要以剩余的 1 项劣化作为代价。论文原作者进一步解释了一下，在一定程度以内（还没有达到最优的情况下）优化，不遵循 RUM 猜想，但是达到一定阈值后，就需要付出代价才能进一步进行优化。这里的 Update Overhead 只考虑写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：[EDBT&#39;16] Designing Access Methods: The RUM Conjecture">
+<meta property="og:url" content="http://hcoona.github.io/Paper-Note/rum-conjecture/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="RUM 猜想指的是在 Read Overhead，Update Overhead 和 Memory (or Storage) Overhead 中，同时优化 2 项时需要以剩余的 1 项劣化作为代价。论文原作者进一步解释了一下，在一定程度以内（还没有达到最优的情况下）优化，不遵循 RUM 猜想，但是达到一定阈值后，就需要付出代价才能进一步进行优化。这里的 Update Overhead 只考虑写">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://hcoona.github.io/images/popular-in-rum.png">
+<meta property="og:image" content="http://hcoona.github.io/images/popular-in-rum-bigo.png">
+<meta property="article:published_time" content="2020-05-07T13:59:54.000Z">
+<meta property="article:modified_time" content="2023-08-07T12:29:54.868Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Paper Note">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Storage Engine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://hcoona.github.io/images/popular-in-rum.png">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Paper-Note/rum-conjecture/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/rum-conjecture/","path":"Paper-Note/rum-conjecture/","title":"论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture | HCOONa's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/rum-conjecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-05-07 21:59:54" itemprop="dateCreated datePublished" datetime="2020-05-07T21:59:54+08:00">2020-05-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-07 20:29:54" itemprop="dateModified" datetime="2023-08-07T20:29:54+08:00">2023-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>RUM 猜想指的是在 <strong>R</strong>ead Overhead，<strong>U</strong>pdate Overhead 和 <strong>M</strong>emory (or Storage) Overhead 中，同时优化 2 项时需要以剩余的 1 项劣化作为代价。论文原作者进一步解释了一下，在一定程度以内（还没有达到最优的情况下）优化，不遵循 RUM 猜想，但是达到一定阈值后，就需要付出代价才能进一步进行优化。这里的 Update Overhead 只考虑写放大，不考虑写时寻址的代价。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The RUM Conjecture: Read, Update, Memory – Optimize Two at the Expense of the Third.</p>
+</div>
+</blockquote>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>designing access methods that set an upper bound for two of the
+RUM overheads, leads to a hard lower bound for the third overhead
+which cannot be further reduced.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>论文原作者解释，提出这一猜想不是说大家啥都不用干了，而是说在达到优化阈值后，如果不想付出某一项性能劣化的代价，应当考虑自适应调整之类的方法，根据数据的特征在这三个重要的参数之间进行平衡。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>RUM-Aware Access Method Design. Accepting that a perfect access
+method does not exist, does not mean the research community
+should stop striving to improve; quite the opposite. The RUM Conjecture
+opens the path for exciting research challenges towards the
+goal of creating RUM-aware and RUM-adaptive access methods.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>P.S. 这篇论文也由相同的作者在 SIGMOD'16 上发表了几乎相同的内容<a href="#2">[2]</a>。</p>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="paragraph">
+<p>先来看几个极端情况：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>\(\min(RO) = 1.0 \implies UO = 2.0 \,\text&#123;and&#125;\, MO \to \infty\)</p>
+</li>
+<li>
+<p>\(\min(UO) = 1.0 \implies RO \to \infty \,\text&#123;and&#125;\, MO \to \infty\)</p>
+</li>
+<li>
+<p>\(\min(MO) = 1.0 \implies RO = N \,\text&#123;and&#125;\, UO = 1.0\)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>第 1 种情况是我们将读性能优化到极致，类似于哈希表的极端情况，即我们穷举所有可能的 Key Space，为每一个 Key 安排一个固定的空间。这种情况下存储空间的使用量是无界的（或者说实际意义上无界的），因为穷举整个 Key Space 并为每个 Key 预留 Value 大小的空间在大多数情况下是不实际的。</p>
+</div>
+<div class="paragraph">
+<p>第 2 种情况为写性能优化到极致，简单来说就是一个 Append-Only 的写请求日志。由于我们从来不实际上删除任何内容，所以存储空间是无界的。而写请求需要遍历全部日志，因此也是无界的。</p>
+</div>
+<div class="paragraph">
+<p>第 3 种情况为将存储空间优化到极致。类似于第 2 种情况但是所有的更新操作都在原地进行。</p>
+</div>
+<div class="paragraph">
+<p>显然这 3 种只优化一个目标的极端情况都是不实用的。接下来我们考虑同时优化 2 种目标的情况。论文作者提出这样一种假设：在 RUM 中同时优化任意 2 个目标，都需要付出降低剩下的 1 个指标为代价。</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The RUM Conjecture. An access method that can set an upper
+bound for two out of the read, update, and memory overheads, also
+sets a lower bound for the third overhead.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>一些常见的 Access Methods 在 RUM 中的视角如 <a href="#popular-in-rum">常见的 Access Methods 在 RUM 中的视角</a> 所示，他们的时间复杂度（大O表示法）如 <a href="#popular-in-rum-bigo">常见的 Access Methods 的时间复杂度</a> 所示。</p>
+</div>
+<div id="popular-in-rum" class="imageblock text-center">
+<div class="content">
+<img data-src="/images/popular-in-rum.png" alt="常见的 Access Methods 在 RUM 中的视角">
+</div>
+<div class="title">Figure 1. 常见的 Access Methods 在 RUM 中的视角</div>
+</div>
+<div id="popular-in-rum-bigo" class="imageblock text-center">
+<div class="content">
+<img data-src="/images/popular-in-rum-bigo.png" alt="常见的 Access Methods 的时间复杂度">
+</div>
+<div class="title">Figure 2. 常见的 Access Methods 的时间复杂度</div>
+</div>
+<div class="paragraph">
+<p>直觉上考虑一下这个问题。为了读性能优化的数据结构类似于上面第 1 种极端情况的思路，就是在写的时候多做点事情，同时多付出一些冗余的存储空间记录一些辅助查询的信息。为了写性能优化的数据结构类似于上面第 2 种极端情况的思路，在写的时候少做点事情，增加了查询时候的负担。为了给查询减负，又在时间上进行均摊，将本应该在一次写请求中做完的事情拆成上半部和下半部，在非关键路径上执行下半部，将写日志进行重整合并。为了存储空间优化的主要思路是压缩或者牺牲精度，一般都需要同时损失一些读写性能。</p>
+</div>
+<div class="sect1">
+<h2 id="_参考文献">参考文献</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a id="rum-conjecture"></a>[1] ATHANASSOULIS M, KESTER M, MAAS L, et al. Designing Access Methods: The RUM Conjecture[C]//International Conference on Extending Database Technology (EDBT). Bordeaux, France: 2016.</p>
+</li>
+<li>
+<p><a id="tradeoffs"></a>[2] ATHANASSOULIS M, IDREOS S. Design Tradeoffs of Data Access Methods[C]//Proceedings of the 2016 International Conference on Management of Data. New York, NY, USA: Association for Computing Machinery, 2016: 2195–2200.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Paper-Note/rum-conjecture/" title="论文笔记：[EDBT&#39;16] Designing Access Methods: The RUM Conjecture">http://hcoona.github.io/Paper-Note/rum-conjecture/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Paper-Note/" rel="tag"># Paper Note</a>
+              <a href="/tags/Database/" rel="tag"># Database</a>
+              <a href="/tags/Storage-Engine/" rel="tag"># Storage Engine</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/" rel="prev" title="自制分布式存储系统入门篇：系统概要设计">
+                  <i class="fa fa-angle-left"></i> 自制分布式存储系统入门篇：系统概要设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/seda/" rel="next" title="论文笔记：[SOSP'01] SEDA: An Architecture for Well-Conditioned, Scalable Internet Services">
+                  论文笔记：[SOSP'01] SEDA: An Architecture for Well-Conditioned, Scalable Internet Services <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js" integrity="sha256-q8XkJ6dj5VwSvzI8+nATCHHQG+Xv/dAZBCgqmu93zOY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/motion.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/next-boot.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/pjax.js"></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.12/pdfobject.min.js","integrity":"sha256-g2xji1rlE3KsGVClvuxTbcR0Kn2+wtQADSff2Tbb4zA="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://unpkg.com/quicklink@2.3.0/dist/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/rum-conjecture/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/quicklink.js"></script>
+
+</body>
+</html>

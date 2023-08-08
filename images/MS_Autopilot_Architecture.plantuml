@@ -1,0 +1,33 @@
+@startuml
+
+database "Device Manager"
+[Deployment Service]
+
+node "Node" {
+    [Application Manager]
+    [File Sync Service]
+    [Collection Agent]
+    [User Application]
+
+    [Device Manager] <-- [Application Manager]
+    [Application Manager] --> [File Sync Service]
+    [Application Manager] --> [User Application]
+    [Collection Agent] --> [User Application]
+}
+
+[Deployment Service] -> [Device Manager]
+[Repair Manager] --> [Device Manager]
+[Provisioning Service] --> [Device Manager]
+[Device Manager] <- [Watchdog Service]
+[Watchdog Service] --> [User Application]
+
+
+database "Hot Metrics"
+[Hot Metrics] <-- [Collection Agent]
+[Cockpit] --> [Hot Metrics]
+[Alert Service] --> [Hot Metrics]
+
+database "Warm Storage"
+[Collection Agent] -> [Warm Storage]
+
+@enduml
