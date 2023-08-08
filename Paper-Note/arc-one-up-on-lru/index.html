@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" integrity="sha256-RvRHGSuWAxZpXKV9lLDt2e+rZ+btzn48Wp4ueS3NZKs=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/config.js"></script>
+
+    <meta name="description" content="ARC是一种缓存替换算法，在很多种负载环境的表现优于常用的LRU算法，并且实现难度和算法复杂度与LRU近似。   ARC算法具有以下优良特性：     在recency和frequency之间持续的进行动态（在线）调整   无需事先指定特别的参数（先验知识）   具有全局优化策略（意译，不确定翻译的对不对，原文empirically universal，note说明该词出自LZ77的论文）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：[FAST&#39;03] ARC: A Self-Tuning, Low Overhead Replacement Cache">
+<meta property="og:url" content="http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="ARC是一种缓存替换算法，在很多种负载环境的表现优于常用的LRU算法，并且实现难度和算法复杂度与LRU近似。   ARC算法具有以下优良特性：     在recency和frequency之间持续的进行动态（在线）调整   无需事先指定特别的参数（先验知识）   具有全局优化策略（意译，不确定翻译的对不对，原文empirically universal，note说明该词出自LZ77的论文）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://hcoona.github.io/images/ARC.png">
+<meta property="og:image" content="http://hcoona.github.io/images/ARC_algo.png">
+<meta property="article:published_time" content="2019-03-30T12:21:02.000Z">
+<meta property="article:modified_time" content="2023-08-08T09:16:36.770Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Paper Note">
+<meta property="article:tag" content="Algorithms">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://hcoona.github.io/images/ARC.png">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/","path":"Paper-Note/arc-one-up-on-lru/","title":"论文笔记：[FAST'03] ARC: A Self-Tuning, Low Overhead Replacement Cache"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>论文笔记：[FAST'03] ARC: A Self-Tuning, Low Overhead Replacement Cache | HCOONa's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="nav-number">1.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_arc%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">ARC算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E9%97%AE%E9%A2%98%E5%9B%9E%E9%A1%BE"><span class="nav-number">3.</span> <span class="nav-text">问题回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#_l_1%E5%92%8Cl_2%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E8%B0%83%E6%95%B4"><span class="nav-number">3.1.</span> <span class="nav-text">$L_1$和$L_2$的大小是否可以调整</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_p%E7%9A%84%E8%B0%83%E6%95%B4%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%98%AF%E5%9B%BA%E5%AE%9A%E7%9A%84"><span class="nav-number">3.2.</span> <span class="nav-text">$p$的调整为什么不是固定的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_scan_resistant"><span class="nav-number">3.3.</span> <span class="nav-text">Scan-Resistant</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E4%B8%8D%E6%80%BB%E7%BB%93%E6%80%BB%E8%A7%89%E5%BE%97%E5%B0%91%E7%82%B9%E4%BB%80%E4%B9%88"><span class="nav-number">4.</span> <span class="nav-text">不总结总觉得少点什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_references"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：[FAST'03] ARC: A Self-Tuning, Low Overhead Replacement Cache | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：[FAST'03] ARC: A Self-Tuning, Low Overhead Replacement Cache
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-03-30 20:21:02" itemprop="dateCreated datePublished" datetime="2019-03-30T20:21:02+08:00">2019-03-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-08 17:16:36" itemprop="dateModified" datetime="2023-08-08T17:16:36+08:00">2023-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>ARC是一种缓存替换算法，在很多种负载环境的表现优于常用的LRU算法，并且实现难度和算法复杂度与LRU近似。</p>
+</div>
+<div class="paragraph">
+<p>ARC算法具有以下优良特性：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在recency和frequency之间持续的进行动态（在线）调整</p>
+</li>
+<li>
+<p>无需事先指定特别的参数（先验知识）</p>
+</li>
+<li>
+<p>具有全局优化策略（意译，不确定翻译的对不对，原文empirically universal，note说明该词出自LZ77的论文）</p>
+</li>
+<li>
+<p>可以（在某种程度上）抵抗线性扫描（scan-resistant）</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="paragraph">
+<p>原论文中花费了很多篇幅介绍之前人们试图提出比LRU更好的算法的一些工作，并进行了一番对比，本文限于篇幅和精力略过这部分内容。</p>
+</div>
+<div class="sect1">
+<h2 id="_基本思想">基本思想</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>LRU的问题在于其只考虑了recency而完全没有考虑frequency。一般而言，保存freqency信息的代价又比较大。ARC的最根本的思路（以下称为DBL）在于使用2个LRU，其中一个$L_1$存放最近被访问1次的数据（也就是传统的LRU），另一个$L_2$存放最近被访问2次及以上的数据。这一近似减少了维护frequency的成本。最终目标是尽可能维持$|L_1| = |L_2| = c$，但是论文中并没有解释为什么要这么做。（总是能保持$|L_1| + |L_2| = 2c$，如果$|L_1| &lt; c$时会优先淘汰$L_2$中的内容给$L_1$腾地儿）</p>
+</div>
+<div class="paragraph">
+<p>我们把整个Cache分为以下2个部分：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Cache Directory</p>
+</li>
+<li>
+<p>Cache Item</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>其中Cache Directory用于进行索引，Cache Item真正表示在缓存中的内容。对于传统LRU算法而言，以上2者的大小是一样的（Directory索引的项的数量和真正在缓存中的内容的数量）。对于上面提到的DBL而言，以上2者的大小也是一样的，为$|L_1| + |L_2| = 2c$。特别的，在DBL中，$L_1$就是一个传统的LRU，其大小为$c$。</p>
+</div>
+<div class="paragraph">
+<p>上面提到的DBL算法的问题是使用了2倍于LRU的空间，其效果比LRU好是显然的，能不能使用和LRU一样多的空间得到更好的效果呢？一个直接的想法是使用$2c$的Cache Directory但是只保留$c$个Cache Item常驻内存，那么在这$2c$个索引项中如何取舍就是一个问题。如<a href="#figure-1">[figure-1]</a>所示，我们将$L_1$和$L_2$分别拆分为$T_1, B_1, T_2, B_2$。直觉上，$T_1$比$B_1$更有价值，$T_2$比$B_2$更有价值，如果我们能够维持$|T_1| + |T_2| \le c$，则应当将$T_1 \cup T_2$中的元素保留在Cache中。</p>
+</div>
+<div id="figure-1" class="imageblock">
+<div class="content">
+<img src="/images/ARC.png" alt="ARC" width="50%">
+</div>
+</div>
+<div class="paragraph">
+<p>剩下的问题，在于如何在$L_1 \cup L_2$中调节$T_1 \cup T_2$的位置（即调节$|B_1|$和$|B_2|$），以及如何在$T_1 \cup T_2$中调节两者的大小分配。特别的，当$|L_1| = |T_1| = c$时，该算法等价于LRU，也就是说如果调节得当的话，该算法至少能做到和LRU一样好。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arc算法">ARC算法</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>由于我们要求保持性质$|L_1| = |L_2| = c$，因此当调节$T_1$和$T_2$的关系时，实际上就调节了$T_1 \cup T_2$在$L_1 \cup L_2$中的位置。直觉上相当于在$L_1$和$L_2$中间的地方有一个固定大小的滑块，我们在调节这个滑块的位置。不妨令$|T_1| = p$，则$|B_1| = |T_2| = c - p$且$|B_2| = p$。</p>
+</div>
+<div class="paragraph">
+<p>接下来，我们需要思考一下$B_1$和$B_2$对我们而言意味着什么。回想上面提到的DBL，$L_1$意味着最近只命中了1次的缓存项索引，其中$T_1$是我们保留在缓存中的内容，$B_1$是我们没有保留在缓存中的内容。因此，如果查询请求命中了$B_1$，意味着我们应当把这次命中当作命中了$L_1$来看，并且相应的，说明我们的$|T_1|$可能小了，没能将这次命中的数据存起来。论文中，当$|B_1| \gt |B_2|$时，$p$增加1，当$|B_1| &lt; |B_2|$时，$p$增加$|B_2| / |B_1|$，但是论文中没有解释为什么这么设计。</p>
+</div>
+<div class="paragraph">
+<p>完整的ARC算法如<a href="#figure-2">[figure-2]</a>所示，其中Case I-III对应于DBL命中的情况，Case IV对应于DBL未命中的情况。</p>
+</div>
+<div id="figure-2" class="imageblock">
+<div class="content">
+<img src="/images/ARC_algo.png" alt="ARC Algorithm">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_问题回顾">问题回顾</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>之前提到了一些问题，在此继续探讨一下。</p>
+</div>
+<div class="sect2">
+<h3 id="_l_1和l_2的大小是否可以调整">$L_1$和$L_2$的大小是否可以调整</h3>
+<div class="paragraph">
+<p>在目前的设计中，$|L_1| = |L_2| = c$，由于我们最多只保留$|T_1| + |T_2| = c$项内容，在极端情况下$|L_1| = |T_1| = c$，此时进一步增大$L_1$也不能再进行什么调整了（受限于Cache大小），从这个角度来看在$L_1$和$L_2$之间进行调整可能是没什么意义的。</p>
+</div>
+<div class="paragraph">
+<p>但是在论文中特别提到了 <code>E. Extra History</code>，讨论了这样一个问题：</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+An interesting question is whether we can incorporate more history information in ARC to further improve it.
+</blockquote>
+</div>
+<div class="paragraph">
+<p>论文中给出了一种利用额外的空间的方法，似乎暗示了这么做是有用的，但是没有论证对比这一方法的效果如何。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_p的调整为什么不是固定的">$p$的调整为什么不是固定的</h3>
+<div class="paragraph">
+<p>推测是因为当$B_1$小的时候命中$B_1$是比较困难的，要对此做一个加成。但是为什么这么做论文并没有给出一个解释，也没有什么对比。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scan_resistant">Scan-Resistant</h3>
+<div class="paragraph">
+<p>直觉上ARC是可以抵御扫描Pattern的请求的，因为ARC不仅考虑了recency，还考虑了frequency。具体而言，有以下2个原因：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>扫描会刷新$L_1$的内容，但是不会影响$L_2$的内容</p>
+</li>
+<li>
+<p>扫描会更多的命中$B_2$（相较于$B_1$），因此会进一步减小$|T_1|$，进而使得扫描造成的影响比单纯考虑第1点更小</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_不总结总觉得少点什么">不总结总觉得少点什么</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>总的来说，ARC算法通过一种比较巧妙的方法，在不显著增加实现成本和算法时间复杂的情况下，较为显著的改进了LRU算法。使用LRU来承载最近遇到2次以上的数据来近似捕获frequency信息是一大亮点。动态平衡的方案直觉上有效，但是细节上缺乏有力的论证，不确定是不是一个最优的算法。对于动态变化的数据而言，动态平衡的算法优于静态的算法是可以预期的。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a id="arc1"></a>[1] MEGIDDO N, MODHA D S. ARC: A Self-Tuning, Low Overhead Replacement Cache[C]//CHASE J. Proceedings of the &#123;FAST&#125; ’03 Conference on File and Storage Technologies, March 31 - April 2, 2003, Cathedral Hill Hotel, San Francisco, California, &#123;USA&#125;. USENIX, 2003.</p>
+</li>
+<li>
+<p><a id="arc2"></a>[2] NIMROD MEGIDDO, MODHA D S. one up on LRU[J]. ;Login:, 2003, 28(4).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/" title="论文笔记：[FAST&#39;03] ARC: A Self-Tuning, Low Overhead Replacement Cache">http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Paper-Note/" rel="tag"># Paper Note</a>
+              <a href="/tags/Algorithms/" rel="tag"># Algorithms</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Tips/distributed-systems-101/" rel="prev" title="分布式系统入门介绍">
+                  <i class="fa fa-angle-left"></i> 分布式系统入门介绍
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/transactional-consistency-models/" rel="next" title="论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility">
+                  论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js" integrity="sha256-q8XkJ6dj5VwSvzI8+nATCHHQG+Xv/dAZBCgqmu93zOY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/motion.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/next-boot.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/pjax.js"></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.12/pdfobject.min.js","integrity":"sha256-g2xji1rlE3KsGVClvuxTbcR0Kn2+wtQADSff2Tbb4zA="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://unpkg.com/quicklink@2.3.0/dist/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/quicklink.js"></script>
+
+</body>
+</html>
