@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -52,10 +52,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>论文笔记：[OSDI'16] Slicer: Auto-Sharding for Datacenter Applications | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -317,7 +327,7 @@
 </div>
 <div id="slicer-architecture" class="imageblock text-center text-center">
 <div class="content">
-<img src="/images/slicer-abstract-architecture.png" alt="Abstract Slicer architecture">
+<img data-src="/images/slicer-abstract-architecture.png" alt="Abstract Slicer architecture">
 </div>
 <div class="title">Figure 1. Abstract Slicer architecture</div>
 </div>
@@ -345,7 +355,7 @@
 </div>
 <div id="slicer-backend-architecture" class="imageblock text-center text-center">
 <div class="content">
-<img src="/images/slicer-backend-service-architecture.png" alt="Slicer backend service architecture">
+<img data-src="/images/slicer-backend-service-architecture.png" alt="Slicer backend service architecture">
 </div>
 <div class="title">Figure 2. Slicer backend service architecture</div>
 </div>
@@ -357,7 +367,7 @@
 </div>
 <div id="centrifuge-cross-datacenter" class="imageblock text-center">
 <div class="content">
-<img src="/images/centrifuge-cross-datacenter.png" alt="Centrifuge cross datacenter">
+<img data-src="/images/centrifuge-cross-datacenter.png" alt="Centrifuge cross datacenter">
 </div>
 <div class="title">Figure 3. Datacenter applications are often divided into multiple component services, and servicing clients requests frequently requires communicating with multiple such services. Centrifuge is designed to replace only the internal network load balancers used by the component services.</div>
 </div>
@@ -439,8 +449,8 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java"><pre><code class="highlight java"><span class="function">Opaque <span class="title">getSliceKeyHandle</span><span class="params">(String key)</span></span>;
-<span class="function"><span class="keyword">boolean</span> <span class="title">isAssignedContinuously</span><span class="params">(Opaque handle)</span></span>;</code></pre></code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java"><pre><code class="highlight java">Opaque <span class="title function_">getSliceKeyHandle</span><span class="params">(String key)</span>;
+<span class="type">boolean</span> <span class="title function_">isAssignedContinuously</span><span class="params">(Opaque handle)</span>;</code></pre></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -448,26 +458,26 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java"><pre><code class="highlight java"><span class="function"><span class="keyword">boolean</span> <span class="title">Subscribe</span><span class="params">(String key, String address)</span> </span>&#123;
+<pre class="highlight"><code class="language-java" data-lang="java"><pre><code class="highlight java"><span class="type">boolean</span> <span class="title function_">Subscribe</span><span class="params">(String key, String address)</span> &#123;
   <span class="comment">// (1) Check that this is the correct node</span>
-  Opaque handle = getSliceKeyHandle(key);
-  <span class="keyword">if</span> (handle == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;
+  <span class="type">Opaque</span> <span class="variable">handle</span> <span class="operator">=</span> getSliceKeyHandle(key);
+  <span class="keyword">if</span> (handle == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;
 
   <span class="comment">// (2) Perform arbitrary operation on this state;</span>
   <span class="comment">// store lease number with any created state</span>
   <span class="comment">// in this case, simply add subscription</span>
-  <span class="keyword">this</span>.subscriptionLists[key].add(address);
+  <span class="built_in">this</span>.subscriptionLists[key].add(address);
 
   <span class="comment">// (3) Check that lease has been continuously held;</span>
   <span class="comment">// if so, return result</span>
   <span class="keyword">if</span> (!isAssignedContinuously(handle)) &#123;
     <span class="comment">// Rollback subscription</span>
-    <span class="keyword">this</span>.subscriptionLists[key].remove(address);
-    <span class="keyword">return</span> <span class="keyword">false</span>;
+    <span class="built_in">this</span>.subscriptionLists[key].remove(address);
+    <span class="keyword">return</span> <span class="literal">false</span>;
   &#125;
 
   <span class="comment">// Commit subscription</span>
-  <span class="keyword">return</span> <span class="keyword">true</span>;
+  <span class="keyword">return</span> <span class="literal">true</span>;
 &#125;</code></pre></code></pre>
 </div>
 </div>
@@ -558,7 +568,7 @@
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -607,7 +617,7 @@
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
 
 

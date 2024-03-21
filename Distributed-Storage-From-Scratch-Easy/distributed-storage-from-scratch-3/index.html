@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -27,9 +27,9 @@
 <meta property="og:url" content="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/index.html">
 <meta property="og:site_name" content="HCOONa&#39;s blog">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://hcoona.github.io/images/系统架构图.svg">
-<meta property="og:image" content="http://hcoona.github.io/images/用户MGET请求时序图.svg">
-<meta property="og:image" content="http://hcoona.github.io/images/用户PUT请求时序图.svg">
+<meta property="og:image" content="http://hcoona.github.io/images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE.svg">
+<meta property="og:image" content="http://hcoona.github.io/images/%E7%94%A8%E6%88%B7MGET%E8%AF%B7%E6%B1%82%E6%97%B6%E5%BA%8F%E5%9B%BE.svg">
+<meta property="og:image" content="http://hcoona.github.io/images/%E7%94%A8%E6%88%B7PUT%E8%AF%B7%E6%B1%82%E6%97%B6%E5%BA%8F%E5%9B%BE.svg">
 <meta property="article:published_time" content="2020-02-08T05:01:05.000Z">
 <meta property="article:modified_time" content="2023-08-08T09:16:36.774Z">
 <meta property="article:author" content="Shuai Zhang">
@@ -37,7 +37,7 @@
 <meta property="article:tag" content="Distributed Storage">
 <meta property="article:tag" content="Hands-on Lab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://hcoona.github.io/images/系统架构图.svg">
+<meta name="twitter:image" content="http://hcoona.github.io/images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE.svg">
 
 
 <link rel="canonical" href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/">
@@ -49,10 +49,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>自制分布式存储系统入门篇：系统概要设计 | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -307,7 +317,7 @@
 </div>
 <div id="architecture-diagram" class="imageblock text-center">
 <div class="content">
-<img src="/images/系统架构图.svg" alt="系统架构图">
+<img data-src="/images/系统架构图.svg" alt="系统架构图">
 </div>
 <div class="title">Figure 1. 系统架构图</div>
 </div>
@@ -321,7 +331,7 @@
 <h4 id="_用户进行_mget_请求">用户进行 MGET 请求</h4>
 <div id="mget-sequence-diagram" class="imageblock text-center">
 <div class="content">
-<img src="/images/用户MGET请求时序图.svg" alt="用户MGET请求时序图">
+<img data-src="/images/用户MGET请求时序图.svg" alt="用户MGET请求时序图">
 </div>
 <div class="title">Figure 2. 用户MGET请求时序图</div>
 </div>
@@ -333,7 +343,7 @@
 <h4 id="_用户进行_put_请求">用户进行 PUT 请求</h4>
 <div id="put-sequence-diagram" class="imageblock text-center">
 <div class="content">
-<img src="/images/用户PUT请求时序图.svg" alt="用户PUT请求时序图">
+<img data-src="/images/用户PUT请求时序图.svg" alt="用户PUT请求时序图">
 </div>
 <div class="title">Figure 3. 用户PUT请求时序图</div>
 </div>
@@ -412,7 +422,7 @@
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -461,7 +471,7 @@
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
 
 

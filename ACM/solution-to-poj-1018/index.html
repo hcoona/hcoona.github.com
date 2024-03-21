@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -49,10 +49,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Solution to POJ 1018 | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -246,18 +256,16 @@
     <div class="post-body" itemprop="articleBody"><p>The problem is on <a target="_blank" rel="noopener" href="http://poj.org/problem?id=1018">here</a>.</p>
 <h2 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h2><p>There are n group of devices. We should take one and only one device from any group.</p>
 <p>Firstly I think it is another <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Dynamic_programming">Dynamic<br>Programming</a> problem, because<br>what I would choose in each group depends on what I already took in before<br>groups. However, it is not. Because what device I take now would affect the<br>result before. For example, if I took a device with a very low bandwidth, the<br>result before might not be optimal then. If I want to use Dynamic Programming, I<br>have to say, when I already take several devices to make the total price rise to<br>P and bandwidth limited to B, I would choose a optimal device in current group<br>together with the optimal devices I choose before under new limitation P’ and<br>B’. That’s too much complex. What’s worse, the combination of P would be very<br>very large. Under the worst case, it would be <img alt="\prod_{0< i \leq n} m_i
-\leq 100^{100}"
-src="http://chart.apis.google.com/chart?cht=tx&chl=\prod_{0%3C%20i%20\leq%20n}m_i%20\leq%20100^{100}"
+\leq 100^{100}" data-src="http://chart.apis.google.com/chart?cht=tx&chl=\prod_{0%3C%20i%20\leq%20n}m_i%20\leq%20100^{100}"
 />.</p>
-<p>Obviously, we cannot use Dynamic Programming to solve this problem. What make it not is we need to judge the optimal with B/P, which depends on both B and P, and the B is the minimum of the bandwidths which means it depends on all possilbe groups.</p>
+<p>Obviously, we cannot use Dynamic Programming to solve this problem. What make it not is we need to judge the optimal with B&#x2F;P, which depends on both B and P, and the B is the minimum of the bandwidths which means it depends on all possilbe groups.</p>
 <p>However, we now the possible final bandwidths are very limited, with no more<br>than the count of all devices which is <img alt="\sum_{0&lti\leq n} m_i \leq
-10000"
-src="http://chart.apis.google.com/chart?cht=tx&chl=\sum_{0%3Ci\leq%20n}m_i%20\leq%2010000"
+10000" data-src="http://chart.apis.google.com/chart?cht=tx&chl=\sum_{0%3Ci\leq%20n}m_i%20\leq%2010000"
 />. If we fix the final bandwidth, the problem would turn to find the minimum total price P, which is a very simple problem.</p>
 <h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><ol>
 <li>Enumerate all possible bandwidths.</li>
 <li>For each possible bandwidth, find the minimum total price P.</li>
-<li>Find the maximum B/P for each optimal P and B.</li>
+<li>Find the maximum B&#x2F;P for each optimal P and B.</li>
 </ol>
 <p>In the second step, we can follow these steps.</p>
 <ol>
@@ -328,7 +336,7 @@ src="http://chart.apis.google.com/chart?cht=tx&chl=\sum_{0%3Ci\leq%20n}m_i%20\le
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -377,7 +385,7 @@ src="http://chart.apis.google.com/chart?cht=tx&chl=\sum_{0%3Ci\leq%20n}m_i%20\le
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
 
 

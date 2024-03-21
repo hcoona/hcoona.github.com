@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -45,10 +45,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>什么是 C++ 中的 const | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -276,7 +286,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="keyword">const</span> <span class="keyword">int</span> a = <span class="built_in">f</span>();
+<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="type">const</span> <span class="type">int</span> a = <span class="built_in">f</span>();
 cout &lt;&lt; a &lt;&lt; endl; <span class="comment">// OK</span>
 a = <span class="number">5</span>; <span class="comment">// Compile Error! `a` is readonly.</span></code></pre></code></pre>
 </div>
@@ -310,13 +320,13 @@ a = <span class="number">5</span>; <span class="comment">// Compile Error! `a` i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>
-<span class="class">&#123;</span>
+<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">A</span>
+&#123;
 <span class="keyword">private</span>:
-    <span class="keyword">int</span> m_id;
+    <span class="type">int</span> m_id;
 <span class="keyword">public</span>:
-    <span class="function"><span class="keyword">int</span> <span class="title">get_id</span><span class="params">(<span class="keyword">void</span>)</span> <span class="keyword">const</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">set_id</span><span class="params">(<span class="keyword">int</span> id)</span></span>;
+    <span class="function"><span class="type">int</span> <span class="title">get_id</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span></span>;
+    <span class="function"><span class="type">void</span> <span class="title">set_id</span><span class="params">(<span class="type">int</span> id)</span></span>;
 &#125;</code></pre></code></pre>
 </div>
 </div>
@@ -346,11 +356,11 @@ a = <span class="number">5</span>; <span class="comment">// Compile Error! `a` i
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-cs" data-lang="cs"><pre><code class="highlight cs"><span class="keyword">interface</span> <span class="title">AReadOnly</span> &#123;
-    <span class="function"><span class="built_in">int</span> <span class="title">GetId</span>(<span class="params"></span>)</span>;
+    <span class="function"><span class="built_in">int</span> <span class="title">GetId</span>()</span>;
 &#125;
 <span class="keyword">class</span> <span class="title">A</span> &#123;
     <span class="keyword">private</span> <span class="built_in">int</span> m_id;
-    <span class="function"><span class="keyword">public</span> <span class="title">GetId</span>(<span class="params"></span>)</span>;
+    <span class="function"><span class="keyword">public</span> <span class="title">GetId</span>()</span>;
     <span class="function"><span class="keyword">public</span> <span class="title">SetId</span>(<span class="params"><span class="built_in">int</span> id</span>)</span>;
 &#125;
 
@@ -418,7 +428,7 @@ AReadOnly a_const = <span class="keyword">new</span> A();</code></pre></code></p
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -467,7 +477,7 @@ AReadOnly a_const = <span class="keyword">new</span> A();</code></pre></code></p
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
 
 

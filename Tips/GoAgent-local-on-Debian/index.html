@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -47,10 +47,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>在Debian上部署GoAgent客户端 | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -247,20 +257,20 @@
 <li>修改proxy.ini文件。</li>
 <li>安装依赖包python-openssl libnss3-tools。</li>
 <li>重建Certificate Database：<ol>
-<li>mkdir -p $HOME/.pki/nssdb</li>
-<li>certutil -d $HOME/.pki/nssdb -N (不设定密码)</li>
+<li>mkdir -p $HOME&#x2F;.pki&#x2F;nssdb</li>
+<li>certutil -d $HOME&#x2F;.pki&#x2F;nssdb -N (不设定密码)</li>
 </ol>
 </li>
-<li>导入证书certutil -d sql:$HOME/.pki/nssdb -A -t TC -n GoAgent -i /opt/GoAgentLocal/CA.crt。</li>
+<li>导入证书certutil -d sql:$HOME&#x2F;.pki&#x2F;nssdb -A -t TC -n GoAgent -i &#x2F;opt&#x2F;GoAgentLocal&#x2F;CA.crt。</li>
 <li>在Firefox或Chrome中导入证书。</li>
-<li>运行python /opt/GoAgentLocal/proxy.py。</li>
+<li>运行python &#x2F;opt&#x2F;GoAgentLocal&#x2F;proxy.py。</li>
 <li>设定代理服务器为自动地址：<a target="_blank" rel="noopener" href="http://127.0.0.1:8086/proxy.pac%E3%80%82">http://127.0.0.1:8086/proxy.pac。</a></li>
 </ol>
 <p>如果想要在Gnome3环境下开机自动启动代理程序：</p>
 <ol>
-<li>修改proxy.ini文件，将visible=1改为0。</li>
+<li>修改proxy.ini文件，将visible&#x3D;1改为0。</li>
 <li>按Alt+F2输入gnome-session-properties并回车。</li>
-<li>添加项proxy /opt/GoAgentLocal/proxy.py。</li>
+<li>添加项proxy &#x2F;opt&#x2F;GoAgentLocal&#x2F;proxy.py。</li>
 </ol>
 
     </div>
@@ -324,7 +334,7 @@
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -373,7 +383,7 @@
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
 
 

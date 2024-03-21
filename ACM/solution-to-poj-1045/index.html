@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://chart.apis.google.com/chart?cht=tx&chl=%5CDelta%20x">
 <meta property="og:image" content="http://chart.apis.google.com/chart?cht=tx&chl=v_1=V_S%5Ccos%7B%5Comega%20t%7D">
 <meta property="og:image" content="http://chart.apis.google.com/chart?cht=tx&chl=v_2=V_R%5Ccos(%5Comega%20t+%5Ctheta)">
-<meta property="og:image" content="http://hcoona.github.io/ACM/solution-to-poj-1045/chart.apis.google.com/chart?cht=tx&chl=v_2=iR">
+<meta property="og:image" content="http://hcoona.github.io/chart.apis.google.com/chart?cht=tx&chl=v_2=iR">
 <meta property="og:image" content="http://chart.apis.google.com/chart?cht=tx&chl=i=C%5Cfrac%7Bd(v_1-v_2)%7D%7Bdt%7D">
 <meta property="og:image" content="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos(%5Comega%20t+%5Ctheta)=CR(%5Cfrac%7Bd%20v_1%7D%7Bdt%7D-%5Cfrac%7Bd%20v_2%7D%7Bdt%7D)">
 <meta property="og:image" content="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos(%5Comega%20t+%5Ctheta)=%5Comega%20CR%5BV_R%5Csin(%5Comega%20t+%5Ctheta)-V_S%5Csin%7B%5Comega%20t%7D%5D">
@@ -61,10 +61,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Solution to POJ 1045 | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -257,20 +267,19 @@
     
     <div class="post-body" itemprop="articleBody"><p>The problem is on <a target="_blank" rel="noopener" href="http://poj.org/problem?id=1045">here</a>.</p>
 <h2 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h2><p>It is hard to go with the direct fomular, because there is no build-in way to<br>calculate a differential. However, we can apporach it with the defination of<br>differential: <img alt="\frac{df(x)}{dx} = \lim_{\Delta x \to
-+\infty}\frac{f(x+\Delta x)-f(x)}{\Delta x}"
-src="http://chart.apis.google.com/chart?cht=tx&chl=\frac{df%28x%29}{dx}%20=%20\lim_{\Delta%20x%20\to%2B\infty}\frac{f%28x%2B\Delta%20x%29-f%28x%29}{\Delta%20x}"
-/>. Usually make <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5CDelta%20x" alt="\Delta x"> equal to DOUBLE_EPSILON.</p>
-<p>The first thing we should do is to simplification the fomulars. From <img src="http://chart.apis.google.com/chart?cht=tx&chl=v_1=V_S%5Ccos%7B%5Comega%20t%7D" alt="v_1=V_S\cos{\omega t}">, <img src="http://chart.apis.google.com/chart?cht=tx&chl=v_2=V_R%5Ccos(%5Comega%20t+%5Ctheta)" alt="v_2=V_R\cos(\omega t + \theta)">, <img src="chart.apis.google.com/chart?cht=tx&chl=v_2=iR" alt="v_2=iR">, and <img src="http://chart.apis.google.com/chart?cht=tx&chl=i=C%5Cfrac%7Bd(v_1-v_2)%7D%7Bdt%7D" alt="i=C\frac{d(v_1-v_2)}{dt}">, we could come out an equation shown below:</p>
-<p><img src="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos(%5Comega%20t+%5Ctheta)=CR(%5Cfrac%7Bd%20v_1%7D%7Bdt%7D-%5Cfrac%7Bd%20v_2%7D%7Bdt%7D)" alt="V_R\cos(\omega t+\theta)=CR(\frac{d v_1}{dt}-\frac{d v_2}{dt})"></p>
++\infty}\frac{f(x+\Delta x)-f(x)}{\Delta x}" data-src="http://chart.apis.google.com/chart?cht=tx&chl=\frac{df%28x%29}{dx}%20=%20\lim_{\Delta%20x%20\to%2B\infty}\frac{f%28x%2B\Delta%20x%29-f%28x%29}{\Delta%20x}"
+/>. Usually make <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=%5CDelta%20x" alt="\Delta x"> equal to DOUBLE_EPSILON.</p>
+<p>The first thing we should do is to simplification the fomulars. From <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=v_1=V_S%5Ccos%7B%5Comega%20t%7D" alt="v_1=V_S\cos{\omega t}">, <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=v_2=V_R%5Ccos(%5Comega%20t+%5Ctheta)" alt="v_2=V_R\cos(\omega t + \theta)">, <img data-src="/chart.apis.google.com/chart?cht=tx&chl=v_2=iR" alt="v_2=iR">, and <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=i=C%5Cfrac%7Bd(v_1-v_2)%7D%7Bdt%7D" alt="i=C\frac{d(v_1-v_2)}{dt}">, we could come out an equation shown below:</p>
+<p><img data-src="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos(%5Comega%20t+%5Ctheta)=CR(%5Cfrac%7Bd%20v_1%7D%7Bdt%7D-%5Cfrac%7Bd%20v_2%7D%7Bdt%7D)" alt="V_R\cos(\omega t+\theta)=CR(\frac{d v_1}{dt}-\frac{d v_2}{dt})"></p>
 <p>After simplification, it would turn into the equation shown below:</p>
-<p><img src="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos(%5Comega%20t+%5Ctheta)=%5Comega%20CR%5BV_R%5Csin(%5Comega%20t+%5Ctheta)-V_S%5Csin%7B%5Comega%20t%7D%5D" alt="V_R\cos(\omega t+\theta)=\omega CR[V_R\sin(\omega t+\theta)-V_S\sin{\omega t}]"></p>
-<p>When <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Comega%20t+%5Ctheta=0" alt="\omega t+\theta=0">, it would show us:</p>
-<p><img src="http://chart.apis.google.com/chart?cht=tx&chl=V_R=%5Comega%20CRV_S%5Csin%5Ctheta" alt="V_R=\omega CRV_S\sin\theta"></p>
-<p>When <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Comega%20t=0" alt="\omega t=0">, it would show us:</p>
-<p><img src="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos%5Ctheta=%5Comega%20CRV_R%5Csin%5Ctheta" alt="V_R\cos\theta=\omega CRV_R\sin\theta"></p>
-<p>which would further lead to <img src="http://chart.apis.google.com/chart?cht=tx&chl=%5Ctan%5Ctheta=%5Cfrac%7B1%7D%7B%5Comega%20CR%7D" alt="\tan\theta=\frac{1}{\omega CR}">.</p>
-<p>As a consequence, we know how to calculate <img src="http://chart.apis.google.com/chart?cht=tx&chl=V_R" alt="V_R">.</p>
-<h2 id="Easy-Solution"><a href="#Easy-Solution" class="headerlink" title="Easy Solution"></a>Easy Solution</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> Vs, R, C;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%d&quot;</span>, &amp;Vs, &amp;R, &amp;C, &amp;n);</span><br><span class="line">    <span class="keyword">while</span>(n--) &#123;</span><br><span class="line">        <span class="keyword">double</span> omega;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;omega);</span><br><span class="line">        <span class="keyword">double</span> CRw = C * R * omega;</span><br><span class="line">        <span class="keyword">double</span> phi = <span class="built_in">atan</span>(<span class="number">1.0</span> / CRw);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%.3lf\n&quot;</span>, CRw * Vs * <span class="built_in">sin</span>(phi));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img data-src="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos(%5Comega%20t+%5Ctheta)=%5Comega%20CR%5BV_R%5Csin(%5Comega%20t+%5Ctheta)-V_S%5Csin%7B%5Comega%20t%7D%5D" alt="V_R\cos(\omega t+\theta)=\omega CR[V_R\sin(\omega t+\theta)-V_S\sin{\omega t}]"></p>
+<p>When <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=%5Comega%20t+%5Ctheta=0" alt="\omega t+\theta=0">, it would show us:</p>
+<p><img data-src="http://chart.apis.google.com/chart?cht=tx&chl=V_R=%5Comega%20CRV_S%5Csin%5Ctheta" alt="V_R=\omega CRV_S\sin\theta"></p>
+<p>When <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=%5Comega%20t=0" alt="\omega t=0">, it would show us:</p>
+<p><img data-src="http://chart.apis.google.com/chart?cht=tx&chl=V_R%5Ccos%5Ctheta=%5Comega%20CRV_R%5Csin%5Ctheta" alt="V_R\cos\theta=\omega CRV_R\sin\theta"></p>
+<p>which would further lead to <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=%5Ctan%5Ctheta=%5Cfrac%7B1%7D%7B%5Comega%20CR%7D" alt="\tan\theta=\frac{1}{\omega CR}">.</p>
+<p>As a consequence, we know how to calculate <img data-src="http://chart.apis.google.com/chart?cht=tx&chl=V_R" alt="V_R">.</p>
+<h2 id="Easy-Solution"><a href="#Easy-Solution" class="headerlink" title="Easy Solution"></a>Easy Solution</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">double</span> Vs, R, C;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%d&quot;</span>, &amp;Vs, &amp;R, &amp;C, &amp;n);</span><br><span class="line">    <span class="keyword">while</span>(n--) &#123;</span><br><span class="line">        <span class="type">double</span> omega;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;omega);</span><br><span class="line">        <span class="type">double</span> CRw = C * R * omega;</span><br><span class="line">        <span class="type">double</span> phi = <span class="built_in">atan</span>(<span class="number">1.0</span> / CRw);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%.3lf\n&quot;</span>, CRw * Vs * <span class="built_in">sin</span>(phi));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Please pay more attention about “… output should be rounded to three digits after the decimal point.”.</p>
 
@@ -334,7 +343,7 @@ src="http://chart.apis.google.com/chart?cht=tx&chl=\frac{df%28x%29}{dx}%20=%20\l
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -383,7 +392,7 @@ src="http://chart.apis.google.com/chart?cht=tx&chl=\frac{df%28x%29}{dx}%20=%20\l
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
 
 
