@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -16,11 +16,11 @@
 
 
 
-<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" integrity="sha256-RvRHGSuWAxZpXKV9lLDt2e+rZ+btzn48Wp4ueS3NZKs=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/config.js"></script>
 
     <meta name="description" content="本文介绍了什么是尾递归，什么是CPS，以及如何应用前两者将递归转化为循环。">
 <meta property="og:type" content="article">
@@ -46,10 +46,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>尾递归、CPS和将递归转化为循环的一般方法 | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -133,7 +143,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -144,7 +154,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -267,14 +277,14 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="function"><span class="keyword">int</span> <span class="title">factorial</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;
+<pre><code class="highlight cpp"><span class="function"><span class="type">int</span> <span class="title">factorial</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;
     <span class="built_in">assert</span> (n &gt;= <span class="number">0</span>);
     <span class="keyword">if</span> (n == <span class="number">0</span>) &#123;
         <span class="keyword">return</span> <span class="number">1</span>;
     &#125; <span class="keyword">else</span> &#123;
         <span class="keyword">return</span> n * <span class="built_in">factorial</span>(n - <span class="number">1</span>);
     &#125;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -282,7 +292,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">factorial_recursive_aux</span><span class="params">(<span class="keyword">int</span> acc, <span class="keyword">int</span> n)</span> </span>&#123;
+<pre><code class="highlight cpp"><span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">factorial_recursive_aux</span><span class="params">(<span class="type">int</span> acc, <span class="type">int</span> n)</span> </span>&#123;
     <span class="keyword">if</span> (n) &#123;
         <span class="keyword">return</span> <span class="built_in">factorial_recursive_aux</span>(acc * n, n - <span class="number">1</span>);
     &#125; <span class="keyword">else</span> &#123;
@@ -290,10 +300,10 @@
     &#125;
 &#125;
 
-<span class="function"><span class="keyword">int</span> <span class="title">factorial_recursive</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;
+<span class="function"><span class="type">int</span> <span class="title">factorial_recursive</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;
     <span class="built_in">assert</span> (n &gt;= <span class="number">0</span>);
     <span class="keyword">return</span> <span class="built_in">factorial_recursive_aux</span>(<span class="number">1</span>, n);
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -301,7 +311,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">factorial_recursive_opt</span><span class="params">(<span class="keyword">int</span> acc, <span class="keyword">int</span> n)</span> </span>&#123;
+<pre><code class="highlight cpp"><span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">factorial_recursive_opt</span><span class="params">(<span class="type">int</span> acc, <span class="type">int</span> n)</span> </span>&#123;
 FRO_START:
     <span class="keyword">if</span> (n) &#123;
         acc *= n;
@@ -310,7 +320,7 @@ FRO_START:
     &#125; <span class="keyword">else</span> &#123;
         <span class="keyword">return</span> acc;
     &#125;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -318,10 +328,10 @@ FRO_START:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="keyword">int</span> acc = <span class="number">1</span>;
+<pre><code class="highlight cpp"><span class="type">int</span> acc = <span class="number">1</span>;
 <span class="keyword">for</span> (; n; n--) &#123;
     acc *= n;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -332,7 +342,7 @@ FRO_START:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="function"><span class="keyword">int</span> <span class="title">fibonacci</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;
+<pre><code class="highlight cpp"><span class="function"><span class="type">int</span> <span class="title">fibonacci</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;
     <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;
         <span class="keyword">return</span> <span class="number">0</span>;
     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) &#123;
@@ -340,7 +350,7 @@ FRO_START:
     &#125; <span class="keyword">else</span> &#123;
         <span class="keyword">return</span> <span class="built_in">fibonacci</span>(n - <span class="number">1</span>) + <span class="built_in">fibonacci</span>(n - <span class="number">2</span>);
     &#125;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -351,12 +361,12 @@ FRO_START:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-fsharp" data-lang="fsharp"><pre><code class="highlight fsharp"><span class="keyword">let</span> <span class="keyword">rec</span> fibonacci n =
+<pre><code class="highlight fsharp"><span class="keyword">let</span> <span class="keyword">rec</span> fibonacci n <span class="operator">=</span>
     <span class="keyword">match</span> n <span class="keyword">with</span>
-    | _ <span class="keyword">when</span> n &lt;= <span class="number">0</span> -&gt; <span class="number">0</span>
-    | <span class="number">1</span> | <span class="number">2</span> -&gt; <span class="number">1</span>
-    | _ -&gt; (fibonacci (n - <span class="number">1</span>)) + (fibonacci (n - <span class="number">2</span>))
-;;</code></pre></code></pre>
+    <span class="operator">|</span> _ <span class="keyword">when</span> n <span class="operator">&lt;=</span> <span class="number">0</span> <span class="operator">-&gt;</span> <span class="number">0</span>
+    <span class="operator">|</span> <span class="number">1</span> <span class="operator">|</span> <span class="number">2</span> <span class="operator">-&gt;</span> <span class="number">1</span>
+    <span class="operator">|</span> _ <span class="operator">-&gt;</span> (fibonacci (n <span class="operator">-</span> <span class="number">1</span>)) <span class="operator">+</span> (fibonacci (n <span class="operator">-</span> <span class="number">2</span>))
+;;</code></pre>
 </div>
 </div>
 </div>
@@ -379,22 +389,22 @@ FRO_START:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-fsharp" data-lang="fsharp"><pre><code class="highlight fsharp"><span class="keyword">let</span> <span class="keyword">rec</span> factorial n =
+<pre><code class="highlight fsharp"><span class="keyword">let</span> <span class="keyword">rec</span> factorial n <span class="operator">=</span>
     <span class="keyword">match</span> n <span class="keyword">with</span>
-    | _ <span class="keyword">when</span> n &lt; <span class="number">0</span> -&gt; failwith <span class="string">&quot;n must not be less than 0.&quot;</span>
-    | <span class="number">0</span> -&gt; <span class="number">1</span>
-    | _ -&gt; n * (factorial (n - <span class="number">1</span>))
+    <span class="operator">|</span> _ <span class="keyword">when</span> n <span class="operator">&lt;</span> <span class="number">0</span> <span class="operator">-&gt;</span> <span class="built_in">failwith</span> <span class="string">&quot;n must not be less than 0.&quot;</span>
+    <span class="operator">|</span> <span class="number">0</span> <span class="operator">-&gt;</span> <span class="number">1</span>
+    <span class="operator">|</span> _ <span class="operator">-&gt;</span> n <span class="operator">*</span> (factorial (n <span class="operator">-</span> <span class="number">1</span>))
 ;;
 
-<span class="keyword">let</span> factorial_cps n =
-    <span class="keyword">let</span> <span class="keyword">rec</span> factorial_aux n cont =
+<span class="keyword">let</span> factorial_cps n <span class="operator">=</span>
+    <span class="keyword">let</span> <span class="keyword">rec</span> factorial_aux n cont <span class="operator">=</span>
         <span class="keyword">match</span> n <span class="keyword">with</span>
-        | <span class="number">0</span> -&gt; cont <span class="number">1</span>
-        | _ -&gt; factorial_aux (n - <span class="number">1</span>) (<span class="keyword">fun</span> acc -&gt; cont (acc * n))
+        <span class="operator">|</span> <span class="number">0</span> <span class="operator">-&gt;</span> cont <span class="number">1</span>
+        <span class="operator">|</span> _ <span class="operator">-&gt;</span> factorial_aux (n <span class="operator">-</span> <span class="number">1</span>) (<span class="keyword">fun</span> acc <span class="operator">-&gt;</span> cont (acc <span class="operator">*</span> n))
     <span class="keyword">in</span>
-    <span class="keyword">if</span> n &lt; <span class="number">0</span> <span class="keyword">then</span> failwith <span class="string">&quot;n must not be less than 0.&quot;</span>
-    <span class="keyword">else</span> factorial_aux n (<span class="keyword">fun</span> x -&gt; x)
-;;</code></pre></code></pre>
+    <span class="keyword">if</span> n <span class="operator">&lt;</span> <span class="number">0</span> <span class="keyword">then</span> <span class="built_in">failwith</span> <span class="string">&quot;n must not be less than 0.&quot;</span>
+    <span class="keyword">else</span> factorial_aux n (<span class="keyword">fun</span> x <span class="operator">-&gt;</span> x)
+;;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -408,21 +418,21 @@ FRO_START:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-fsharp" data-lang="fsharp"><pre><code class="highlight fsharp"><span class="keyword">let</span> fibonacci_cps n =
-    <span class="keyword">let</span> <span class="keyword">rec</span> fibonacci_aux n cont =
+<pre><code class="highlight fsharp"><span class="keyword">let</span> fibonacci_cps n <span class="operator">=</span>
+    <span class="keyword">let</span> <span class="keyword">rec</span> fibonacci_aux n cont <span class="operator">=</span>
         <span class="keyword">match</span> n <span class="keyword">with</span>
-        | <span class="number">1</span> | <span class="number">2</span> -&gt; cont <span class="number">1</span>
-        | _ -&gt; fibonacci_aux
-                    (n - <span class="number">1</span>)
-                    (<span class="keyword">fun</span> acc1 -&gt; fibonacci_aux
-                                    (n - <span class="number">2</span>)
-                                    (<span class="keyword">fun</span> acc2 -&gt; cont (acc1 + acc2)))
+        <span class="operator">|</span> <span class="number">1</span> <span class="operator">|</span> <span class="number">2</span> <span class="operator">-&gt;</span> cont <span class="number">1</span>
+        <span class="operator">|</span> _ <span class="operator">-&gt;</span> fibonacci_aux
+                    (n <span class="operator">-</span> <span class="number">1</span>)
+                    (<span class="keyword">fun</span> acc1 <span class="operator">-&gt;</span> fibonacci_aux
+                                    (n <span class="operator">-</span> <span class="number">2</span>)
+                                    (<span class="keyword">fun</span> acc2 <span class="operator">-&gt;</span> cont (acc1 <span class="operator">+</span> acc2)))
     <span class="keyword">in</span>
     <span class="keyword">match</span> n <span class="keyword">with</span>
-    | _ <span class="keyword">when</span> n &lt;= <span class="number">0</span> -&gt; <span class="number">0</span>
-    | <span class="number">1</span> | <span class="number">2</span> -&gt; <span class="number">1</span>
-    | _ -&gt; fibonacci_aux n (<span class="keyword">fun</span> x -&gt; x)
-;;</code></pre></code></pre>
+    <span class="operator">|</span> _ <span class="keyword">when</span> n <span class="operator">&lt;=</span> <span class="number">0</span> <span class="operator">-&gt;</span> <span class="number">0</span>
+    <span class="operator">|</span> <span class="number">1</span> <span class="operator">|</span> <span class="number">2</span> <span class="operator">-&gt;</span> <span class="number">1</span>
+    <span class="operator">|</span> _ <span class="operator">-&gt;</span> fibonacci_aux n (<span class="keyword">fun</span> x <span class="operator">-&gt;</span> x)
+;;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -462,24 +472,24 @@ FRO_START:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> _FContTy&gt;</span>
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">fibonacci_aux</span><span class="params">(<span class="keyword">int</span> n, _FContTy cont)</span></span>
+<pre><code class="highlight cpp"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> _FContTy&gt;</span>
+<span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">fibonacci_aux</span><span class="params">(<span class="type">int</span> n, _FContTy cont)</span></span>
 <span class="function"></span>&#123;
     <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) &#123;
         <span class="keyword">return</span> <span class="built_in">cont</span>(<span class="number">1</span>);
     &#125; <span class="keyword">else</span> &#123;
-        <span class="keyword">return</span> <span class="built_in">fibonacci_aux</span>(n - <span class="number">1</span>, [=](<span class="keyword">int</span> acc1) &#123;
-            <span class="keyword">return</span> <span class="built_in">fibonacci_aux</span>(n - <span class="number">2</span>, [=](<span class="keyword">int</span> acc2) &#123;
+        <span class="keyword">return</span> <span class="built_in">fibonacci_aux</span>(n - <span class="number">1</span>, [=](<span class="type">int</span> acc1) &#123;
+            <span class="keyword">return</span> <span class="built_in">fibonacci_aux</span>(n - <span class="number">2</span>, [=](<span class="type">int</span> acc2) &#123;
                 <span class="keyword">return</span> <span class="built_in">cont</span>(acc1 + acc2);
             &#125;);
         &#125;);
     &#125;
 &#125;
 
-<span class="function"><span class="keyword">int</span> <span class="title">fibonacci</span><span class="params">(<span class="keyword">int</span> n)</span></span>
+<span class="function"><span class="type">int</span> <span class="title">fibonacci</span><span class="params">(<span class="type">int</span> n)</span></span>
 <span class="function"></span>&#123;
-    <span class="keyword">return</span> <span class="built_in">fibonacci_aux</span>(n, [](<span class="keyword">int</span> x) &#123; <span class="keyword">return</span> x; &#125;);
-&#125;</code></pre></code></pre>
+    <span class="keyword">return</span> <span class="built_in">fibonacci_aux</span>(n, [](<span class="type">int</span> x) &#123; <span class="keyword">return</span> x; &#125;);
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -491,63 +501,63 @@ Studio_ <a href="#latest-vs">[latest-vs]</a>或者是_最新版本的G++_ <a hre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span>
+<pre><code class="highlight cpp"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> std;
 
-<span class="class"><span class="keyword">class</span> <span class="title">ContF</span> &#123;</span>
+<span class="keyword">class</span> <span class="title class_">ContF</span> &#123;
 <span class="keyword">protected</span>:
-    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">Imp</span><span class="params">(<span class="keyword">int</span> x)</span> <span class="keyword">const</span> </span>= <span class="number">0</span>;
+    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Imp</span><span class="params">(<span class="type">int</span> x)</span> <span class="type">const</span> </span>= <span class="number">0</span>;
 <span class="keyword">public</span>:
-    <span class="function"><span class="keyword">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">int</span> x)</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="built_in">Imp</span>(x); &#125;
+    <span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> x)</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> <span class="built_in">Imp</span>(x); &#125;
 &#125;;
 
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, shared_ptr&lt;ContF&gt; cont)</span></span>;
+<span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> n, shared_ptr&lt;ContF&gt; cont)</span></span>;
 
-<span class="class"><span class="keyword">class</span> <span class="title">ContIdentityF</span> :</span> <span class="keyword">public</span> ContF &#123;
+<span class="keyword">class</span> <span class="title class_">ContIdentityF</span> : <span class="keyword">public</span> ContF &#123;
 <span class="keyword">protected</span>:
-    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">Imp</span><span class="params">(<span class="keyword">int</span> x)</span> <span class="keyword">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> x; &#125;
+    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Imp</span><span class="params">(<span class="type">int</span> x)</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> x; &#125;
 &#125;;
 
-<span class="class"><span class="keyword">class</span> <span class="title">ContInnerF</span> :</span> <span class="keyword">public</span> ContF &#123;
+<span class="keyword">class</span> <span class="title class_">ContInnerF</span> : <span class="keyword">public</span> ContF &#123;
 <span class="keyword">private</span>:
-    <span class="keyword">int</span> x;
+    <span class="type">int</span> x;
     shared_ptr&lt;ContF&gt; cont;
 <span class="keyword">protected</span>:
-    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">Imp</span><span class="params">(<span class="keyword">int</span> y)</span> <span class="keyword">const</span> <span class="keyword">override</span> </span>&#123;
-        <span class="keyword">return</span> cont-&gt;<span class="built_in"><span class="keyword">operator</span></span>() (x + y);
+    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Imp</span><span class="params">(<span class="type">int</span> y)</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123;
+        <span class="keyword">return</span> cont-&gt;<span class="built_in">operator</span>() (x + y);
     &#125;
 <span class="keyword">public</span>:
-    <span class="built_in">ContInnerF</span>(<span class="keyword">int</span> x, shared_ptr&lt;ContF&gt; cont) : <span class="built_in">x</span>(x), <span class="built_in">cont</span>(cont) &#123; &#125;
+    <span class="built_in">ContInnerF</span>(<span class="type">int</span> x, shared_ptr&lt;ContF&gt; cont) : <span class="built_in">x</span>(x), <span class="built_in">cont</span>(cont) &#123; &#125;
 &#125;;
 
-<span class="class"><span class="keyword">class</span> <span class="title">ContOuterF</span> :</span> <span class="keyword">public</span> ContF &#123;
+<span class="keyword">class</span> <span class="title class_">ContOuterF</span> : <span class="keyword">public</span> ContF &#123;
 <span class="keyword">private</span>:
-    <span class="keyword">int</span> n;
+    <span class="type">int</span> n;
     shared_ptr&lt;ContF&gt; cont;
 <span class="keyword">protected</span>:
-    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">Imp</span><span class="params">(<span class="keyword">int</span> x)</span> <span class="keyword">const</span> <span class="keyword">override</span> </span>&#123;
-        <span class="keyword">return</span> <span class="built_in">f</span>(n - <span class="number">2</span>, make_shared&lt;ContInnerF&gt;(x, cont));
+    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Imp</span><span class="params">(<span class="type">int</span> x)</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123;
+        <span class="keyword">return</span> <span class="built_in">f</span>(n - <span class="number">2</span>, <span class="built_in">make_shared</span>&lt;ContInnerF&gt;(x, cont));
     &#125;
 <span class="keyword">public</span>:
-    <span class="built_in">ContOuterF</span>(<span class="keyword">int</span> n, shared_ptr&lt;ContF&gt; cont) : <span class="built_in">n</span>(n), <span class="built_in">cont</span>(cont) &#123; &#125;
+    <span class="built_in">ContOuterF</span>(<span class="type">int</span> n, shared_ptr&lt;ContF&gt; cont) : <span class="built_in">n</span>(n), <span class="built_in">cont</span>(cont) &#123; &#125;
 &#125;;
 
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, shared_ptr&lt;ContF&gt; cont)</span> </span>&#123;
+<span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> n, shared_ptr&lt;ContF&gt; cont)</span> </span>&#123;
     <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) &#123;
-        <span class="keyword">return</span> cont-&gt;<span class="built_in"><span class="keyword">operator</span></span>() (<span class="number">1</span>);
+        <span class="keyword">return</span> cont-&gt;<span class="built_in">operator</span>() (<span class="number">1</span>);
     &#125; <span class="keyword">else</span> &#123;
-        <span class="keyword">return</span> <span class="built_in">f</span>(n - <span class="number">1</span>, make_shared&lt;ContOuterF&gt;(n, cont));
+        <span class="keyword">return</span> <span class="built_in">f</span>(n - <span class="number">1</span>, <span class="built_in">make_shared</span>&lt;ContOuterF&gt;(n, cont));
     &#125;
 &#125;
 
-<span class="function"><span class="keyword">int</span> <span class="title">fibonacci</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;
+<span class="function"><span class="type">int</span> <span class="title">fibonacci</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;
     <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;
         <span class="keyword">return</span> <span class="number">0</span>;
     &#125; <span class="keyword">else</span> &#123;
-        <span class="keyword">return</span> <span class="built_in">f</span>(n, make_shared&lt;ContIdentityF&gt;());
+        <span class="keyword">return</span> <span class="built_in">f</span>(n, <span class="built_in">make_shared</span>&lt;ContIdentityF&gt;());
     &#125;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -555,18 +565,18 @@ Studio_ <a href="#latest-vs">[latest-vs]</a>或者是_最新版本的G++_ <a hre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span>
+<pre><code class="highlight cpp"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> std;
 
-<span class="class"><span class="keyword">enum</span> <span class="keyword">class</span> <span class="title">ContDataType</span> &#123;</span> Identity, Outer, Inner &#125;;
+<span class="keyword">enum class</span> <span class="title class_">ContDataType</span> &#123; Identity, Outer, Inner &#125;;
 
-<span class="class"><span class="keyword">struct</span> <span class="title">ContData</span> &#123;</span>
-    <span class="keyword">const</span> ContDataType type;
-    <span class="keyword">const</span> <span class="keyword">int</span> x;
-    <span class="keyword">const</span> shared_ptr&lt;ContData&gt; p;
+<span class="keyword">struct</span> <span class="title class_">ContData</span> &#123;
+    <span class="type">const</span> ContDataType type;
+    <span class="type">const</span> <span class="type">int</span> x;
+    <span class="type">const</span> shared_ptr&lt;ContData&gt; p;
 
-    <span class="built_in">ContData</span>(ContDataType type, <span class="keyword">int</span> x, shared_ptr&lt;ContData&gt; p)
+    <span class="built_in">ContData</span>(ContDataType type, <span class="type">int</span> x, shared_ptr&lt;ContData&gt; p)
         : <span class="built_in">type</span>(type), <span class="built_in">x</span>(x), <span class="built_in">p</span>(p)
     &#123;
         _ASSERT(type == ContDataType::Outer
@@ -577,39 +587,39 @@ Studio_ <a href="#latest-vs">[latest-vs]</a>或者是_最新版本的G++_ <a hre
     &#123; &#125;
 &#125;;
 
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, shared_ptr&lt;ContData&gt; data)</span></span>;
+<span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> n, shared_ptr&lt;ContData&gt; data)</span></span>;
 
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f_cont</span><span class="params">(<span class="keyword">int</span> x, shared_ptr&lt;ContData&gt; data)</span> </span>&#123;
-    <span class="built_in"><span class="keyword">switch</span></span> (data-&gt;type)
+<span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">f_cont</span><span class="params">(<span class="type">int</span> x, shared_ptr&lt;ContData&gt; data)</span> </span>&#123;
+    <span class="keyword">switch</span> (data-&gt;type)
     &#123;
     <span class="keyword">case</span> ContDataType::Identity:
         <span class="keyword">return</span> x;
     <span class="keyword">case</span> ContDataType::Outer:
         <span class="keyword">return</span> <span class="built_in">f</span>(
             data-&gt;x - <span class="number">2</span>,
-            make_shared&lt;ContData&gt;(ContDataType::Inner, x, data-&gt;p));
+            <span class="built_in">make_shared</span>&lt;ContData&gt;(ContDataType::Inner, x, data-&gt;p));
     <span class="keyword">case</span> ContDataType::Inner:
         <span class="keyword">return</span> <span class="built_in">f_cont</span>(data-&gt;x + x, data-&gt;p);
     &#125;
 &#125;
 
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, shared_ptr&lt;ContData&gt; cont)</span> </span>&#123;
+<span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> n, shared_ptr&lt;ContData&gt; cont)</span> </span>&#123;
     <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) &#123;
         <span class="keyword">return</span> <span class="built_in">f_cont</span>(<span class="number">1</span>, cont);
     &#125; <span class="keyword">else</span> &#123;
         <span class="keyword">return</span> <span class="built_in">f</span>(
             n - <span class="number">1</span>,
-            make_shared&lt;ContData&gt;(ContDataType::Outer, n, cont));
+            <span class="built_in">make_shared</span>&lt;ContData&gt;(ContDataType::Outer, n, cont));
     &#125;
 &#125;
 
-<span class="function"><span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;
+<span class="function"><span class="type">int</span> <span class="title">fib</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;
     <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;
         <span class="keyword">return</span> <span class="number">0</span>;
     &#125; <span class="keyword">else</span> &#123;
-        <span class="keyword">return</span> <span class="built_in">f</span>(n, make_shared&lt;ContData&gt;());
+        <span class="keyword">return</span> <span class="built_in">f</span>(n, <span class="built_in">make_shared</span>&lt;ContData&gt;());
     &#125;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -617,26 +627,26 @@ Studio_ <a href="#latest-vs">[latest-vs]</a>或者是_最新版本的G++_ <a hre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, shared_ptr&lt;ContData&gt; cont)</span> </span>&#123;
+<pre><code class="highlight cpp"><span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> n, shared_ptr&lt;ContData&gt; cont)</span> </span>&#123;
 F_START:
     <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) &#123;
         n = <span class="number">1</span>;
         <span class="keyword">goto</span> CONT_START;
     &#125; <span class="keyword">else</span> &#123;
-        cont = make_shared&lt;ContData&gt;(ContDataType::Outer, n, cont);
+        cont = <span class="built_in">make_shared</span>&lt;ContData&gt;(ContDataType::Outer, n, cont);
         n--;
         <span class="keyword">goto</span> F_START;
     &#125;
 
 CONT_START:
-    <span class="built_in"><span class="keyword">switch</span></span> (cont-&gt;type)
+    <span class="keyword">switch</span> (cont-&gt;type)
     &#123;
     <span class="keyword">case</span> ContDataType::Identity:
         <span class="keyword">return</span> n;
     <span class="keyword">case</span> ContDataType::Outer: &#123;
-            <span class="keyword">int</span> nn = n;
+            <span class="type">int</span> nn = n;
             n = cont-&gt;x - <span class="number">2</span>;
-            cont = make_shared&lt;ContData&gt;(ContDataType::Inner, nn, cont-&gt;p);
+            cont = <span class="built_in">make_shared</span>&lt;ContData&gt;(ContDataType::Inner, nn, cont-&gt;p);
             <span class="keyword">goto</span> F_START;
         &#125;
     <span class="keyword">case</span> ContDataType::Inner:
@@ -644,7 +654,7 @@ CONT_START:
         cont = cont-&gt;p;
         <span class="keyword">goto</span> CONT_START;
     &#125;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -658,17 +668,17 @@ CONT_START:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp"><pre><code class="highlight cpp"><span class="class"><span class="keyword">enum</span> &#123;</span> Identity, Outer, Inner &#125;;
+<pre><code class="highlight cpp"><span class="keyword">enum</span> &#123; Identity, Outer, Inner &#125;;
 
-<span class="class"><span class="keyword">struct</span> <span class="title">ContData</span> &#123;</span>
-    <span class="keyword">int</span> type;
-    <span class="keyword">int</span> x;
-    <span class="keyword">int</span> pIdx;
+<span class="keyword">struct</span> <span class="title class_">ContData</span> &#123;
+    <span class="type">int</span> type;
+    <span class="type">int</span> x;
+    <span class="type">int</span> pIdx;
 &#125;;
 
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> STACK_SIZE = <span class="number">10000</span>;
+<span class="type">static</span> <span class="type">const</span> <span class="type">int</span> STACK_SIZE = <span class="number">10000</span>;
 
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, ContData stack[], <span class="keyword">int</span> stackTop)</span> </span>&#123;
+<span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> n, ContData stack[], <span class="type">int</span> stackTop)</span> </span>&#123;
 F_START:
     <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) &#123;
         n = <span class="number">1</span>;
@@ -683,12 +693,12 @@ F_START:
     &#125;
 
 CONT_START:
-    <span class="built_in"><span class="keyword">switch</span></span> (stack[stackTop].type)
+    <span class="keyword">switch</span> (stack[stackTop].type)
     &#123;
     <span class="keyword">case</span> Identity:
         <span class="keyword">return</span> n;
     <span class="keyword">case</span> Outer: &#123;
-            <span class="keyword">int</span> nn = n;
+            <span class="type">int</span> nn = n;
             n = stack[stackTop].x - <span class="number">2</span>;
             stackTop++;
             stack[stackTop].type = Inner;
@@ -703,7 +713,7 @@ CONT_START:
     &#125;
 &#125;
 
-<span class="function"><span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;
+<span class="function"><span class="type">int</span> <span class="title">fib</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;
     <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;
         <span class="keyword">return</span> <span class="number">0</span>;
     &#125; <span class="keyword">else</span> &#123;
@@ -711,7 +721,7 @@ CONT_START:
         stack[<span class="number">0</span>].type = Identity;
         <span class="keyword">return</span> <span class="built_in">f</span>(n, stack, <span class="number">0</span>);
     &#125;
-&#125;</code></pre></code></pre>
+&#125;</code></pre>
 </div>
 </div>
 <div class="ulist bibliography">
@@ -796,7 +806,7 @@ CONT_START:
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -823,18 +833,18 @@ CONT_START:
   
   <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js" integrity="sha256-q8XkJ6dj5VwSvzI8+nATCHHQG+Xv/dAZBCgqmu93zOY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js" integrity="sha256-+2+qOqR8CKoHh/AsVR9k2qaDBKWjYNC2nozhYmv5j9k=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/motion.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/next-boot.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/pjax.js"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/motion.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/next-boot.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/pjax.js"></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.12/pdfobject.min.js","integrity":"sha256-g2xji1rlE3KsGVClvuxTbcR0Kn2+wtQADSff2Tbb4zA="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/tags/pdf.js"></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/tags/pdf.js"></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/fancybox.js"></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/fancybox.js"></script>
 
 
 
@@ -846,12 +856,12 @@ CONT_START:
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/math/mathjax.js"></script>
 
 
   <script src="https://unpkg.com/quicklink@2.3.0/dist/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Functional-Programming/tail-recursion-cps-and-recursion-to-loop/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/quicklink.js"></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/quicklink.js"></script>
 
 </body>
 </html>

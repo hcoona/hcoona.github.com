@@ -1,3 +1,8 @@
+http://hcoona.github.io/Tips/dotnet-structure-log-scope/
+http://hcoona.github.io/ACM/solution-to-poj-1045/
+http://hcoona.github.io/ACM/solution-to-poj-1061/
+http://hcoona.github.io/ACM/solution-to-poj-1019/
+http://hcoona.github.io/ACM/solution-to-poj-1018/
 http://hcoona.github.io/about/index.html
 http://hcoona.github.io/tags/index.html
 http://hcoona.github.io/images/manifest.json
@@ -37,12 +42,8 @@ http://hcoona.github.io/interview/the-differences-between-overloading-and-overri
 http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/
 http://hcoona.github.io/Tips/export-pdf-using-ghostscript/
 http://hcoona.github.io/Tips/GoAgent-local-on-Debian/
-http://hcoona.github.io/ACM/solution-to-poj-1061/
 http://hcoona.github.io/ACM/solution-to-poj-1009/
 http://hcoona.github.io/Functional-Programming/tail-recursion-cps-and-recursion-to-loop/
-http://hcoona.github.io/ACM/solution-to-poj-1019/
-http://hcoona.github.io/ACM/solution-to-poj-1018/
-http://hcoona.github.io/ACM/solution-to-poj-1045/
 http://hcoona.github.io/ACM/solution-to-poj-1002/
 http://hcoona.github.io/ACM/solution-to-poj-1001/
 http://hcoona.github.io/PL/reference-type-in-cpp/
@@ -72,6 +73,7 @@ http://hcoona.github.io/tags/Database/
 http://hcoona.github.io/tags/Hands-on-Lab/
 http://hcoona.github.io/tags/Architecture/
 http://hcoona.github.io/tags/Storage-Engine/
+http://hcoona.github.io/tags/CSharp/
 http://hcoona.github.io/categories/ACM/
 http://hcoona.github.io/categories/PL/
 http://hcoona.github.io/categories/Functional-Programming/

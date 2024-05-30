@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -16,11 +16,11 @@
 
 
 
-<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.css" integrity="sha256-RvRHGSuWAxZpXKV9lLDt2e+rZ+btzn48Wp4ueS3NZKs=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/config.js"></script>
 
     <meta name="description" content="很多人都不明白，不同的编程语言具有不同的表述能力，这就是我们为什么有了汇编之后还需要更高级的编程语言。在软件规模愈发庞大的现在，C 和 C++ 语言表述能力的不足越发的明显了。我们应该尽可能的选用高级的编程语言完成我们的任务，在需要性能的地方，使用 Profiling，而不是在一开始就选用 C&#x2F;C++ 这样的语言去工作。">
 <meta property="og:type" content="article">
@@ -46,10 +46,20 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>从一道面试题看不同编程语言的表述能力 | HCOONa's blog</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
 
 
 
@@ -132,7 +142,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -143,7 +153,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -239,42 +249,28 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>很多人都不明白，不同的编程语言具有不同的表述能力，这就是我们为什么有了汇编之后还需要更高级的编程语言。在软件规模愈发庞大的现在，C
-和 C++
-语言表述能力的不足越发的明显了。我们应该尽可能的选用高级的编程语言完成我们的任务，在需要性能的地方，使用
-Profiling，而不是在一开始就选用 C/C++ 这样的语言去工作。</p>
-<p>最近一段时间，突然看到一个很吸引眼球的题，而这道题貌似 ThoughtWorks
-也考过类似的内容。题目很简单，但是怎么写都让我觉得很别扭，知道有一天我用
-DrRacket
-写了一下，才恍然大悟。在没有模式匹配的语言中，这道题就是怎么写怎么别扭，没办法的。下面我们来分别比较一下
-C 语言和 Scheme 这两种古老的语言的实现。</p>
+    <div class="post-body" itemprop="articleBody"><p>很多人都不明白，不同的编程语言具有不同的表述能力，这就是我们为什么有了汇编之后还需要更高级的编程语言。在软件规模愈发庞大的现在，C 和 C++ 语言表述能力的不足越发的明显了。我们应该尽可能的选用高级的编程语言完成我们的任务，在需要性能的地方，使用 Profiling，而不是在一开始就选用 C&#x2F;C++ 这样的语言去工作。</p>
+<p>最近一段时间，突然看到一个很吸引眼球的题，而这道题貌似 ThoughtWorks 也考过类似的内容。题目很简单，但是怎么写都让我觉得很别扭，知道有一天我用 DrRacket 写了一下，才恍然大悟。在没有模式匹配的语言中，这道题就是怎么写怎么别扭，没办法的。下面我们来分别比较一下 C 语言和 Scheme 这两种古老的语言的实现。</p>
 <p>题目描述（大意）：</p>
-<pre><code>依序遍历 0 到 100 闭区间内所有的正整数，如果该数字能被 3 整除，则输出该数字及 ‘*’ 标记；如果该数字能被 5 整除，则输出该数字及 ‘#’ 标记；如果该数字既能被 3 整除又能被 5 整除，则输出该数字及 ‘*#’ 标记。</code></pre>
+<pre><code>依序遍历 0 到 100 闭区间内所有的正整数，如果该数字能被 3 整除，则输出该数字及 ‘*’ 标记；如果该数字能被 5 整除，则输出该数字及 ‘#’ 标记；如果该数字既能被 3 整除又能被 5 整除，则输出该数字及 ‘*#’ 标记。
+</code></pre>
 <p>首先先看看 C 语言的常规实现：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (i % <span class="number">3</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i % <span class="number">5</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d*#&quot;</span>, i);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d*&quot;</span>, i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (i % <span class="number">5</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d#&quot;</span>, i);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ; <span class="comment">// Do nothing</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>省略了 <code>main</code>
-函数等关系不是很大的部分。我选择逻辑最清晰的两层 <code>if-else</code>
-的方式，比起其他“聪明”的方法，可读性最高，逻辑最清晰，最省计算量，同时也最容易添加、修改程序逻辑。</p>
+
+<p>省略了 <code>main</code> 函数等关系不是很大的部分。我选择逻辑最清晰的两层 <code>if-else</code> 的方式，比起其他“聪明”的方法，可读性最高，逻辑最清晰，最省计算量，同时也最容易添加、修改程序逻辑。</p>
 <p>我们再来看看 Scheme 的实现：</p>
 <figure class="highlight scheme"><table><tr><td class="code"><pre><span class="line">#lang racket</span><br><span class="line">(<span class="name"><span class="built_in">require</span></span> math/number-theory)</span><br><span class="line">(<span class="name"><span class="built_in">require</span></span> racket/match)</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="built_in">define</span></span> (<span class="name">range-closed</span> from to [<span class="name">step</span> <span class="number">1</span>])</span><br><span class="line">  (<span class="name">range</span> from (<span class="name"><span class="built_in">+</span></span> <span class="number">1</span> to) step))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="built_in">let</span></span> ([<span class="name">numbers</span> (<span class="name">range-closed</span> <span class="number">1</span> <span class="number">100</span>)])</span><br><span class="line">  (<span class="name">for</span> ([<span class="name">x</span> numbers])</span><br><span class="line">    (<span class="name">match</span> `(,(divides? <span class="number">3</span> x) . ,(divides? <span class="number">5</span> x))</span><br><span class="line">      [&#x27;(<span class="literal">#t</span> . <span class="literal">#t</span>) (<span class="name">printf</span> <span class="string">&quot;~A*#&quot;</span> x)]</span><br><span class="line">      [&#x27;(<span class="literal">#t</span> . <span class="literal">#f</span>) (<span class="name">printf</span> <span class="string">&quot;~A*&quot;</span> x)]</span><br><span class="line">      [&#x27;(<span class="literal">#f</span> . <span class="literal">#t</span>) (<span class="name">printf</span> <span class="string">&quot;~A#&quot;</span> x)]</span><br><span class="line">      [<span class="name"><span class="built_in">else</span></span> (<span class="name">void</span>)])))</span><br></pre></td></tr></table></figure>
-<p>经过对比我们发现，Scheme
-语言由于具备（由库提供）模式匹配功能，从而使得程序的逻辑较 C
-语言清晰不止一筹。仔细的总结一下 Scheme 实现的优点：</p>
-<ol type="1">
+
+<p>经过对比我们发现，Scheme 语言由于具备（由库提供）模式匹配功能，从而使得程序的逻辑较 C 语言清晰不止一筹。仔细的总结一下 Scheme 实现的优点：</p>
+<ol>
 <li>有意义明确的方法来产生一个闭区间的所有数字：<code>range-closed</code>；</li>
 <li>无需手工确定闭区间的左右边界：<code>for</code> 循环；</li>
 <li>有意义明确的方法表示整除：<code>divides?</code>；</li>
 <li>有一致的命名规则表示返回布尔值的方法：后缀<code>?</code>；</li>
-<li>通过模式匹配，判断了被 3 和 5
-整除的所有情况，和该种情况下对应的动作：<code>'(#t, #t) '(#t, #f) '(#f, #t) else</code>。</li>
+<li>通过模式匹配，判断了被 3 和 5 整除的所有情况，和该种情况下对应的动作：<code>&#39;(#t, #t) &#39;(#t, #f) &#39;(#f, #t) else</code>。</li>
 </ol>
-<p>我甚至还没有说 Scheme 中可以在方法中定义方法，而 C 语言不可以（GNU
-扩展可以）；C 语言其他类型可以被直接当做布尔值使用，以至于发明出了
-<code>NULL == ptr</code> 这样扭曲的表达方式（但是我估计这里没有人想用
-<code>if (i % 3)</code> 吧？）。</p>
-<p>这只是非常简单的一道练习题，就能够暴露出了 C/C++
-语言的诸多弱点。我不是说 C/C++
-语言一点好处都没有，但是绝大多数情况下，我们应该选用其他具有更强表达能力的语言。</p>
+<p>我甚至还没有说 Scheme 中可以在方法中定义方法，而 C 语言不可以（GNU 扩展可以）；C 语言其他类型可以被直接当做布尔值使用，以至于发明出了 <code>NULL == ptr</code> 这样扭曲的表达方式（但是我估计这里没有人想用 <code>if (i % 3)</code> 吧？）。</p>
+<p>这只是非常简单的一道练习题，就能够暴露出了 C&#x2F;C++ 语言的诸多弱点。我不是说 C&#x2F;C++ 语言一点好处都没有，但是绝大多数情况下，我们应该选用其他具有更强表达能力的语言。</p>
 <p>珍爱生命，远离低级语言！</p>
 
     </div>
@@ -337,7 +333,7 @@ C 语言和 Scheme 这两种古老的语言的实现。</p>
 
   <div class="copyright">
     &copy; 2011 – 
-    <span itemprop="copyrightYear">2023</span>
+    <span itemprop="copyrightYear">2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -364,18 +360,18 @@ C 语言和 Scheme 这两种古老的语言的实现。</p>
   
   <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.20/dist/fancybox/fancybox.umd.js" integrity="sha256-q8XkJ6dj5VwSvzI8+nATCHHQG+Xv/dAZBCgqmu93zOY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js" integrity="sha256-+2+qOqR8CKoHh/AsVR9k2qaDBKWjYNC2nozhYmv5j9k=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/motion.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/next-boot.js"></script><script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/pjax.js"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/motion.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/next-boot.js"></script><script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/pjax.js"></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.2.12/pdfobject.min.js","integrity":"sha256-g2xji1rlE3KsGVClvuxTbcR0Kn2+wtQADSff2Tbb4zA="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/tags/pdf.js"></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/tags/pdf.js"></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/fancybox.js"></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/fancybox.js"></script>
 
 
 
@@ -387,12 +383,12 @@ C 语言和 Scheme 这两种古老的语言的实现。</p>
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/math/mathjax.js"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/math/mathjax.js"></script>
 
 
   <script src="https://unpkg.com/quicklink@2.3.0/dist/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Tips/different-programming-languages/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.18.0/source/js/third-party/quicklink.js"></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.19.2/source/js/third-party/quicklink.js"></script>
 
 </body>
 </html>
