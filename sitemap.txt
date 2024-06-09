@@ -1,3 +1,6 @@
+http://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/
+http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/
+http://hcoona.github.io/Tips/csharp-console-app-login-msal-wam/
 http://hcoona.github.io/Tips/dotnet-structure-log-scope/
 http://hcoona.github.io/ACM/solution-to-poj-1045/
 http://hcoona.github.io/ACM/solution-to-poj-1061/
@@ -74,6 +77,12 @@ http://hcoona.github.io/tags/Hands-on-Lab/
 http://hcoona.github.io/tags/Architecture/
 http://hcoona.github.io/tags/Storage-Engine/
 http://hcoona.github.io/tags/CSharp/
+http://hcoona.github.io/tags/ASP-NET/
+http://hcoona.github.io/tags/OpenTelemetry/
+http://hcoona.github.io/tags/MSAL/
+http://hcoona.github.io/tags/Authentication/
+http://hcoona.github.io/tags/Azure/
+http://hcoona.github.io/tags/Docker/
 http://hcoona.github.io/categories/ACM/
 http://hcoona.github.io/categories/PL/
 http://hcoona.github.io/categories/Functional-Programming/
