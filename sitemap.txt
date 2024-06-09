@@ -1,3 +1,5 @@
+http://hcoona.github.io/Build-System/msbuild-summary/
+http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/
 http://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/
 http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/
 http://hcoona.github.io/Tips/csharp-console-app-login-msal-wam/
@@ -83,6 +85,8 @@ http://hcoona.github.io/tags/MSAL/
 http://hcoona.github.io/tags/Authentication/
 http://hcoona.github.io/tags/Azure/
 http://hcoona.github.io/tags/Docker/
+http://hcoona.github.io/tags/MSBuild/
+http://hcoona.github.io/tags/Build-System/
 http://hcoona.github.io/categories/ACM/
 http://hcoona.github.io/categories/PL/
 http://hcoona.github.io/categories/Functional-Programming/
@@ -91,3 +95,4 @@ http://hcoona.github.io/categories/interview/
 http://hcoona.github.io/categories/Paper-Note/
 http://hcoona.github.io/categories/Data-Structure/
 http://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/
+http://hcoona.github.io/categories/Build-System/

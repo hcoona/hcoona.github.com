@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hcoona.github.io/Build-System/msbuild-summary/</loc>
+    
+    <lastmod>2024-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/</loc>
+    
+    <lastmod>2024-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/</loc>
     
     <lastmod>2024-06-09</lastmod>
@@ -702,6 +720,20 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>http://hcoona.github.io/tags/MSBuild/</loc>
+    <lastmod>2024-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Build-System/</loc>
+    <lastmod>2024-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -755,6 +787,13 @@
   
   <url>
     <loc>http://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/</loc>
+    <lastmod>2024-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/categories/Build-System/</loc>
     <lastmod>2024-06-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
