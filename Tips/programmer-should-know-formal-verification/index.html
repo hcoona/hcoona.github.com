@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="我认为每个程序员都应该会点形式化证明，这有助于思考，更有助于写出正确的实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每个程序员都应该会点形式化证明">
+<meta property="og:url" content="http://hcoona.github.io/Tips/programmer-should-know-formal-verification/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="我认为每个程序员都应该会点形式化证明，这有助于思考，更有助于写出正确的实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.301Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Tips">
+<meta property="article:tag" content="Algorithms">
+<meta property="article:tag" content="Interview">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Tips/programmer-should-know-formal-verification/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Tips/programmer-should-know-formal-verification/","path":"Tips/programmer-should-know-formal-verification/","title":"每个程序员都应该会点形式化证明"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>每个程序员都应该会点形式化证明 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Tips/programmer-should-know-formal-verification/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Tips/programmer-should-know-formal-verification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="每个程序员都应该会点形式化证明 | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          每个程序员都应该会点形式化证明
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-06 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-06T00:00:00+08:00">2018-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tips/" itemprop="url" rel="index"><span itemprop="name">Tips</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>我认为每个程序员都应该会点形式化证明，这有助于思考，更有助于写出正确的实现。</p>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="paragraph">
+<p>在最近的面试中，我发现近一半的面试者不能正确完成二分搜索（的一个变种）。这些面试者有些是有 3-5 年工作经验，有些是刚毕业的计算机专业的优秀学生。我很惊讶于他们没有一个人能够给出一个完整的，细致而全面的二分搜索算法的解释和正确实现。有些面试者尽管能够写出正确的算法，但是在后面的询问过程中发现他们并没有考虑清楚边界情况，只是恰好写对了。这不禁让我感叹，每个程序员都应该会点数学归纳法。</p>
+</div>
+<div class="paragraph">
+<p>问题描述如下：给定一个单调非下降的数组，要求在其中进行二分搜索，找到第一个大于等于给定数字的位置（<code>std::lower_bound</code>）。这一限定是比较宽泛的，比如说没有限制每次递归中比较的次数，没有限定只能使用小于等于运算符，没有考虑没找到的情况下（目标位置溢出右边界）返回什么，等等。</p>
+</div>
+<div class="paragraph">
+<p>为了更进一步的叙述方便，我在此说明一些记号的含义：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>给定的目标元素记为 <code>t</code>。</p>
+</li>
+<li>
+<p>给定的数组记为 <code>arr</code>，其长度为 <code>n</code>。</p>
+</li>
+<li>
+<p><code>arr[k]</code> 为数组中位置为 <code>k</code> 的值。</p>
+</li>
+<li>
+<p>数组的连续子区间 \([b, e)\) 中含有 <code>arr[b]</code>，<code>arr[b + 1]</code>，&#8230;&#8203;，<code>arr[e - 1]</code> 的值。其中间元素的位置 \(m = b + \lfloor (e - b) / 2 \rfloor\)。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>二分搜索的方法是，检查目标区间的中间元素与目标元素的大小关系，以此为依据将目标区间划分为 2 部分，然后在其中的一部分中继续进行上述步骤，直到目标区间足够小，能够简单的确定要查找的元素的位置。然后使用这一简单方法，确定最终要找的元素的位置。</p>
+</div>
+<div class="paragraph">
+<p>一般来说，面试者会考虑三种情况：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>arr[m]</code> &lt; <code>t</code>，此时需要在右侧区间（不含中间元素）\([m + 1, e)\) 中继续进行搜索。</p>
+</li>
+<li>
+<p><code>arr[m]</code> = <code>t</code>，此时需要在左侧区间（含中间元素）\([b, m + 1)\) 中继续进行搜索。</p>
+</li>
+<li>
+<p><code>arr[m]</code> &gt; <code>t</code>，此时需要在左侧区间（含中间元素）\([b, m + 1)\) 中继续进行搜索。含中间元素的原因是有可能在给定的数组中没有和目标元素相等的元素。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这三种情况考虑的如果没有漏洞的话，就能保证*要找的元素始终在新的区间中*，记此性质为 <em>Safety Property 1</em>。</p>
+</div>
+<div class="paragraph">
+<p>这一步是大多数面试者都能正确做到的。但是我见过的所有的面试者都没有去考虑这样一件事：新的区间是否比原区间小？事实上，我们需要保证*新的查找区间总是比原查找区间小*，这样算法才能够不断有进展，记此性质为 <em>Liveness Property 1</em>。</p>
+</div>
+<div class="paragraph">
+<p><em>Safety Property 1</em> 和 <em>Liveness Property 1</em> 结合对应着<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/数学归纳法">数学归纳法</a>中的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/%E6%95%B0%E5%AD%A6%E5%BD%92%E7%BA%B3%E6%B3%95#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E6%8E%A8%E9%80%92%E6%AD%A5%E9%AA%A4">递推步骤</a>。</p>
+</div>
+<div class="paragraph">
+<p>令 \(e = m + 1\)，解得 \(e = b + 1\) 或 \(e = b + 2\)，即查找区间有 1 个元素或 2 个元素。显然，\(b = m + 1\) 永远都不会成立。由此才能确定，当查找区间收缩到空区间或只含有小于等于 2 个元素时，需要进行特殊处理。所谓特殊处理，即是指处理违反 <em>Liveness Property 1</em> 的情况。此时一一检查区间中的元素即可，如果要找的元素不存在，此时返回 <code>-1</code> 或 <code>e</code> 都是合理的选择。这样的操作保证了*当查找区间中只有 1 个或 2 个元素时，能够返回要找的元素的位置*，记此性质为 <em>Safety Property 2</em>。这一性质对应数学归纳法中的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/%E6%95%B0%E5%AD%A6%E5%BD%92%E7%BA%B3%E6%B3%95#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E8%B5%B7%E5%A7%8B%E6%AD%A5%E9%AA%A4">起始步骤</a>。</p>
+</div>
+<div class="paragraph">
+<p>无需进行形式化证明，只需按照证明的思路进行思考，写出的程序就可以很有信心。</p>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Tips/programmer-should-know-formal-verification/" title="每个程序员都应该会点形式化证明">http://hcoona.github.io/Tips/programmer-should-know-formal-verification/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Tips/" rel="tag"># Tips</a>
+              <a href="/tags/Algorithms/" rel="tag"># Algorithms</a>
+              <a href="/tags/Interview/" rel="tag"># Interview</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Tips/storage-engine-basic/" rel="prev" title="单机存储引擎的基础方法">
+                  <i class="fa fa-angle-left"></i> 单机存储引擎的基础方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/anna-kvs/" rel="next" title="论文笔记：[ICDE&#39;18] Anna: A KVS for any scale">
+                  论文笔记：[ICDE'18] Anna: A KVS for any scale <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

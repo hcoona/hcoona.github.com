@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="本文从CAP理论和ACID性质为切入点，讨论分布式（存储）系统的设计。   分布式系统，尤其是分布式存储系统，在进行设计考虑时，首先需要想到的就是CAP问题，即在C（Consistency）和A（Availability）之间如何进行取舍的问题。我在思考的过程中发现，尽管对于Consistency有着诸多分类，如Linearizability、Sequential Consistency、Cau">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAP，ACID，我们能做什么">
+<meta property="og:url" content="http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="本文从CAP理论和ACID性质为切入点，讨论分布式（存储）系统的设计。   分布式系统，尤其是分布式存储系统，在进行设计考虑时，首先需要想到的就是CAP问题，即在C（Consistency）和A（Availability）之间如何进行取舍的问题。我在思考的过程中发现，尽管对于Consistency有着诸多分类，如Linearizability、Sequential Consistency、Cau">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-05-20T09:56:05.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.302Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Tips">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Distributed Storage">
+<meta property="article:tag" content="Consistency Theory">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/","path":"Tips/CAP-ACID-what-can-we-do/","title":"CAP，ACID，我们能做什么"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CAP，ACID，我们能做什么 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#cap%E5%92%8Cacid"><span class="nav-number">1.</span> <span class="nav-text">CAP和ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cap"><span class="nav-number">1.1.</span> <span class="nav-text">CAP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#acid"><span class="nav-number">1.2.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#different-between-cap-acid"><span class="nav-number">1.3.</span> <span class="nav-text">两者区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linearizability-vs-serializability"><span class="nav-number">2.</span> <span class="nav-text">Linearizability和Serializability</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linearizability"><span class="nav-number">2.1.</span> <span class="nav-text">Linearizability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#serializability"><span class="nav-number">2.2.</span> <span class="nav-text">Serializability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#different-between-linearizability-and-serializability"><span class="nav-number">2.3.</span> <span class="nav-text">两者区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-can-we-do"><span class="nav-number">3.</span> <span class="nav-text">我们能做什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#strong-consistency-system-design"><span class="nav-number">3.1.</span> <span class="nav-text">强一致性约束下的分布式系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#linearizability-consistency-implementation"><span class="nav-number">3.1.1.</span> <span class="nav-text">Linearizability Consistency的实现方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serializability-isolation-transaction-implementation"><span class="nav-number">3.1.2.</span> <span class="nav-text">Serializability Isolation事务的实现方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#problems-with-strong-consistency-system"><span class="nav-number">3.1.3.</span> <span class="nav-text">强一致性系统的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#high-availability-system-design"><span class="nav-number">3.2.</span> <span class="nav-text">高可用性约束下的分布式系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#causal-consistency-implementation"><span class="nav-number">3.2.1.</span> <span class="nav-text">Causal Consistency的实现方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#highly-available-transaction-implementation"><span class="nav-number">3.2.2.</span> <span class="nav-text">高可用分布式事务的实现方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#further-about-high-availability-system-design"><span class="nav-number">3.2.3.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#recommend-readings"><span class="nav-number">4.</span> <span class="nav-text">Recommend Readings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_references"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#afterword"><span class="nav-number">6.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CAP，ACID，我们能做什么 | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CAP，ACID，我们能做什么
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-05-20 17:56:05" itemprop="dateCreated datePublished" datetime="2018-05-20T17:56:05+08:00">2018-05-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tips/" itemprop="url" rel="index"><span itemprop="name">Tips</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>本文从CAP理论和ACID性质为切入点，讨论分布式（存储）系统的设计。</p>
+</div>
+<div class="paragraph">
+<p>分布式系统，尤其是分布式存储系统，在进行设计考虑时，首先需要想到的就是CAP问题，即在C（Consistency）和A（Availability）之间如何进行取舍的问题。我在思考的过程中发现，尽管对于Consistency有着诸多分类，如Linearizability、Sequential
+Consistency、Causal
+Consistency，但是对于Availability却没有一个对应的分类。这有悖于对CAP理论的理解：我们降低了Consistency之后，能得到什么程度的Availability？更进一步的，我们降低了Consistency后，是否真的能够提高Availability？</p>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="sect1">
+<h2 id="cap和acid">CAP和ACID</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>我们之所以需要将一个单机系统扩展到分布式系统，主要原因有：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>对性能的要求超过单机系统所能提供的极限</p>
+</li>
+<li>
+<p>对Availability的要求超过单机系统所能提供的极限</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>对于前者，我们可以使用Shard的方式将负载分布到多个单机系统中。对于后者，我们在设计时必须考虑CAP理论的约束。</p>
+</div>
+<div class="sect2">
+<h3 id="cap">CAP</h3>
+<div class="paragraph">
+<p>CAP理论的第一个较为正式的形式化表述和证明发表于论文[28]。CAP理论是针对于具有多个Replication的Single
+Data Object论述的，其模型类似于Distributed Shared
+Memory。其中P表示Network Partition
+Tolerance，由于目前一般的网络条件不能认为是可靠的，因此构建在这样的网络上的系统必须认为Partition是可能发生的，进而在CAP理论中不能放弃P而选择C和A，详细的论述见[55]。CAP理论中的C指Linearizability
+Consistency，其具体含义见下文中的Linearizability一节，我们此时先认为其是一种非常强的一致性保证。CAP理论中的A指的是100%的Read
+&amp; Write
+Availability，非形式化的理解，在任意时刻对任意节点发起的（读或写）请求，无需等待与系统中其他节点通信的结果，即可进行“正确”响应。</p>
+</div>
+<div class="paragraph">
+<p>由于Partition不是经常发生[11]，在这样的情况下，C和A是可以同时达到的。有趣的是，Google对于网络基础设施的持续改善，使得在他们的网络环境中，由于网络通信导致的问题的概率比由于Bug导致的问题的概率还低，此时甚至可以认为网络是可靠的[17]。但是在Partition发生时，我们必须在Linearizability
+Consistency和100% Availability之间进行取舍。</p>
+</div>
+<div class="paragraph">
+<p>这样一来，就有一个关键的问题：如何判断是否正在发生Network
+Partition？实践中我们通常采用消息超时的机制进行判断，即如果两个节点之间的通信（即便经过一些重试）超时，则认为此时正在发生Network
+Partition。使用这种方法进行判断，我们会发现Latency和Availability是一回事。Latency低的时候，节点之间可以正常通信，从而提供Linearizability
+Consistency。Latency高的时候，我们认为发生了Network
+Partition，或者等待Latency降低到足以在Threshold内进行通信（Network
+Partition解除），即放弃100% Availability但是保证Linearizability
+Consistency，或者放弃节点间进行通信直接进行响应，即放弃保证Linearizability
+Consistency但是提供100%
+Availability。目前越来越多的系统即使在P没有发生时，也不提供Linearizability
+Consistency，其这样做是为了提供更高的性能保证。也就是说，在P发生时，我们在C和A之间进行取舍；在P没有发生时，我们在C和L（Latency）之间进行取舍。这样，CAP理论被扩展为PACELC理论（If
+there is a Partition, how does the system trade off Availability and
+Consistency; Else, when the system is running normally in the absence of
+partitions, how does the system trade off Latency and
+Consistency?），见[1]。</p>
+</div>
+<div class="paragraph">
+<p>进一步考虑，我们之所以需要在C和A之间进行取舍，或者是在C和L之间进行取舍，其根本原因在于节点之间需要进行<strong>同步通信</strong>才能够保证C。极端情况下，我们可以使得整个系统无需进行同步通信，来达到极致的A和L。此时考虑一个写请求，在写入一个节点并收到成功确认后，如果该节点在和其他节点进行<strong>异步通信</strong>之前就发生了永久性故障，则这一写请求写入的内容将永久性的丢失。这说明Consistency和Durability在某种程度上是类似的[43]。</p>
+</div>
+<div class="paragraph">
+<p>从一个更大的角度来看，在一个不可靠的分布式系统中，我们需要在Safety性质和Liveness性质之间进行取舍[29]。例如，Consistency是一种Safety性质，而Availability是一种Liveness性质。又例如，FLP问题[27]告诉我们在Consensus问题中如果有任意节点不可靠，则无法在保证Safety性质的同时保证Liveness性质。有关分布式系统中的Impossibility的重要问题有[15,
+27, 28, 46]。</p>
+</div>
+<div class="paragraph">
+<p>Paxos算法可以容忍系统中少数集合中的节点失效，直觉上，我们认为Paxos算法在系统级别提供高可用服务，同时提供了Linearizability
+Consistency。这似乎与CAP理论相违背。考虑CAP理论对于Availability的定义，要求对任意节点的请求都能立刻（read-time）得到回应。假设由于网络分区将系统分为了一个多数集和一个少数集，对于Paxos算法，尽管多数集中的节点仍然可以正确且立即回复请求，但是少数集中的节点不能。CAP理论这样定义有一定道理，因为在网络分区发生时，有可能客户端并不能访问多数集中的节点。</p>
+</div>
+<div class="paragraph">
+<p>[37]提出了对CAP理论的一些批评和改进。考虑这样一个事实，Availability是服务的一个观测结果（Metric）而非系统的一个属性，而Consistency和Partition是系统模型，这两者并不能统一起来，CAP理论中对于Availability的定义是不严格的。Brewer在[16]中（非形式化的）提出，Availability和Consistency在CAP理论中并不是一个非0即1的离散变量，而是从0%至100%连续变化的变量。这与[28]中形式化描述CAP理论的工作是相违背的。这意味着我们有必要重新思考CAP理论的精确定义（形式化描述）。[37]中将CAP中的A定义为算法对Latency的敏感程度，将C定义为算法所使用的并发一致性模型，将P定义为Latency的突发增长。这样一来，A不再是对服务的一个观测结果，而是算法的一个本质属性；P的定义也能和A相结合。在这样一种框架下，最终一致性模型也能很好的进行建模和推理，最终得出结论，最终一致性的Replica算法在Partition永久性的发生时仍然能够停机。这与我们的直觉，使用最终一致性协议可以提高Availability一致。文中还进一步总结了达成三种一致性模型所需时间的下界（不确定是否是下确界），假设消息传播时间为\(d\)，见下表：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Consistency Level</th>
+<th class="tableblock halign-left valign-top">Write latency</th>
+<th class="tableblock halign-left valign-top">Read latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linearizability</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\mathcal&#123;O&#125;(d)\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\mathcal&#123;O&#125;(d)\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sequential Consistency</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\mathcal&#123;O&#125;(d)\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\mathcal&#123;O&#125;(1)\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Causal Consistency</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\mathcal&#123;O&#125;(1)\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\mathcal&#123;O&#125;(1)\)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>其中Sequential Consistency的读写延迟可以互换。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="acid">ACID</h3>
+<div class="paragraph">
+<p>ACID性质指的是并行执行多个事务（Transaction）时需要保证的性质[33]：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Transaction
+Atomicity：组成事务的多个事件（Event）要么都成功要么都失败（all-or-nothing）</p>
+</li>
+<li>
+<p>Database
+Consistency：执行事务的前后，数据库的状态保持（应用程序层面）一致</p>
+</li>
+<li>
+<p>Isolation：并发执行的事务之间不互相影响</p>
+</li>
+<li>
+<p>Durability：已经提交的事务中的事件不会丢失</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>ACID中的Atomicity和Concurrent
+Programming领域中的Atomicity意义完全不同，为了区分这一点我将ACID中的A称为Transaction
+Atomicity。同样的，ACID中的Consistency和Concurrent
+Programming领域中的Consistency也完全不同，但是ACID中的Isolation和Concurrent
+Programming领域中的Consistency有一定相关性。这里将ACID中的Consistency称为Database
+Consistency是因为ACID中的A、I、D是更底层的性质，而C是上层应用的性质，具体见[38]中的第7章。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="different-between-cap-acid">两者区别</h3>
+<div class="paragraph">
+<p>CAP理论更多的关注于分布式共享内存模型下对象的一致性问题和可用性问题，是传统Concurrent
+Programming领域在不可靠系统下的问题。传统Consistency的分类在[51]中有一个总结，其中比较常见的几种一致性模型从弱到强如下：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Read-your-writes/Monotonic Reads/Monotonic Writes</p>
+</li>
+<li>
+<p>PRAM（即FIFO，等于上面三者的和）</p>
+</li>
+<li>
+<p>Causal（等于PRAM和Writes-follow-reads）</p>
+</li>
+<li>
+<p>Sequential</p>
+</li>
+<li>
+<p>Linearizability</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>ACID性质是数据库系统中并发执行多个事务时的问题，是数据库领域的传统问题。ACID性质中的Isolation从弱到强有以下几个常见级别[12]：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Read Uncommitted</p>
+</li>
+<li>
+<p>Read Committed</p>
+</li>
+<li>
+<p>Cursor Stability</p>
+</li>
+<li>
+<p>Repeatable Read</p>
+</li>
+<li>
+<p>Snapshot Isolation</p>
+</li>
+<li>
+<p>Serializable</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="linearizability-vs-serializability">Linearizability和Serializability</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Linearizability是Concurrent
+Programming中Consistency的最终目标，Serializability是数据库事务中Isolation的最终目标，两者均在分布式存储系统中起到了重要的作用。</p>
+</div>
+<div class="sect2">
+<h3 id="linearizability">Linearizability</h3>
+<div class="paragraph">
+<p>Linearizability是在具有多个副本的单个对象的情况下，对于并发操作的执行顺序约束。也可以认为是在给定的并发操作历史下，对于单个操作返回结果的约束。</p>
+</div>
+<div class="paragraph">
+<p>Linearizability的原始论文为[35]，但是个人认为[45]的第16章更容易理解，此外[38]的第9章也给出了Linearizability的非形式化解释。</p>
+</div>
+<div class="paragraph">
+<p>Linearizability的形式化定义如下[35]：</p>
+</div>
+<div class="paragraph">
+<p>A history \(H\) induces an irreflexive partial order
+\(&lt;_&#123;H&#125;\) on operations:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[e_&#123;0&#125; &lt;_&#123;H&#125;e_&#123;1&#125;\ \text&#123;if&#125;\ res(e_&#123;0&#125;)\ \text&#123;precedes&#125;\ inv(e_&#123;1&#125;)\ \text&#123;in&#125;\ H\]
+</div>
+</div>
+<div class="paragraph">
+<p>A history \(H\) is <em>linearizable</em> if it can be extended (by
+appending zero or more response events) to some history \(H'\)
+such that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>\(complete(H')\) is equivalent to some legal sequential
+history \(S\)</p>
+</li>
+<li>
+<p>\(&lt;_&#123;H&#125; \subseteq &lt;_&#123;S&#125;\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>直觉上理解，Linearizability执行的结果，等价于按照真实时间顺序，依次（非并发的）执行这些事件（Event，在此理解为读或写操作）。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="serializability">Serializability</h3>
+<div class="paragraph">
+<p>Serializability是数据库事务并发执行的约束。一个数据库事务由涉及到多个对象（也可以只是一个对象）的多个操作（也可以只是一个）组成。Serializability要求这些事务执行的结果，等价于这些事务依次（非并发的）执行的结果。值得注意的是，Serializability并没有对这些事务的执行顺序做出约束。</p>
+</div>
+<div class="paragraph">
+<p>Serializability的具体描述见[13]的第2章。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="different-between-linearizability-and-serializability">两者区别</h3>
+<div class="paragraph">
+<p>Linearizability主要应用于分布式共享内存模型下，对于单个对象的单个操作返回什么样的值合法做出限制。Linearizability是一种对Recency的限制，要求历史上并行操作的执行顺序必须反映他们的Real-Time顺序。此处Real-Time指的并非实时系统领域的Real-Time，而是对应于全局时钟而言的真实时间这一概念。</p>
+</div>
+<div class="paragraph">
+<p>Serializability是数据库事务并行执行时的Isolation要求，其约束了并行事务执行的结果等价于这些事务“一条接一条”的执行的结果，但是没有限定这些并行事务的执行顺序。数据库事务通常涉及对多个对象的多个操作。</p>
+</div>
+<div class="paragraph">
+<p>Serializability和Linearizability结合称为Strict Serializability或One-copy
+Serializability。</p>
+</div>
+<div class="paragraph">
+<p>对于两者的比较也可以参考[39]。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-can-we-do">我们能做什么</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>理清了CAP理论和ACID，我们来考虑一下分布式系统设计中能做到什么，以及如何进行取舍：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在满足传统数据库的强一致性约束下，我们能做到多高的可用性，以及多低的延迟？</p>
+</li>
+<li>
+<p>在满足100% Read Write Availability的约束下，我们能做到多高的一致性？</p>
+</li>
+<li>
+<p>在这两者之间还存在什么？</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>对于这些问题，我们总是从最简单的模型入手，即多副本的Key-Value
+Store开始，然后再考虑如何加上分布式事务。当然对于一个分布式数据库而言，我们至少还应该有Secondary
+Index，Data Constraint Check，等等功能，但是不在本文中进行进一步展开。</p>
+</div>
+<div class="sect2">
+<h3 id="strong-consistency-system-design">强一致性约束下的分布式系统</h3>
+<div class="paragraph">
+<p>我们的目标是实现一个Linearizability Consistency的Key-Value
+Store，同时支持Serializability Isolation Level的分布式事务。</p>
+</div>
+<div class="sect3">
+<h4 id="linearizability-consistency-implementation">Linearizability Consistency的实现方法</h4>
+<div class="paragraph">
+<p>我们的目标是实现一个Linearizability Consistency的Key-Value
+Store。由于Linearizability具有Local
+Property，我们可以将问题进一步简化。首先我们考虑如何实现一个Atomic
+Read/Write Register。更具体的，应该是MRMW Atomic Register（Multi-Reader
+Multi-Writer Atomic Register）。</p>
+</div>
+<div class="paragraph">
+<p>[38]的P333对于Replication方式是否能实现Linearizability有一个总结：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Single-leader replication (potentially linearizable)</p>
+</li>
+<li>
+<p>Consensus algorithms (linearizable)</p>
+</li>
+<li>
+<p>Multi-leader replication (not linearizable)</p>
+</li>
+<li>
+<p>Leaderless replication (probably not linearizable)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>[45]的第16章第4节对于如何实现Linearizability也有一个总结：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Atomicity Based on a Total Order Broadcast Abstraction</p>
+</li>
+<li>
+<p>Atomicity of Read/Write Objects Based on Server Processes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Atomicity Based on a Server Process and Copy Invalidation</p>
+</li>
+<li>
+<p>Atomicity Based on a Server Process and Copy Update</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>总的来说，分为这样几种思路：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Total Order Broadcast</p>
+</li>
+<li>
+<p>Quorum read/write</p>
+</li>
+<li>
+<p>Write-invalidate &amp; Read-through</p>
+</li>
+<li>
+<p>Write-through</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Total Order
+Broadcast保证每个replication以相同的顺序接收到全序排列的消息，显然，这符合Linearizability
+Consistency的定义。使用Consensus算法，例如Raft、ZAB等，相当于先在Leader节点上定序，然后再将消息和这一顺序本身传播给所有的replication，实际上等同于Total
+Order Broadcast。关于Total Order Broadcast的分类和实现方法见[23]。</p>
+</div>
+<div class="paragraph">
+<p>使用Quorum方式实现Linearizability，需要在每次Read/Write操作的之前都进行一次Repair，见[38]的P334，[20]的第4章，以及[4]。需要注意的是，只有Read/Write操作能够以这种方式实现，Compare-And-Set之类的操作不能以这种形式实现，而必须使用分布式共识（Consensus）算法，具体见[34]的Fig
+1。</p>
+</div>
+<div class="paragraph">
+<p>Read-through和Write-through的方式主要适用于Cache场景，在分布式存储场景下使用这样的方法有较大的丢失数据的风险。</p>
+</div>
+<div class="paragraph">
+<p>达成Linearizability的代价为Client到Leader的延迟加上Leader到多数集中最慢的节点的延迟。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="serializability-isolation-transaction-implementation">Serializability Isolation事务的实现方法</h4>
+<div class="paragraph">
+<p>在已经有了分布式Key-Value
+Store的情况下，我们接下来的目标是实现一个Serializability Isolation
+Level的分布式事务。</p>
+</div>
+<div class="paragraph">
+<p>在单机数据库系统中实现Serializability Isolation
+Level事务的方法（按照Scalability从弱到强）主要有：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>真实（单线程）Serialize执行</p>
+</li>
+<li>
+<p>Strict 2 Phase Locking</p>
+</li>
+<li>
+<p>Serializable Snapshot Isolation Algorithm</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>其中，Serialize execute和Strict 2PL（Strict 2 Phase
+Locking）属于悲观并发，SSI（Serializable Snapshot
+Isolation）属于乐观并发。SSI的原理大致是使用Snapshot
+Isolation但是在提交前检查是否有已知的写操作与当前事务的读操作在Serializability语义下冲突，如果有的话就Abort，没有的话就可以Commit并且保证Serializability了[21]。</p>
+</div>
+<div class="paragraph">
+<p>实现分布式事务所需要解决的主要问题是Atomic
+Commitment，即多个节点all-or-nothing的决议commit或abort一个transaction的问题。Atomic
+Commitment分为Blocking和Non-blocking两种。Blocking Atomic
+Commitment问题可以转化为Consensus问题[31]。Blocking Atomic
+Commitment的一个典型的实现方法是2 Phase Commit，但是我觉得应该使用Paxos
+Commit Algorithm[31]。Non-blocking Atomic
+Commitment问题严格的比Consensus问题难[32]，一个典型的实现方法是3PC（3
+Phase
+Commit），但是由于3PC不能在节点失效时保证正确性，所以几乎没有人在实际环境中使用3PC。</p>
+</div>
+<div class="paragraph">
+<p>对于一个Linearizability
+Consistency的系统，我们无需关注每个Shard的多个副本（Replication）之间的一致性，因此对于没有跨越Shard的事务的实现方法和单机数据库事务的实现方法一致。对于跨越Shard的事务的实现方法，一个可行的方案是使用Paxos
+Commit Algorithm协调多个Shard，每个Shard使用Strict
+2PL。除了需要额外的外部组件记录整个系统中事务和锁的关系以便进行死锁检测和处理，这个方案基本上和传统数据库的事务处理一致。SSI的实现需要解决一个重要问题，即如何跨越Shard生成一致的Snapshot。关于这方面我的经验不多，希望能在以后阅读了[26,
+36, 48, 49, 53]后在补完这一部分内容（也有可能挖坑不埋）。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="problems-with-strong-consistency-system">强一致性系统的问题</h4>
+<div class="paragraph">
+<p>Linearizability
+Consistency虽然使得我们可以像是对待只有一份副本系统一样使用这一系统，但是代价不仅是算法的Network
+Latency Sensitive，还有Scalability下降。对于一个Linearizability
+Consistency的系统，不能够通过增加副本来提高系统的性能。Linearizability
+Consistency代价非常高，即便是多核CPU也没有使用Linearizability
+Consistency[47]。因此，我们应该只在必要的时候提供Linearizability
+Consistency，例如使用额外的系统（Zookeeper）。</p>
+</div>
+<div class="paragraph">
+<p>Strict
+2PL的并发度也比较低，带来的问题是事务处理的性能低。SSI的并发度尽管比Strict
+2PL要高，但是在高并发场景下Abort的概率也比较高。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="high-availability-system-design">高可用性约束下的分布式系统</h3>
+<div class="paragraph">
+<p>从[3, 37]中总结的结论，若想实现一个100% Read &amp; Write
+Available的系统（或者说，读写操作的时间复杂度不受节点间通信网络延迟的影响），最高只能支持Causal
+Consistency。特别的，考虑到Version
+Vector的大小，甚至可能不支持完全的Causal Consistency。另一方面
+，从[8]中的结论来看，对于分布式事务的支持最高也只能达到RC（Read
+Committed），MAV（Monotonic Atomic View）或P-CI（Predicate Cut
+Isolation）。</p>
+</div>
+<div class="paragraph">
+<p>这里故意避开了Eventual
+Consistency的概念，因为目前还没有统一的对于Eventual
+Consistency的形式化的定义，分歧主要集中在How Eventual和What
+Consistency两方面。[19, 51]中通过将Linearizability
+Consistency中的全序关系扩展到偏序关系，并且分解为Visible和Arbitration两个维度，来统一的描述多种Consistency。特别的，只出现在Arbitration关系中，但是没有出现在Visible关系中的事件相当于丢失了或被覆盖了。</p>
+</div>
+<div class="paragraph">
+<p>Causal
+Consistency对于很多场景都具有很高的价值。例如在社交网络中，A说自己的小孩走丢了（a1），A又发消息说小孩找到了（a2），B评论说太好了（b）。如果此时C只能看到消息a1和b，就会产生问题。从Causal
+Relation上看，a1&#8594;a2&#8594;b，一个Eventual Consistency的系统不提供Causal
+Relation的保证，但是Causal Consistency必须保证这一点。</p>
+</div>
+<div class="paragraph">
+<p>尽管如此，目前主流的NoSQL只实现了Eventual
+Consistency[22]。这是因为实现一个通用的Causal
+Consistency的代价比较高，例如某个Client先读取大量的数据然后进行了一次写入，一个通用的系统不能知道这个写入只是Causal依赖其中的哪些读取操作，进而必须捕获所有的读取操作。即便是让用户显式指定其写操作依赖于哪些读操作，还需要考虑Causal
+Relation的传递性（transitive），即读操作又依赖于那些读操作，等等。</p>
+</div>
+<div class="sect3">
+<h4 id="causal-consistency-implementation">Causal Consistency的实现方法</h4>
+<div class="paragraph">
+<p>Single Object（或者说Per-Key）的Causal
+Consistency是容易实现的，使用MVCC等技术可以同时存储对象的多个版本，在写入时只需指定其依赖于哪一个版本，即可实现Single
+Object的Causal Consistency。需要注意的是，为了维持Session Level
+Guarantees，需要在Session维持期间只与同一个副本进行通信。个人认为，一般情况下，系统应该提供Single
+Object的Causal Consistency，这一负担并不重。</p>
+</div>
+<div class="paragraph">
+<p>可惜的是，不像Linearizability Consistency，Causal
+Consistency不具有Locality性质。即使实现了Single Object的Causal
+Consistency，也不能使得整个系统能够满足Causal Consistency。</p>
+</div>
+<div class="paragraph">
+<p>目前，如何实现Causal Consistency是学术上的一个热点[2, 6, 22, 24, 25,
+40–42, 54]，一方面因为Causal Consistency是维持100%
+Availability情况下所能支持的最高的一致性级别，另一方面是因为Eventual
+Consistency提供的保证实在是太少了[10, 30]。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="highly-available-transaction-implementation">高可用分布式事务的实现方法</h4>
+<div class="paragraph">
+<p>尽管[8]指出，在保证高可用的情况下，分布式事务最高能支持RC（Read
+Committed），MAV（Monotonic Atomic View）或P-CI（Predicate Cut
+Isolation），但是在其中并没有指出可以使用什么样的算法来做到这一点。特别的，[8]指出他们之所以写这篇论文，就是因为尽管很多算法实现了这些分布式事务，但是并没有支持高可用，很多系统虽然宣称自己是高可用的，但是用了这些不是高可用的算法后，也就不是严格意义上的高可用系统。</p>
+</div>
+<div class="paragraph">
+<p>[18]提出了一种无需Coordinator的分布式事务的实现方法，[7]对Coordination
+Avoidance进行了进一步的论述。Eiger系统分别提供了低延迟的只读事务和只写事务[41]，但是仍然需要进一步的仔细检查，才能知道其是否是高可用的。Anna系统号称实现了Read
+Committed级别的跨越Shard的分布式事务[54]，但是没有披露更多的技术细节。其作者还发布过RAMP事务[9]，提供了低延迟的Read
+Atomic
+Isolation分布式事务。总的来说，高可用的分布式事务的实现还是一个开放问题。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="further-about-high-availability-system-design">其他</h4>
+<div class="paragraph">
+<p>[7]对什么样的约束检查需要进行Coordination进行了形式化的论述。总的来说，无需Coordination的约束检查只能检查具有Locality性质的约束，而不能检查全局约束（例如非负计数器，自增主键等等）。</p>
+</div>
+<div class="paragraph">
+<p>目前仍需探索的一个方向是如何在不同级别的Consistency和Isolation
+Level之间切换[50]。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="recommend-readings">Recommend Readings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在撰写本文时，我阅读了大量的相关资料，在此给出一个文献的建议阅读顺序。</p>
+</div>
+<div class="paragraph">
+<p>首先应该阅读[38]中的第5章、第7章和第9章，这些章节分别介绍了Replication的方法，数据库事务，Consistency和Consensus及它们之间的关系。这使得读者对于CAP理论，数据库事务，Concurrent
+Programming中的一致性模型，分布式系统的共识问题，有一个初步的理解。</p>
+</div>
+<div class="paragraph">
+<p>然后建议阅读[22]，对当前流行的NoSQL系统有一个初步的认识。</p>
+</div>
+<div class="paragraph">
+<p>对于CAP理论相关的文献，建议首先阅读[28]，对于普遍认识中的CAP理论有非形式化和形式化的定义和证明。然后强烈建议阅读[37]，其作者也是[38]的作者，在这篇论文中提出了对CAP理论现有工作的一些批评和改进，这些批评和改进非常具有启发性和实用性。然后可以在以下列表中挑选感兴趣的内容阅读：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[16]为CAP理论的提出者Brewer在12年后对CAP理论的回顾和补充</p>
+</li>
+<li>
+<p>[1]这篇论文将CAP理论扩展为PACELC理论，将Latency纳入对Availability的解释中</p>
+</li>
+<li>
+<p>[29]这篇论文将CAP理论扩展为Safety性质和Liveness性质的Impossibility问题</p>
+</li>
+<li>
+<p>[55]解释了在CAP理论中P是不可舍弃的（应该作为算法设计模型的一部分），这一问题在[37]中也略有涉及</p>
+</li>
+<li>
+<p>[51]对于Consistency进行了非常详尽的形式化的总结，但是强烈建议先看完[19]再看这个，因为其描述方法是沿用[19]中的方式，否则容易看不懂</p>
+</li>
+<li>
+<p>[52]对Eventual Consistency有一个简略的介绍和总结</p>
+</li>
+<li>
+<p>[30]对于Eventual Consistency的Eventual有一个略微深入的展开</p>
+</li>
+<li>
+<p>[19]是一个对Eventual Consistency非常详尽和形式化的总结</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>关于Linearizability
+Consistency，建议阅读[45]的第16章，其原始论文为[35]，关于其性能的一些讨论可以在[5]中找到。关于Eventual
+Consistency，建议阅读[10, 14, 52]，关于其一些形式化的描述，建议阅读[19,
+51]。</p>
+</div>
+<div class="paragraph">
+<p>关于Serializability建议阅读[13]的第2章。</p>
+</div>
+<div class="paragraph">
+<p>关于Concurrent Programming中的Consistency，建议阅读</p>
+</div>
+<div class="paragraph">
+<p>对于（单机）数据库事务，建议阅读[38]的第7章。关于Serializable Snapshot
+Isolation，见[21, 44]。关于实现单机数据库事务的新方法，见[53]。</p>
+</div>
+<div class="paragraph">
+<p>分布式事务的一致性和分布式共识问题有很强的相关性，建议阅读[38]中的第9章，以及Lamport写的[31]。关于Non-blocking
+Atomic Commitment，建议阅读[32]。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>[1] Abadi, D. 2012. Consistency Tradeoffs in Modern Distributed Database
+System Design: CAP is Only Part of the Story. <em>Computer</em>. 45, 2 (2012),
+37–42. DOI:https://doi.org/10.1109/MC.2012.33.</p>
+</div>
+<div class="paragraph">
+<p>[2] Akkoorath, D.D. et al. 2016. Cure: Strong Semantics Meets High
+Availability and Low Latency. <em>2016 IEEE 36th International Conference
+on Distributed Computing Systems (ICDCS)</em> (Jun. 2016), 405–414.</p>
+</div>
+<div class="paragraph">
+<p>[3] Attiya, H. et al. 2017. Limitations of Highly-Available
+Eventually-Consistent Data Stores. <em>IEEE Transactions on Parallel and
+Distributed Systems</em>. 28, 1 (2017), 141–155.
+DOI:https://doi.org/10.1109/TPDS.2016.2556669.</p>
+</div>
+<div class="paragraph">
+<p>[4] Attiya, H. et al. 1995. Sharing memory robustly in message-passing
+systems. <em>Journal of the ACM</em>. 42, 1 (1995), 124–142.
+DOI:https://doi.org/10.1145/200836.200869.</p>
+</div>
+<div class="paragraph">
+<p>[5] Attiya, H. and Welch, J.L. 1994. Sequential consistency versus
+linearizability. <em>ACM Transactions on Computer Systems</em>. 12, 2 (1994),
+91–122. DOI:https://doi.org/10.1145/176575.176576.</p>
+</div>
+<div class="paragraph">
+<p>[6] Bailis, P. et al. 2013. Bolt-on causal consistency. <em>Proceedings of
+the 2013 international conference on Management of data - SIGMOD ’13</em>.
+(2013), 761. DOI:https://doi.org/10.1145/2463676.2465279.</p>
+</div>
+<div class="paragraph">
+<p>[7] Bailis, P. et al. 2015. Coordination Avoidance in Database Systems.
+<em>Pvldb</em>. 8, 4 (2015), 185–196. DOI:https://doi.org/1402.2237v2.</p>
+</div>
+<div class="paragraph">
+<p>[8] Bailis, P. et al. 2013. Highly Available Transactions: Virtues and
+Limitations. <em>Proceedings of the VLDB Endowment</em>. 7, 3 (2013), 181–192.
+DOI:https://doi.org/10.14778/2732232.2732237.</p>
+</div>
+<div class="paragraph">
+<p>[9] Bailis, P. et al. 2014. Scalable atomic visibility with RAMP
+transactions. <em>Proceedings of the 2014 ACM SIGMOD international
+conference on Management of data - SIGMOD ’14</em>. (2014), 27–38.
+DOI:https://doi.org/10.1145/2588555.2588562.</p>
+</div>
+<div class="paragraph">
+<p>[10] Bailis, P. and Ghodsi, A. 2013. Eventual consistency today.
+<em>Communications of the ACM</em>. 56, 5 (2013), 55.
+DOI:https://doi.org/10.1145/2447976.2447992.</p>
+</div>
+<div class="paragraph">
+<p>[11] Bailis, P. and Kingsbury, K. 2014. The Network is Reliable.
+<em>Queue</em>. 12, 7 (2014), 20:20-20:32.
+DOI:https://doi.org/10.1145/2639988.2639988.</p>
+</div>
+<div class="paragraph">
+<p>[12] Berenson, H. et al. 1995. A critique of ANSI SQL isolation levels.
+<em>ACM SIGMOD Record</em>. 24, 2 (1995), 1–10.
+DOI:https://doi.org/10.1145/568271.223785.</p>
+</div>
+<div class="paragraph">
+<p>[13] Bernstein, P.A. et al. 1987. <em>Concurrency Control and Recovery in
+Database Systems</em>. Addison-Wesley Pub. Co.</p>
+</div>
+<div class="paragraph">
+<p>[14] Bernstein, P.A. and Das, S. 2013. Rethinking eventual consistency.
+<em>Proceedings of the 2013 international conference on Management of data
+- SIGMOD ’13</em>. (2013), 923. DOI:https://doi.org/10.1145/2463676.2465339.</p>
+</div>
+<div class="paragraph">
+<p>[15] Borowsky, E. and Gafni, E. 1993. Generalized FLP impossibility
+result for <em>t</em>-resilient asynchronous computations. <em>Proceedings of the
+twenty-fifth annual ACM symposium on Theory of computing - STOC ’93</em>. 5,
+(1993), 91–100. DOI:https://doi.org/10.1145/167088.167119.</p>
+</div>
+<div class="paragraph">
+<p>[16] Brewer, E. 2012. CAP twelve years later: How the “rules” have
+changed. <em>Computer</em>. 45, 2 (2012), 23–29.
+DOI:https://doi.org/10.1109/MC.2012.37.</p>
+</div>
+<div class="paragraph">
+<p>[17] Brewer, E. 2017. Spanner, TrueTime &amp; The CAP Theorem. <em>White
+Papers</em>. 2015, 4/4/2015 (2017), 1–7.</p>
+</div>
+<div class="paragraph">
+<p>[18] Burckhardt, S. et al. 2012. Eventually Consistent Transactions.
+<em>Proceedings of the 22n European Symposium on Programming (ESOP)</em>.
+Springer. 67–86.</p>
+</div>
+<div class="paragraph">
+<p>[19] Burckhardt, S. 2014. Principles of Eventual Consistency.
+<em>Foundations and Trends® in Programming Languages</em>. 1, 1–2 (2014),
+1–150. DOI:https://doi.org/10.1561/2500000011.</p>
+</div>
+<div class="paragraph">
+<p>[20] Cachin, C. et al. 2011. <em>Introduction to reliable and secure
+distributed programming</em>. Springer.</p>
+</div>
+<div class="paragraph">
+<p>[21] Cahill, M.J. et al. 2009. Serializable isolation for snapshot
+databases. <em>ACM Transactions on Database Systems</em>. 34, 4 (Dec. 2009),
+1–42. DOI:https://doi.org/10.1145/1620585.1620587.</p>
+</div>
+<div class="paragraph">
+<p>[22] Davoudian, A. et al. 2018. A Survey on NoSQL Stores. <em>ACM Computing
+Surveys</em>. 51, 2 (Apr. 2018), 1–43. DOI:https://doi.org/10.1145/3158661.</p>
+</div>
+<div class="paragraph">
+<p>[23] Défago, X. et al. 2004. Total order broadcast and multicast
+algorithms: Taxonomy and Survey. <em>ACM Computing Surveys</em>. 36, 4 (Dec.
+2004), 372–421. DOI:https://doi.org/10.1145/1041680.1041682.</p>
+</div>
+<div class="paragraph">
+<p>[24] Didona, D. et al. 2017. Okapi: Causally Consistent Geo-Replication
+Made Faster, Cheaper and More Available. (Feb. 2017).</p>
+</div>
+<div class="paragraph">
+<p>[25] Du, J. et al. 2014. GentleRain : Cheap and Scalable Causal
+Consistency with Physical Clocks. <em>SOCC ’14 Proceedings of the ACM
+Symposium on Cloud Computing</em>. (2014), 1–13.
+DOI:https://doi.org/10.1145/2670979.2670983.</p>
+</div>
+<div class="paragraph">
+<p>[26] Dutta, P. et al. 2005. How fast can eventual synchrony lead to
+consensus? <em>Proceedings of the International Conference on Dependable
+Systems and Networks</em>. March (2005), 22–27.
+DOI:https://doi.org/10.1109/DSN.2005.54.</p>
+</div>
+<div class="paragraph">
+<p>[27] Fischer, M.J. et al. 1983. Impossibility of distributed consensus
+with one faulty process. <em>Proceedings of the 2nd ACM SIGACT-SIGMOD
+symposium on Principles of database systems - PODS ’83</em> (New York, New
+York, USA, Apr. 1983), 1–7.</p>
+</div>
+<div class="paragraph">
+<p>[28] Gilbert, S. and Lynch, N. 2002. Brewer’s conjecture and the
+feasibility of consistent, available, partition-tolerant web services.
+<em>ACM SIGACT News</em>. 33, 2 (2002), 51.
+DOI:https://doi.org/10.1145/564585.564601.</p>
+</div>
+<div class="paragraph">
+<p>[29] Gilbert, S. and Lynch, N. 2012. Perspectives on the CAP Theorem.
+<em>Computer</em>. 45, 2 (2012), 30–36.
+DOI:https://doi.org/10.1109/MC.2011.389.</p>
+</div>
+<div class="paragraph">
+<p>[30] Golab, W. et al. 2014. Eventually consistent: not what you were
+expecting? <em>Communications of the ACM</em>. 57, 3 (2014), 38–44.
+DOI:https://doi.org/10.1145/ 2576794.</p>
+</div>
+<div class="paragraph">
+<p>[31] Gray, J. and Lamport, L. 2004. Consensus on Transaction Commit. 1,
+April 2004 (2004). DOI:https://doi.org/10.1145/1132863.1132867.</p>
+</div>
+<div class="paragraph">
+<p>[32] Guerraoui, R. 1995. Revisiting the relationship between
+non-blocking atomic commitment and consensus. <em>Distributed Algorithms</em>
+(1995), 87–100.</p>
+</div>
+<div class="paragraph">
+<p>[33] Haerder, T. and Reuter, A. 1983. Principles of transaction-oriented
+database recovery. <em>ACM Computing Surveys</em>. 15, 4 (1983), 287–317.
+DOI:https://doi.org/10.1145/289.291.</p>
+</div>
+<div class="paragraph">
+<p>[34] Herlihy, M. 1991. Wait-free synchronization. <em>ACM Transactions on
+Programming Languages and Systems</em>. 13, 1 (1991), 124–149.
+DOI:https://doi.org/10.1145/114005.102808.</p>
+</div>
+<div class="paragraph">
+<p>[35] Herlihy, M.P. and Wing, J.M. 1990. Linearizability: a correctness
+condition for concurrent objects. <em>ACM Transactions on Programming
+Languages and Systems</em>. 12, 3 (Jul. 1990), 463–492.
+DOI:https://doi.org/10.1145/78969.78972.</p>
+</div>
+<div class="paragraph">
+<p>[36] Jung, H. et al. 2011. Serializable Snapshot Isolation for
+Replicated Databases in High-Update Scenarios. <em>PVLDB</em>. 4, 11 (2011),
+783–794.</p>
+</div>
+<div class="paragraph">
+<p>[37] Kleppmann, M. 2015. A Critique of the CAP Theorem. (2015).</p>
+</div>
+<div class="paragraph">
+<p>[38] Kleppmann, M. 2017. <em>Designing data-intensive applications</em>.
+O’Reilly Media, Inc.</p>
+</div>
+<div class="paragraph">
+<p>[39] Linearizability versus Serializability: 2014.
+<em><a target="_blank" rel="noopener" href="http://www.bailis.org/blog/linearizability-versus-serializability/" class="bare">http://www.bailis.org/blog/linearizability-versus-serializability/</a></em>.
+Accessed: 2018-05-08.</p>
+</div>
+<div class="paragraph">
+<p>[40] Lloyd, W. et al. 2011. Don’t Settle for Eventual: Scalable Causal
+Consistency for Wide-Area Storage with COPS. <em>Proceedings of the
+Symposium on Operating Systems Principles</em>. (2011), 1–16.
+DOI:https://doi.org/10.1145/2043556.2043593.</p>
+</div>
+<div class="paragraph">
+<p>[41] Lloyd, W. et al. 2013. Stronger Semantics for Low-Latency
+Geo-Replicated Storage. <em>Proceedings of the Symposium on Networked
+Systems Design and Implementation</em>. April (2013), 313–328.
+DOI:https://doi.org/10.1145/2602649.2610533.</p>
+</div>
+<div class="paragraph">
+<p>[42] Mehdi, S.A. et al. 2017. I Can’t Believe It’s Not Causal! Scalable
+Causal Consistency with No Slowdown Cascades. <em>14th &#123;USENIX&#125; Symposium
+on Networked Systems Design and Implementation, &#123;NSDI&#125; 2017, Boston,
+MA, USA, March 27-29, 2017</em>. (2017), 453–468.</p>
+</div>
+<div class="paragraph">
+<p>[43] On Consistency and Durability:
+<em><a target="_blank" rel="noopener" href="http://www.bailis.org/blog/on-consistency-and-durability/" class="bare">http://www.bailis.org/blog/on-consistency-and-durability/</a></em>. Accessed:
+2018-05-08.</p>
+</div>
+<div class="paragraph">
+<p>[44] Ports, D.R.K. and Grittner, K. 2012. Serializable snapshot
+isolation in PostgreSQL. <em>Proceedings of the VLDB Endowment</em>. 5, 12
+(Aug. 2012), 1850–1861. DOI:https://doi.org/10.14778/2367502.2367523.</p>
+</div>
+<div class="paragraph">
+<p>[45] Raynal, M. 2013. <em>Distributed Algorithms for Message-Passing
+Systems</em>. Springer, Berlin, Heidelberg.</p>
+</div>
+<div class="paragraph">
+<p>[46] Saks, M. and Zaharoglou, F. 1993. Wait-free k-set agreement is
+impossible. <em>Proceedings of the twenty-fifth annual ACM symposium on
+Theory of computing - STOC ’93</em>. (1993), 101–110.
+DOI:https://doi.org/10.1145/167088.167122.</p>
+</div>
+<div class="paragraph">
+<p>[47] Sewell, P. et al. 2010. X86-TSO: A Rigorous and Usable Programmer’s
+Model for x86 Multiprocessors. <em>Communications of the ACM</em>. 53, 7 (Jul.
+2010), 89. DOI:https://doi.org/10.1145/1785414.1785443.</p>
+</div>
+<div class="paragraph">
+<p>[48] Shao, J. et al. 2016. Read Consistency in Distributed Database
+Based on DMVCC. <em>2016 IEEE 23rd International Conference on High
+Performance Computing (HiPC)</em>. (Dec. 2016), 142–151.
+DOI:https://doi.org/10.1109/HiPC.2016.11.</p>
+</div>
+<div class="paragraph">
+<p>[49] Sovran, Y. et al. 2011. Transactional storage for geo-replicated
+systems. <em>Proceedings of the Twenty-Third ACM Symposium on Operating
+Systems Principles - SOSP ’11</em>. (2011), 385.
+DOI:https://doi.org/10.1145/2043556.2043592.</p>
+</div>
+<div class="paragraph">
+<p>[50] Tripathi, A. and Thirunavukarasu, B.D. 2015. A transaction model
+for management of replicated data with multiple consistency levels.
+<em>2015 IEEE International Conference on Big Data (Big Data)</em> (Oct. 2015),
+470–477.</p>
+</div>
+<div class="paragraph">
+<p>[51] Viotti, P. and Vukolić, M. 2016. Consistency in Non-Transactional
+Distributed Storage Systems. <em>ACM Computing Surveys</em>. 49, 1 (Jun. 2016),
+1–34. DOI:https://doi.org/10.1145/2926965.</p>
+</div>
+<div class="paragraph">
+<p>[52] Vogels, W. 2008. Eventually Consistent. <em>Queue</em>. 6, 6 (2008), 14.
+DOI:https://doi.org/10.1145/1466443.1466448.</p>
+</div>
+<div class="paragraph">
+<p>[53] Wang, T. et al. 2016. Efficiently making (almost) any concurrency
+control mechanism serializable. <em>The VLDB Journal</em>. 26, 4 (May 2016),
+537–562. DOI:https://doi.org/10.1007/s00778-017-0463-8.</p>
+</div>
+<div class="paragraph">
+<p>[54] Wu, C. et al. 2018. Anna : A KVS For Any Scale. <em>34th IEEE
+International Conference on Data Engineering</em>. (2018).</p>
+</div>
+<div class="paragraph">
+<p>[55] You Can’t Sacrifice Partition Tolerance: 2010.
+<em><a target="_blank" rel="noopener" href="https://codahale.com/you-cant-sacrifice-partition-tolerance/" class="bare">https://codahale.com/you-cant-sacrifice-partition-tolerance/</a></em>.
+Accessed: 2018-04-17.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="afterword">后记</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>可以看得出，本文后期的内容比较杂乱，实际上没有达到我心中的效果。这是因为本人对于如何实现一个Causal Consistency存储系统并没有一个非常清晰的认识。我写这篇文章的初衷是理清CAP理论和ACID性质之间的关系，为分布式存储系统的设计找到一个清晰的脉络。在查资料的过程中，发现CAP理论的描述并不清晰，大家对此也各有纷争。ACID性质本身也不是很清晰，而且扩展到分布式环境中又带来一些新的问题。一些新的数据库事务的实现方法，也没有很好的对应于ACID性质中去。Non-blocking的分布式系统也是一个新兴领域，目前尽管有一些理论准备，但是算法和实现上还没有一个清晰的思路。</p>
+</div>
+<div class="paragraph">
+<p>对于分布式存储系统，首先要考虑在性能和一致性之间权衡。考虑的顺序应该如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Per-key Consistency</p>
+</li>
+<li>
+<p>Multi-key Consistency</p>
+</li>
+<li>
+<p>Transaction Consistency</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>偏重一致性的应用应该考虑支持Linearizability Consistency，但是同时也要考虑是否能够接受随之而来的Latency和Scalability的下降。需要高性能或高可用的应用应当考虑使用Eventual Consistency，因为Causal Consistency相关理论目前还不够成熟。但是在需要的时候，也可以探索Causal Consistency的高可用实现。对于事务的支持，如果没有实现Linearizability Consistency的话，可以考虑只支持单机事务，或者多机只读、只写事务。</p>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/" title="CAP，ACID，我们能做什么">http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Tips/" rel="tag"># Tips</a>
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Distributed-Storage/" rel="tag"># Distributed Storage</a>
+              <a href="/tags/Consistency-Theory/" rel="tag"># Consistency Theory</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Data-Structure/hash-table-summary-and-advanced-topics/" rel="prev" title="哈希表总结及其高级话题讨论">
+                  <i class="fa fa-angle-left"></i> 哈希表总结及其高级话题讨论
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/Microsoft-Autopilot/" rel="next" title="论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management">
+                  论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

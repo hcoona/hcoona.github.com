@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="这道题使用排序来解决基本上一定会超时，使用二叉查找树来做就可以了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POJ 1002 解题分析">
+<meta property="og:url" content="http://hcoona.github.io/ACM/solution-to-poj-1002/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="这道题使用排序来解决基本上一定会超时，使用二叉查找树来做就可以了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://7xis58.com1.z0.glb.clouddn.com/images/blog/trie.png">
+<meta property="article:published_time" content="2010-07-04T17:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.297Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="POJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://7xis58.com1.z0.glb.clouddn.com/images/blog/trie.png">
+
+
+<link rel="canonical" href="http://hcoona.github.io/ACM/solution-to-poj-1002/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/ACM/solution-to-poj-1002/","path":"ACM/solution-to-poj-1002/","title":"POJ 1002 解题分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>POJ 1002 解题分析 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/ACM/solution-to-poj-1002/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E8%A7%A3%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">解题分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E6%8E%92%E5%BA%8F%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">排序法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-number">1.2.</span> <span class="nav-text">哈希表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91"><span class="nav-number">1.3.</span> <span class="nav-text">平衡二叉查找树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E9%A2%9D%E5%A4%96%E8%A1%A5%E5%85%85"><span class="nav-number">3.</span> <span class="nav-text">额外补充</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/ACM/solution-to-poj-1002/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="POJ 1002 解题分析 | HCOONa's blog">
+      <meta itemprop="description" content="这道题使用排序来解决基本上一定会超时，使用二叉查找树来做就可以了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          POJ 1002 解题分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2010-07-05 01:00:00" itemprop="dateCreated datePublished" datetime="2010-07-05T01:00:00+08:00">2010-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这道题使用排序来解决基本上一定会超时，使用二叉查找树来做就可以了</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p><a target="_blank" rel="noopener" href="http://poj.org/problem?id=1002">题目链接</a></p>
+</div>
+<div class="sect1">
+<h2 id="_解题分析">解题分析</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>题目非常简单，可以分为以下三个步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>对输入进行翻译（格式化）使之成为标准的电话号码格式XXX-XXXX</p>
+</li>
+<li>
+<p>统计电话号码的出现次数</p>
+</li>
+<li>
+<p>按照字典序升序输出重复出现的电话号码及其重复次数，没有重复的输出"No duplicates."</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>第一个步骤没有什么难度，遇到"-"就跳过，遇到数字直接减"0"就可以了，遇到字母就按照题目中的规则进行Map。</p>
+</div>
+<div class="paragraph">
+<p>第二个步骤就出现分歧了，大约有以下三种可能：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>直接把解析后的电话号码插入到序列容器里，等到扫描完毕后对序列进行排序，然后统计并输出重复的电话号码</p>
+</li>
+<li>
+<p>使用哈希表存放包含电话号码和出现次数的一个数据结构，然后排序输出</p>
+</li>
+<li>
+<p>使用二叉查找树存放包含电话号码和出现次数的一个数据结构，然后遍历并输出</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_排序法">排序法</h3>
+<div class="paragraph">
+<p>第一种方法最为直接，但是后来我从论坛里看到很多这么做的人都超时了。</p>
+</div>
+<div class="paragraph">
+<p>个人感觉这种方法不会超时，不知道为什么那么多人卡住了。</p>
+</div>
+<div class="paragraph">
+<p>使用数组作为容器，快速排序作为排序方法，分析一下时间复杂性：</p>
+</div>
+<div class="paragraph">
+<p>假设每个输入的电话号码的长度不超过\(m\)，一共有\(n\)个电话号码</p>
+</div>
+<div class="paragraph">
+<p>则解析一个电话号码的时间为\(O(m)\)，插入的时间为\(O(1)\)，排序的时间为\(O(n\log n)\)，最后统计加输出的时间为\(O(n)\)，</p>
+</div>
+<div class="paragraph">
+<p>整体时间复杂度为\(T(n)=n(O(m)+O(1))+O(n\log n)+O(n)=O(n\log n)\)</p>
+</div>
+<div class="paragraph">
+<p>给出伪代码：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Procedure
+Begin
+    telNumberArray &lt;- empty
+    For currentLine &lt;- each line of input
+    Begin
+        telNumber &lt;- parse tel number from currentLine
+        push telNumber at the end of telNumberArray
+    End For
+
+    Quick sort telNumberArray
+
+    duplicates &lt;- 0
+    noDuplicates &lt;- true
+    For i from 1 to n
+    Begin
+        If telNumberArray(i – 1) = telNumberArray(i)
+            duplictates &lt;- duplicates + 1
+        Else If duplicates &gt; 0
+        Begin
+            Print telNumberArray(i – 1) and duplicates
+            duplicates &lt;- 0
+            noDuplicates &lt;- false
+        End If
+
+        If duplicates &gt; 0
+        Begin
+            Print telNumberArray(i – 1) and duplicates
+            duplicates &lt;- 0
+            noDuplicates &lt;- false
+        End If
+    End For
+
+    If noDuplicates
+        Print “No duplicates.”
+
+End Procedure</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_哈希表">哈希表</h3>
+<div class="paragraph">
+<p>这是我最先想到的方法，不过在这里用起来感觉还不如其他两种方法爽。</p>
+</div>
+<div class="paragraph">
+<p>总的来说就是把上一种方法中的数组换成哈希表，用于查找已经存在的电话号码。</p>
+</div>
+<div class="paragraph">
+<p>哈希函数可以用电话号码右移若干位得到。（位移速度远快于取模运算）</p>
+</div>
+<div class="paragraph">
+<p>时间复杂度与上一个方法在同一阶上，不过实际上应该会快不少。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_平衡二叉查找树">平衡二叉查找树</h3>
+<div class="paragraph">
+<p>在用哈希表解这道题的时候，我注意到一句话："Arrange the output lines by telephone number in ascending lexicographical order."</p>
+</div>
+<div class="paragraph">
+<p>而二叉查找树遍历时恰好会产生一个有序的输出。</p>
+</div>
+<div class="paragraph">
+<p>而且二叉查找树的查找性能虽然低于哈希表，但是仍有不俗的表现，因此我觉得用AVL来解这道题是比较好的。</p>
+</div>
+<div class="paragraph">
+<p>平均插入时间为\(O(n\log n)\)，平均查找时间也为\(O(n\log n)\)，</p>
+</div>
+<div class="paragraph">
+<p>总的时间复杂度\(T(n) = n(O(m) + O(n\log n) + O(n\log n)) + O(n)\)。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_总结">总结</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>从算法分析的结果来看，第一种方法反而是时空复杂度和实现难度比较优秀的一种解法，事实又一次证明维护有序比一次排序消耗要大得多。</p>
+</div>
+<div class="paragraph">
+<p>汗，因此用第一种方法实现1002而超时的同学们应该好好检查一下自己的代码~</p>
+</div>
+<div class="paragraph">
+<p>另外，还有一些同学和我一样，没有注意到"If there are no duplicates in the input print the line:No duplicates."而WA了，在此提醒大家注意审题T_T</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_额外补充">额外补充</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>昨天晚上跟同学聊天，同学提到这道题如果用Trie树一定非常快。汗了，确实没有想到，不过用Trie树绝对是最快的了。对于这道题来说，Trie树插入时间和查找时间都是\(O(1)\)，然后遍历的时候就会得到一个有序的输出，总时间复杂度\(T(n) = n(O(1)) + O(n) = O(n)\)。</p>
+</div>
+<div class="paragraph">
+<p>对不了解Trie树的同学有一幅图可以说明问题：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img data-src="//7xis58.com1.z0.glb.clouddn.com/images/blog/trie.png" alt="Trie Tree Sample Image">
+</div>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/ACM/solution-to-poj-1002/" title="POJ 1002 解题分析">http://hcoona.github.io/ACM/solution-to-poj-1002/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/POJ/" rel="tag"># POJ</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/ACM/solution-to-poj-1001/" rel="next" title="POJ 1001 解题分析">
+                  POJ 1001 解题分析 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

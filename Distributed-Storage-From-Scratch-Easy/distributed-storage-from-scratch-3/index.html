@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta property="og:type" content="article">
+<meta property="og:title" content="自制分布式存储系统入门篇：系统概要设计">
+<meta property="og:url" content="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://hcoona.github.io/images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE.svg">
+<meta property="og:image" content="http://hcoona.github.io/images/%E7%94%A8%E6%88%B7MGET%E8%AF%B7%E6%B1%82%E6%97%B6%E5%BA%8F%E5%9B%BE.svg">
+<meta property="og:image" content="http://hcoona.github.io/images/%E7%94%A8%E6%88%B7PUT%E8%AF%B7%E6%B1%82%E6%97%B6%E5%BA%8F%E5%9B%BE.svg">
+<meta property="article:published_time" content="2020-02-08T05:01:05.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.305Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Distributed Storage">
+<meta property="article:tag" content="Hands-on Lab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://hcoona.github.io/images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE.svg">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/","path":"Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/","title":"自制分布式存储系统入门篇：系统概要设计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>自制分布式存储系统入门篇：系统概要设计 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E6%9C%80%E7%BB%88%E7%94%A8%E6%88%B7_api"><span class="nav-number">1.</span> <span class="nav-text">最终用户 API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">主要流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#_%E7%94%A8%E6%88%B7%E8%BF%9B%E8%A1%8C_mget_%E8%AF%B7%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">用户进行 MGET 请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#_%E7%94%A8%E6%88%B7%E8%BF%9B%E8%A1%8C_put_%E8%AF%B7%E6%B1%82"><span class="nav-number">3.2.</span> <span class="nav-text">用户进行 PUT 请求</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="自制分布式存储系统入门篇：系统概要设计 | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          自制分布式存储系统入门篇：系统概要设计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-02-08 13:01:05" itemprop="dateCreated datePublished" datetime="2020-02-08T13:01:05+08:00">2020-02-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Distributed-Storage-From-Scratch-Easy/" itemprop="url" rel="index"><span itemprop="name">Distributed Storage From Scratch(Easy)</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="sect2">
+<h3 id="_最终用户_api">最终用户 API</h3>
+<div class="paragraph">
+<p>最简单的 Key-Value 存储只需要实现 Put 和 Get 方法就可以了，但是如果只提供这 2 个 API，在遇到一些比较复杂的场景时，就会给调用方带来比较大的负担。甚至于一些需要一致性保证的场景下，无法单靠调用方来完成这些功能。</p>
+</div>
+<div class="paragraph">
+<p>Redis 是一个比较成熟的，得到广泛应用的 NoSQL 存储，我们可以参考 Redis 的接口设计，实现其中利用率比较高的一些 API。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">方法名</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">含义</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get by key</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GETSET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set, returning old value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MGET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get multiple</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set by key</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SETNX</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if doesn&#8217;t exist</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SETXX</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set if exist</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MSET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set multiple</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>除此之外再加上一个 Exists 判断给定的 Key 是否存在但不返回其内容。</p>
+</div>
+<div class="paragraph">
+<p>这里需要特别注意的是，MSET 应该具有原子性——要么都成功，要么都失败。MGET 和 MSET 这 2 个成对的操作理应满足一定的一致性原则，例如不应该出现 fractured reads <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>，但是这样做的实现难度较高，我们暂时先不考虑。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_整体架构">整体架构</h3>
+<div class="paragraph">
+<p>目标系统的架构如<a href="#architecture-diagram">系统架构图</a>所示：</p>
+</div>
+<div id="architecture-diagram" class="imageblock text-center">
+<div class="content">
+<img data-src="/images/系统架构图.svg" alt="系统架构图">
+</div>
+<div class="title">Figure 1. 系统架构图</div>
+</div>
+<div class="paragraph">
+<p>所有的用户请求首先进入 API Server，然后由 API Server 处理系统内部的逻辑。API Server 周期性的与 MetadataServer 同步数据的拓扑信息，例如哪些 DataServer 持有哪些数据，然后将用户的请求转发给对应的 DataServer。DataServer 是数据的真正持有者，服务的真正提供者。DataServer 与 MetadataServer 周期性的进行同步，向 MetadataServer 汇报自己的状态信息，接受 MetadataServer 的控制指令。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_主要流程">主要流程</h3>
+<div class="sect3">
+<h4 id="_用户进行_mget_请求">用户进行 MGET 请求</h4>
+<div id="mget-sequence-diagram" class="imageblock text-center">
+<div class="content">
+<img data-src="/images/用户MGET请求时序图.svg" alt="用户MGET请求时序图">
+</div>
+<div class="title">Figure 2. 用户MGET请求时序图</div>
+</div>
+<div class="paragraph">
+<p>用户进行 MGET 请求时，首先将请求发送给 API Server。API Server 周期性的与 Metadata Server 进行消息同步，以获取整个集群中的拓扑关系，这一关系中含有哪些数据存放在哪些 Data Server 的映射关系。API Server 将请求发送给对应的一个或多个 Data Server，将获取到的数据进行聚合后，回复给用户。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_用户进行_put_请求">用户进行 PUT 请求</h4>
+<div id="put-sequence-diagram" class="imageblock text-center">
+<div class="content">
+<img data-src="/images/用户PUT请求时序图.svg" alt="用户PUT请求时序图">
+</div>
+<div class="title">Figure 3. 用户PUT请求时序图</div>
+</div>
+<div class="paragraph">
+<p>用户进行 PUT 请求时，首先将请求发送给 API Server。API Server 将数据写入对应的 Data Server 中，然后向该数据分片的主节点请求提交该请求。主从节点内部协调后，向 API Server 返回协调后的结果。API Server 向用户返回该结果。</p>
+</div>
+<div class="paragraph">
+<p>如果 PUT 的 Value 特别小的话，随着控制指令进行主从协调可以节省一些消息交互。但是更多的情况下，Value 没有这么小。此时由 API Server 进行数据复制，比主节点进行复制更合理，因为 API Server 的数量是随着请求负载增长而增长的，但是主节点的数量并不具有这样的关系，因此这样做可以降低主节点的压力。</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. 见<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67077901">论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility</a> 中的 Read Atomic 一致性模型。
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/" title="自制分布式存储系统入门篇：系统概要设计">http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Distributed-Storage/" rel="tag"># Distributed Storage</a>
+              <a href="/tags/Hands-on-Lab/" rel="tag"># Hands-on Lab</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/" rel="prev" title="自制分布式存储系统入门篇：背景介绍">
+                  <i class="fa fa-angle-left"></i> 自制分布式存储系统入门篇：背景介绍
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/rum-conjecture/" rel="next" title="论文笔记：[EDBT&#39;16] Designing Access Methods: The RUM Conjecture">
+                  论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

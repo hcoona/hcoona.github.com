@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="如题所述，该论文讲述了一种构建高可用 Key-Value 存储的方案，高可用主要是针对于写请求，存储的环境是可信环境，存储的对象的大小一般不超过 1MB。实现方法类似于 Chord + MVRs(multi-valued registers)，但是另有不少针对性能的优化。Dynamo 提供 observable causal consistency。根据 论文笔记：[PODC 2015] Limi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store">
+<meta property="og:url" content="http://hcoona.github.io/Paper-Note/amazon-dynamo/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="如题所述，该论文讲述了一种构建高可用 Key-Value 存储的方案，高可用主要是针对于写请求，存储的环境是可信环境，存储的对象的大小一般不超过 1MB。实现方法类似于 Chord + MVRs(multi-valued registers)，但是另有不少针对性能的优化。Dynamo 提供 observable causal consistency。根据 论文笔记：[PODC 2015] Limi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.300Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Distributed Storage">
+<meta property="article:tag" content="Paper Note">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Paper-Note/amazon-dynamo/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/amazon-dynamo/","path":"Paper-Note/amazon-dynamo/","title":"论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/amazon-dynamo/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">系统优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zero-hop-routing"><span class="nav-number">1.1.</span> <span class="nav-text">zero-hop routing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#virtual-node-on-DHT-ring"><span class="nav-number">1.2.</span> <span class="nav-text">virtual node on DHT ring</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#coordinator-choosing-optimization"><span class="nav-number">1.3.</span> <span class="nav-text">coordinator choosing optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client-drive-coordinating"><span class="nav-number">1.4.</span> <span class="nav-text">client-drive coordinating</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resolve-conflicts-on-read"><span class="nav-number">1.5.</span> <span class="nav-text">resolve conflicts on read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#async-write-to-disk"><span class="nav-number">1.6.</span> <span class="nav-text">async write to disk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector-versioning-%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%8E%A7%E5%88%B6"><span class="nav-number">1.7.</span> <span class="nav-text">vector versioning 的大小控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector-versioning-merge-result-write-back-read-repair"><span class="nav-number">1.8.</span> <span class="nav-text">vector versioning merge result write-back (read repair)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#feedback-controlled-background-task"><span class="nav-number">1.9.</span> <span class="nav-text">feedback controlled background task</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">其他问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/amazon-dynamo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-03-12 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-12T00:00:00+08:00">2018-03-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>如题所述，该论文讲述了一种构建高可用 Key-Value 存储的方案，高可用主要是针对于写请求，存储的环境是可信环境，存储的对象的大小一般不超过 1MB。实现方法类似于 Chord + MVRs(multi-valued registers)，但是另有不少针对性能的优化。Dynamo 提供 observable causal consistency。根据 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34431818">论文笔记：[PODC 2015] Limitations of Highly-Available Eventually-Consistent Data Stores</a>，这已经是这一类系统所能提供的最高一致性了。[3]</p>
+<span id="more"></span>
+
+<p>Dynamo 的主要需求和限制如下：</p>
+<ol>
+<li>need an “always writable” data store where no updates are rejected due to failures or concurrent writes</li>
+<li>all nodes are assumed to be trusted</li>
+<li>do not require support for hierarchical namespaces or complex relational schema</li>
+<li>99.9% of read and write operations to be performed within a few hundred milliseconds</li>
+<li>zero-hop routing for DHT</li>
+</ol>
+<p>此外还有个隐性需求藏在论文中：Periodical archiving of the dataset is a mandatory requirement for most of Amazon storage services.</p>
+<p>为了满足写请求的高可用性，Dynamo 不在写时处理冲突，而是通过 vector versioning 同时保存多个结果，在读的时候如果能够通过 vector version 确定序关系则进行合并，并将合并后的结果写回源，否则只能选择简单的 LWW (last write wins) 或者是由客户自行处理。</p>
+<p>与一般 Key-Value 存储不同的是，Dynamo 的 get&#x2F;put 请求需要额外携带一个 context，这个 context 对用户不透明。从论文来看，这个 context 至少包括两个内容：vector version (<em>when a client wishes to update an object, it must specify which version it is updating. This is done by passing the context it obtained from an earlier read operation, which contains the vector clock information</em>) 以及这次请求中各个节点的响应速度 (<em>the coordinator for a write is chosen to be the node that replied fastest to the previous read operation which is stored in the context information of the request</em>)。</p>
+<p>Dynamo 的 replication 策略混合了 proactive 和 passive 两种策略 [3]。其 proactive 策略是一种 “sloppy quorum” 策略，需要预先配置好 N&#x2F;R&#x2F;W 值，并满足 R + W &gt; N（一般取 N &#x3D; 3, R &#x3D; W &#x3D; 2）。首先按照 chord 的方法定位要 get&#x2F;put 的位置，从此位置向后数 N 个健康的物理节点。get 或 put 时，需要向所有 N 个节点发起请求，但是只需有 R 或 W 个节点成功，即可向客户端返回结果。其 passive 策略是这样的，每个节点将自己所负责的区间 build 出一棵 Merkle 树，并通过 gossip 协议进行传播。按照 proactive replica 策略，会有 N 个节点负责同一个区间，这些节点通过 Merkle 树可以快速的比较出差异部分并进行同步。</p>
+<p>当有节点失效时，按照上面的 proactive replication 策略会将本属于该节点 A 的值写入其他节点 B。此时 B 会将此值（持久化的）存储到一个特殊列表中，并记录 hinted handoff 标记，以了解该值应该被传输给节点 A。这一纪录会在 B 的后台任务检测到 A 恢复后，将该值传递给 A。</p>
+<p>可以看出，这种读写请求在系统内部处理起来还是比较复杂的。Dynamo 对于每个请求都在 coordinator 节点上创建一个状态机。The state machine contains all the logic for identifying the nodes responsible for a key, sending the requests, waiting for responses, potentially doing retries, processing the replies and packaging the response to the client.Each state machine instance handles exactly one client request. For instance, a read operation implements the following state machine:</p>
+<ol>
+<li>send read requests to the nodes</li>
+<li>wait for minimum number of required responses</li>
+<li>if too few replies were received within a given time bound, fail the request</li>
+<li>otherwise gather all the data versions and determine the ones to be returned and</li>
+<li>if versioning is enabled, perform syntactic reconciliation and generate an opaque write context that contains the vector clock that subsumes all the remaining versions.</li>
+</ol>
+<p>For the sake of brevity the failure handling and retry states are left out.</p>
+<h2 id="系统优化"><a href="#系统优化" class="headerlink" title="系统优化"></a>系统优化</h2><p>Dynamo 在 Chord + MVRs 的基础上做了大量的优化：</p>
+<ol>
+<li>zero-hop routing</li>
+<li>virtual node on DHT ring</li>
+<li>coordinator choosing optimization</li>
+<li>client-drive coordinating</li>
+<li>resolve conflicts on read</li>
+<li>async write to disk</li>
+<li>vector versioning 的大小控制</li>
+<li>vector versioning merge result write-back (read repair)</li>
+<li>feedback controlled background task</li>
+</ol>
+<p>下面分别讲解上面提到的优化措施。</p>
+<h3 id="zero-hop-routing"><a href="#zero-hop-routing" class="headerlink" title="zero-hop routing"></a>zero-hop routing</h3><p>zero-hop routing 是为了减少路由造成的延迟。Chord routing 的时间复杂度是 $O(\log n)$，这对于一个在线系统而言是比较难接受的。单机从磁盘中顺序读取 1MB 数据也只需要 10ms，而一次 RPC 查询可能就需要 1ms。Dynamo 选择通过 gossip 协议，使得每个节点都（弱一致性）知道全局所有节点的信息。这样，zero-hop routing 就成为可能。对于一般情况，用户请求通过 SLB 均匀的抵达某一个节点，然后该节点立刻知道该将这个请求转发给哪个节点。另一种情况，即上面提到的 client-drive coordinating，client 周期性的从任意节点 pull 整个系统的节点信息，从而在接下来的通信中，直接知道该将请求发送到哪个节点。这一全局信息的大小可用以下数据进行估计：</p>
+<ol>
+<li>IP 地址：4 bytes</li>
+<li>端口号：2 bytes</li>
+<li>一系列 virtual node id：Q &#x2F; S * 16 bytes<ul>
+<li>每个 virtual node id 的大小取决于 hash 空间的大小，论文中使用 MD5，因此每个 id 的大小为 16 bytes</li>
+<li>根据中提到的策略 3，virtual node per physical node &#x3D; 区间总量&#x2F;系统中的节点数量</li>
+</ul>
+</li>
+</ol>
+<p>一共有 S 个节点，每个节点需要 (6 + Q &#x2F; S * 16) bytes，即整体需要 (6S + 16Q) bytes，其中 Q 为 hash 空间中预先划分好的片段数量，并且 Q 远大于 S。假设 S &#x3D; 1k，则 Q &#x3D; 100k，这样需要维护约 1.6MB 的路由信息。</p>
+<p>但是考虑到 Q 个区间是预先划分的，属于每个节点都预先知道的公共信息，因此可以不用传输 virtual node id，而是传输 virtual node id index 即可。此时每个节点的信息需要 (6 + Q &#x2F; S * 4) bytes，即整体需要 (6S + 4Q) bytes。假设 S &#x3D; 1k, Q &#x3D; 100k，则需要维护约 406KB 的路由信息。这个量级应该是可以接受的。</p>
+<p>论文中还提到可以用 [4] 中提到的算法进行平均 $O(1)$ 的路由，然而其最坏情况下仍然是 $O(\log n)$ 的。<del>而且在确定 preference list 的时候，需要知道 physical node 和 virtual node 的对应关系，否则选择 N 个节点的时候就会选到少于 N 个物理节点</del>（每个节点只需维护其之后的 N 个物理节点信息即可）。<del>个人怀疑并不能使用这种方法。</del></p>
+<h3 id="virtual-node-on-DHT-ring"><a href="#virtual-node-on-DHT-ring" class="headerlink" title="virtual node on DHT ring"></a>virtual node on DHT ring</h3><p>一个物理节点可以具有多个虚拟节点，在 DHT 环中，每个虚拟节点被视为 DHT 环上的一个节点。</p>
+<p>Using virtual nodes has the following advantages:</p>
+<ul>
+<li>If a node becomes unavailable, the load handled by this node is evenly dispersed across the remaining available nodes.</li>
+<li>When a node becomes available again, or a new node is added to the system, the newly available node accepts a roughly equivalent amount of load from each of the other available nodes.</li>
+<li>The number of virtual nodes that a node is responsible can decided based on its capacity, accounting for heterogeneity in the physical infrastructure.</li>
+</ul>
+<p>Chord DHT ring 中，每个区间的范围是不固定的，并且节点的加入或离去都可能会影响这个区间范围。对于 Dynamo 系统而言会带来以下问题：</p>
+<ol>
+<li>the nodes handing the key ranges off to the new node have to <strong>scan</strong> their local persistence store to retrieve the appropriate set of data items.</li>
+<li>the Merkle trees for the <strong>new ranges need to be recalculated</strong></li>
+<li>there was no easy way to <strong>take a snapshot</strong> of the entire key space due to the randomness in key ranges.</li>
+</ol>
+<p>这些问题对于采用 RocksDB 作为单机引擎而言可能不是个大问题，但是当时还没有这种系统。Dynamo 选择的是 Berkeley Database for 10KB objects, MySQL for larger size。</p>
+<p>Dynamo 系统采用以下策略来确定 virtual node 和划分 DHT 空间。In this strategy, the hash space is divided into Q equally sized partitions&#x2F;ranges and each node is assigned Q&#x2F;S tokens(virtual node id) where S is the number of nodes in the system, Q is usually set such that Q &gt;&gt; N. <strong>Each node needs to maintain the information regarding the partitions assigned to each node.</strong></p>
+<h3 id="coordinator-choosing-optimization"><a href="#coordinator-choosing-optimization" class="headerlink" title="coordinator choosing optimization"></a>coordinator choosing optimization</h3><p>any of the top N nodes in the preference list is allowed to coordinate the writes. In particular, since <strong>each write usually follows a read operation, the coordinator for a write is chosen to be the node that replied fastest to the previous read operation</strong> which is stored in the context information of the request. This optimization enables us to pick the node that has the data that was read by the preceding read operation thereby <strong>increasing the chances of getting “read-your-writes” consistency</strong></p>
+<h3 id="client-drive-coordinating"><a href="#client-drive-coordinating" class="headerlink" title="client-drive coordinating"></a>client-drive coordinating</h3><p>上面讲 zero-hop routing 的时候大略讲过这一点。具体而言，client 的 get&#x2F;put 请求首先要路由到一个合适的 coordinator 节点上，这个节点可以是在 preference list 中任选一个节点，或者是干脆就由 client 来负责。这个 coordinator 需要建立状态机来维护整套工作流程。当 client 和 Dynamo 在同一个 data center 内时，这是可行的，并且能显著减少延迟。论文中 Table 2 显示，99.9% latency 从 60ms+ 减少到了 30ms+，平均 latency 从 ~4ms 减少到了 1-2ms。</p>
+<p>A client periodically picks a random Dynamo node and downloads its current view of Dynamo membership state. Using this information the client can determine which set of nodes form the preference list for any given key. (Currently clients poll a random Dynamo node every 10 seconds for membership updates.)</p>
+<h3 id="resolve-conflicts-on-read"><a href="#resolve-conflicts-on-read" class="headerlink" title="resolve conflicts on read"></a>resolve conflicts on read</h3><p>这一优化是针对写请求的高可用性，而非针对性能的优化。具体的实现细节参照论文中的 4.4 节以及 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34057588">论文笔记：Time, clocks, and the ordering of events in a distributed system</a>。可以理解的，对于一个最终一致性系统，一定有可能发生两个不同的客户端同时写两个不同的节点这种事情。对于这种情况，如果要在写的时候控制一致性，要不然就拒绝掉其中的一个写请求，要不一个写请求会被另一个写请求所覆盖。采用前者所述策略，我们会丧失高可用性。采用后者所述策略，相当于 LWW (last write wins)，但是我们丧失了一些信息。LWW 对于有些业务场景来说可能是不合适的，毕竟有时业务方可以根据内容进行无损合并，见 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33912913">论文笔记：[Inria RR-7506] A comprehensive study of Convergent and Commutative Replicated Data Types</a>。</p>
+<h3 id="async-write-to-disk"><a href="#async-write-to-disk" class="headerlink" title="async write to disk"></a>async write to disk</h3><p>Dynamo provides the ability to trade-off durability guarantees for performance. In the optimization each storage node maintains an object buffer in its main memory. Each write operation is stored in the buffer and gets periodically written to storage by a <em>writer thread</em>. In this scheme, read operations first check if the requested key is present in the buffer. If so, the object is read from the buffer instead of the storage engine.</p>
+<p>This optimization has resulted in <strong>lowering the 99.9th percentile latency by a factor of 5 during peak traffic even for a very small buffer of a thousand objects</strong>. Also, as seen in the figure, write buffering smooths out higher percentile latencies. Obviously, this scheme <strong>trades durability for performance</strong>. In this scheme, a server crash can result in missing writes that were queued up in the buffer. <strong>To reduce the durability risk, the write operation is refined to have the coordinator choose one out of the N replicas to perform a “durable write”.</strong> Since the coordinator waits only for W responses, the performance of the write operation is not affected by the performance of the durable write operation performed by a single replica.</p>
+<h3 id="vector-versioning-的大小控制"><a href="#vector-versioning-的大小控制" class="headerlink" title="vector versioning 的大小控制"></a>vector versioning 的大小控制</h3><p><strong>A possible issue with vector clocks is that the size of vector clocks may grow if many servers coordinate the writes to an object.</strong> In practice, this is not likely because the writes are usually handled by one of the top N nodes in the preference list. In case of network partitions or multiple server failures, <strong>write requests may be handled by nodes that are not in the top N nodes in the preference list causing the size of vector clock to grow.</strong> In these scenarios, it is desirable to limit the size of vector clock. To this end, <strong>Dynamo employs the following clock truncation scheme: Along with each (node, counter) pair, Dynamo stores a timestamp that indicates the last time the node updated the data item. When the number of (node, counter) pairs in the vector clock reaches a threshold (say 10), the oldest pair is removed from the clock.</strong> Clearly, this truncation scheme can lead to inefficiencies in reconciliation as the descendant relationships cannot be derived accurately. However, this problem has not surfaced in production and therefore this issue has not been thoroughly investigated.</p>
+<h3 id="vector-versioning-merge-result-write-back-read-repair"><a href="#vector-versioning-merge-result-write-back-read-repair" class="headerlink" title="vector versioning merge result write-back (read repair)"></a>vector versioning merge result write-back (read repair)</h3><p>After the read response has been returned to the caller the state machine waits for a small period of time to receive any outstanding responses. If stale versions were returned in any of the responses, the coordinator updates those nodes with the latest version. This process is called <em>read repair</em> because it repairs replicas that have missed a recent update at an opportunistic time and relieves the anti-entropy protocol from having to do it.</p>
+<h3 id="feedback-controlled-background-task"><a href="#feedback-controlled-background-task" class="headerlink" title="feedback controlled background task"></a>feedback controlled background task</h3><p>Each of the background tasks uses this controller to reserve runtime <strong>slices</strong> of the resource shared across all background tasks. A feedback mechanism based on the monitored performance of the foreground tasks is employed to change the number of slices that are available to the background tasks. For example, the background controller checks to see how close the 99th percentile database read latency (over the last 60 seconds) is to a preset threshold (say 50ms).</p>
+<h2 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h2><p>在阅读论文的过程中，我遇到一些问题，其中有些问题在论文中找到了答案，但是另一些问题论文中并没有给出具体的方案。</p>
+<p>论文 4.6 节提到：In essence, the preference list of a key is constructed such that the storage nodes are spread across multiple data centers. This scheme of replicating across multiple datacenters allows us to handle entire data center failures without a data outage. 这个做法感觉并不容易做到。直觉上，我们需要总共 S &#x2F; N 个位于其他 DC (datacenter) 的节点，这些节点均匀的分布在整个 DHT 空间上。但是这一方案难免会有 N 个节点都在同一个 DC 的情况。</p>
+<p>论文中提到 coordinator 需要对每个请求创建一个状态机来处理整个读写流程。若此时 coordinator 失效了会怎么样？个人认为是不要紧的，首先用户没有得到回复，相当于请求超时，此时用户应认为这次请求有两种可能的状态：失败或成功。如果一个节点都没写成功，那么这个写请求就相当于丢失了，即请求失败。如果至少有一个节点写成功了，那么之后通过 Merkle tree 同步的时候，会将这一记录同步到所有需要存储的节点。如果这一记录所在的节点在同步之前就失效了，则这个记录就没了，相当于请求失败了。如果在失效之前被用户读到了，那么根据 read repair 优化，这个记录会被扩散到所有需要存储的节点上。节点失效但是之后又回来了，产生了写冲突，也会被 vector versioning 所处理。</p>
+<p>接下来的是论文没有提到，但是我想到的几个问题。</p>
+<p>节点的加入和退出会导致 virtual node tokens 的重新分配，这一过程是如何进行的呢？如果新加入的节点主动从其他节点中偷取一个 token，则有可能同时新加入的节点选择了相同的 token。如果系统中的节点发现了新加入的节点后，主动给出一个 token，也许是比较不错的一种选择，但是可能需要记录自己把 token 给出过给谁，或者以某一个概率给出。比如说当发现自己的 token 数大于 Q &#x2F; S 时，把自己的 token 给当前 token 数量最少的节点，并且将对应的记录全都标记上 hand-off hint。token 可以在记录传输得差不多了的时候再给出去，此时新记录的信息标记 hand-off hint，读取的时候不差这一份数据。当节点退出系统时，其所拥有的 tokens 该怎么处理？显然不能由这一节点主动给别人，因为节点失效退出时没有机会执行动作。看来只能等系统中的节点发现自己的 token 数小于 Q &#x2F; S 时，看看有没有漏的 token 捡一个。那么问题来了，如果两个节点取到了同一个 token 怎么办？怎么保证我取的 token 和现有的 tokens 组成的 tokens 是均匀分布在整个 DHT 空间中的？后者可能不好办，我们姑且认为等概率的就行。前者的话，如果不借助共识算法的话估计很难搞定。可能最简单的方法还是在系统外安排一组协调者，采用共识算法选主保证没有单点，然后发现并且均匀分配这些 tokens。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Giuseppe DeCandia, Deniz Hastorun, Madan Jampani, Gunavardhan Kakulapati, Avinash Lakshman, Alex Pilchin, Swaminathan Sivasubramanian, Peter Vosshall, and Werner Vogels. 2007. Dynamo: Amazon’s Highly Available Key-value Store. Proc. Symp. Oper. Syst. Princ. (2007), 205–220. DOI:<a target="_blank" rel="noopener" href="https://doi.org/10.1145/1323293.1294281">https://doi.org/10.1145/1323293.1294281</a></p>
+<p>[2] Hagit Attiya, Faith Ellen, and Adam Morrison. 2017. Limitations of Highly-Available Eventually-Consistent Data Stores. IEEE Trans. Parallel Distrib. Syst. 28, 1 (2017), 141–155. DOI:<a target="_blank" rel="noopener" href="https://doi.org/10.1109/TPDS.2016.2556669">https://doi.org/10.1109/TPDS.2016.2556669</a></p>
+<p>[3] Stephanos Androutsellis-Theotokis and Diomidis Spinellis. 2004. A survey of peer-to-peer content distribution technologies. ACM Comput. Surv. 36, 4 (December 2004), 335–371. DOI:<a target="_blank" rel="noopener" href="https://doi.org/10.1145/1041680.1041681">https://doi.org/10.1145/1041680.1041681</a></p>
+<p>[4] Venugopalan Ramasubramanian and Emin Gun Sirer. 2004. Beehive: O(1)lookup performance for power-law query distributions in peer-to-peer overlays. System 1, 1 (2004), 8. Retrieved from <a target="_blank" rel="noopener" href="http://portal.acm.org/citation.cfm?id=1251175.1251183">http://portal.acm.org/citation.cfm?id=1251175.1251183</a></p>
+<p>[5] Leslie Lamport. 1978. Time, clocks, and the ordering of events in a distributed system. Commun. ACM 21, 7 (July 1978), 558–565. DOI:<a target="_blank" rel="noopener" href="https://doi.org/10.1145/359545.359563">https://doi.org/10.1145/359545.359563</a></p>
+<p>[6] Marc Shapiro, Nuno Preguiça, Carlos Baquero, and Marek Zawirski. 2011. A comprehensive study of Convergent and Commutative Replicated Data Types. (2011).</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Paper-Note/amazon-dynamo/" title="论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store">http://hcoona.github.io/Paper-Note/amazon-dynamo/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Distributed-Storage/" rel="tag"># Distributed Storage</a>
+              <a href="/tags/Paper-Note/" rel="tag"># Paper Note</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/PL/what-is-const/" rel="prev" title="什么是 C++ 中的 const">
+                  <i class="fa fa-angle-left"></i> 什么是 C++ 中的 const
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/paxos-made-simple/" rel="next" title="论文笔记：Paxos Made Simple">
+                  论文笔记：Paxos Made Simple <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="C++中的&#96;const&#96;是一个非常容易混淆的概念，我认为这主要是因为&#96;const&#96;的设计不够完善导致的，尽管目前C++11中新加入了&#96;constexpr&#96;关键词，解决了一部分问题，但是还有很多本质上的问题没有得到解决，甚至很多人都没有认识到这些问题的本质。我在这里解释一下我对C++中&#96;const&#96;的理解，并且试图分析其所解决的本质问题，对于部分问题，给出一些其他方案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是 C++ 中的 const">
+<meta property="og:url" content="http://hcoona.github.io/PL/what-is-const/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="C++中的&#96;const&#96;是一个非常容易混淆的概念，我认为这主要是因为&#96;const&#96;的设计不够完善导致的，尽管目前C++11中新加入了&#96;constexpr&#96;关键词，解决了一部分问题，但是还有很多本质上的问题没有得到解决，甚至很多人都没有认识到这些问题的本质。我在这里解释一下我对C++中&#96;const&#96;的理解，并且试图分析其所解决的本质问题，对于部分问题，给出一些其他方案。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-04-28T14:44:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.300Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Programming Language">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/PL/what-is-const/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/PL/what-is-const/","path":"PL/what-is-const/","title":"什么是 C++ 中的 const"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>什么是 C++ 中的 const | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/PL/what-is-const/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_c%E4%B8%AD%E7%9A%84const%E7%9A%843%E7%A7%8D%E7%94%A8%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">C++中的&#96;const&#96;的3种用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_const%E8%A1%A8%E7%A4%BA%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%8F%AF%E4%BF%AE%E6%94%B9"><span class="nav-number">2.</span> <span class="nav-text">&#96;const&#96;表示变量（类型）不可修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_const%E4%BF%AE%E9%A5%B0%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">&#96;const&#96;修饰成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_c%E4%B8%AD%E7%9A%84readonly%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">C#中的&#96;readonly&#96;关键字</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/PL/what-is-const/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="什么是 C++ 中的 const | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          什么是 C++ 中的 const
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-04-28 22:44:00" itemprop="dateCreated datePublished" datetime="2015-04-28T22:44:00+08:00">2015-04-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PL/" itemprop="url" rel="index"><span itemprop="name">PL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>C++中的`const`是一个非常容易混淆的概念，我认为这主要是因为`const`的设计不够完善导致的，尽管目前C++11中新加入了`constexpr`关键词，解决了一部分问题，但是还有很多本质上的问题没有得到解决，甚至很多人都没有认识到这些问题的本质。我在这里解释一下我对C++中`const`的理解，并且试图分析其所解决的本质问题，对于部分问题，给出一些其他方案。</p>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="sect1">
+<h2 id="_c中的const的3种用法">C++中的`const`的3种用法</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>C++中的`const`有3种用法：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>修饰一个变量（类型），表示这个变量（类型）不可修改</p>
+</li>
+<li>
+<p>修饰一个变量（类型），表示这是一个常量</p>
+</li>
+<li>
+<p>修饰一个成员函数，表示这个成员函数不会修改类的内部状态</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这三种用法中，第2种已经被新的关键字`constexpr`所取代，而第1种和第2种用法或多或少有些问题。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_const表示变量类型不可修改">`const`表示变量（类型）不可修改</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>代码实例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cpp"><span class="type">const</span> <span class="type">int</span> a = <span class="built_in">f</span>();
+cout &lt;&lt; a &lt;&lt; endl; <span class="comment">// OK</span>
+a = <span class="number">5</span>; <span class="comment">// Compile Error! `a` is readonly.</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>其实大家在使用这种方式的时候，只是想表明被修饰的*变量*<code>a`是只读的。但是C++在这里有一个问题，就是`const`修饰的并不是变量，而是*变量的类型*。这里变量`a`的类型是`int const</code>，这个类型和`int`是不兼容的，这经常导致一些非常傻逼的情况：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>将函数的返回值类型设置为`const`类型的</p>
+</li>
+<li>
+<p>将函数的参数类型设置为`const`类型的，到后来发现有一个很深的依赖函数需要修改这个值</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>第1种情况在修饰栈上对象的时候就是一种纯傻逼行为，因为函数返回的时候一拷贝就能去掉`const`修饰符，相当于什么都没干；在修饰指针（含引用）类型的时候，则需要更多的考虑以防出现第2种情况这样缺乏远见的行为。</p>
+</div>
+<div class="paragraph">
+<p>C++之所以这么做，就是因为对象有可能是在栈上的，也有可能是堆上的，而这两种情况对于用户是不透明的，用户必须知道这个对象是在哪儿的，并且在代码中反映出这种不同，这对于C++程序员而言是相当痛苦的。当一个对象是在堆上的时候，尽管我们不允许修改指向这个对象实例的指针，但是仍然有可能修改其所指向的对象实例的内容。为了防止这种情况发生，C++设计的时候让`const`修饰类型，这样我们使用只读类型的时候，无论是在栈上还是堆上都不能修改对象实例的内容了。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_const修饰成员函数">`const`修饰成员函数</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>示例代码：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">A</span>
+&#123;
+<span class="keyword">private</span>:
+    <span class="type">int</span> m_id;
+<span class="keyword">public</span>:
+    <span class="function"><span class="type">int</span> <span class="title">get_id</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span></span>;
+    <span class="function"><span class="type">void</span> <span class="title">set_id</span><span class="params">(<span class="type">int</span> id)</span></span>;
+&#125;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这个问题和上一个问题是高度相关的，正因为`const`在表示只读时修饰的是类型，所以就需要标记出哪些成员函数是只读的，这些成员函数可以在只读类型中继续使用，而其他成员函数不可以。</p>
+</div>
+<div class="paragraph">
+<p>说到这里，我们突然发现，<code>const`的这种用法竟然是在定义一个新的类型——`X`类型的只读类型`X const</code>。</p>
+</div>
+<div class="paragraph">
+<p>这也是为什么很多程序员都不愿意在成员函数上标记`const`。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_c中的readonly关键字">C#中的`readonly`关键字</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>C#中有两个关键字，<code>readonly`和`const</code>。前者用于修饰一个变量，表示该变量只读。后者也是用于修饰一个变量，表示该变量是编译时期常量。我认为这是一种比较好的设计，因为这种设计中，两个关键字分别表示两种完全不同的语义，并且`readonly`的语义符合人们修饰一个变量而非其类型的预期。</p>
+</div>
+<div class="paragraph">
+<p>`readonly`只能控制栈上（含寄存器）对象不被修改，比如`int`类型的变量，或者对象引用本身。如果想要控制堆上变量不被修改，则需要针对这一类型定义一种新的只读接口，使用这一只读接口类型才能控制堆上变量本身不被修改。</p>
+</div>
+<div class="paragraph">
+<p>示例代码</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cs"><span class="keyword">interface</span> <span class="title">AReadOnly</span> &#123;
+    <span class="function"><span class="built_in">int</span> <span class="title">GetId</span>()</span>;
+&#125;
+<span class="keyword">class</span> <span class="title">A</span> &#123;
+    <span class="keyword">private</span> <span class="built_in">int</span> m_id;
+    <span class="function"><span class="keyword">public</span> <span class="title">GetId</span>()</span>;
+    <span class="function"><span class="keyword">public</span> <span class="title">SetId</span>(<span class="params"><span class="built_in">int</span> id</span>)</span>;
+&#125;
+
+AReadOnly a_const = <span class="keyword">new</span> A();</code></pre>
+</div>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/PL/what-is-const/" title="什么是 C++ 中的 const">http://hcoona.github.io/PL/what-is-const/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Programming-Language/" rel="tag"># Programming Language</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/interview/split-nature-number-answer/" rel="prev" title="对“编程小练习：拆分自然数”的解答">
+                  <i class="fa fa-angle-left"></i> 对“编程小练习：拆分自然数”的解答
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/amazon-dynamo/" rel="next" title="论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store">
+                  论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

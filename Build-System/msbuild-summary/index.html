@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="总结 MSBuild 的基本概念和扩展方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MSBuild 总结">
+<meta property="og:url" content="http://hcoona.github.io/Build-System/msbuild-summary/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="总结 MSBuild 的基本概念和扩展方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.305Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Tips">
+<meta property="article:tag" content="MSBuild">
+<meta property="article:tag" content="Build System">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Build-System/msbuild-summary/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Build-System/msbuild-summary/","path":"Build-System/msbuild-summary/","title":"MSBuild 总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MSBuild 总结 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Build-System/msbuild-summary/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Property"><span class="nav-number">3.</span> <span class="nav-text">Property</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item"><span class="nav-number">4.</span> <span class="nav-text">Item</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Target"><span class="nav-number">5.</span> <span class="nav-text">Target</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task"><span class="nav-number">6.</span> <span class="nav-text">Task</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Directory-Build-props"><span class="nav-number">7.</span> <span class="nav-text">Directory.Build.props</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%BC%95%E7%94%A8%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">7.1.</span> <span class="nav-text">递归引用的小技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MSBuildSdks"><span class="nav-number">7.2.</span> <span class="nav-text">MSBuildSdks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">8.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XML-%E6%96%87%E4%BB%B6-Schema"><span class="nav-number">8.1.</span> <span class="nav-text">XML 文件 Schema</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%8A%8A%E6%89%A9%E5%B1%95%E6%8B%86%E6%88%90-props-%E5%92%8C-targets-%E4%B8%A4%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="nav-number">8.2.</span> <span class="nav-text">一般把扩展拆成 .props 和 .targets 两个文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%A0%B9%E6%8D%AE%E9%A1%B9%E7%9B%AE%E7%B1%BB%E5%9E%8B%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="nav-number">8.3.</span> <span class="nav-text">根根据项目类型自定义配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E-proj-%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90-sln-%E6%96%87%E4%BB%B6"><span class="nav-number">8.4.</span> <span class="nav-text">从 proj 文件生成 sln 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91-NET-Framework-%E7%9B%AE%E6%A0%87%E5%B7%A5%E7%A8%8B"><span class="nav-number">8.5.</span> <span class="nav-text">编译 .NET Framework 目标工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-SDK"><span class="nav-number">8.6.</span> <span class="nav-text">C++ SDK</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Build-System/msbuild-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MSBuild 总结 | HCOONa's blog">
+      <meta itemprop="description" content="总结 MSBuild 的基本概念和扩展方法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MSBuild 总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-27 00:00:00" itemprop="dateCreated datePublished" datetime="2022-07-27T00:00:00+08:00">2022-07-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Build-System/" itemprop="url" rel="index"><span itemprop="name">Build System</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">总结 MSBuild 的基本概念和扩展方法</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>最近又要开始搞 Visual Studio 的项目了，可能还要把之前一些老构建流程的项目迁移过来，所以在看看 MSBuild 的相关资料，整理一下学习笔记。</p>
+<p>这次的话会写得简单一些，因为有些基础概念已经都掌握了。</p>
+<p>官方文档见 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2022">MSBuild - MSBuild</a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>参考 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-concepts?view=vs-2022">MSBuild Concepts - MSBuild</a></p>
+<ul>
+<li>Property：约等于 Variable 的概念</li>
+<li>Item：会展示在 IDE 中的文件</li>
+<li>Target：执行构建工作流的节点</li>
+<li>Task：实际执行的动作，一个 Target 可以包含多个 Tasks</li>
+</ul>
+<h2 id="Property"><a href="#Property" class="headerlink" title="Property"></a>Property</h2><p>用 <code>$(&lt;name&gt;)</code> 来使用。</p>
+<p>主要是要知道有些内建的 Properties：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-reserved-and-well-known-properties?view=vs-2022">MSBuild Reserved and Well-known Properties - MSBuild</a></p>
+<p>然后是环境变量也能当成 Property 用：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-use-environment-variables-in-a-build?view=vs-2022">How to: Use Environment Variables in a Build - MSBuild</a></p>
+<p>可以用一些特定的函数对 Property 进行计算：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/property-functions?view=vs-2022">Property Functions - MSBuild</a></p>
+<h2 id="Item"><a href="#Item" class="headerlink" title="Item"></a>Item</h2><p>用 <code>@(&lt;name&gt;)</code> 来使用 Item，用 <code>%(&lt;name&gt;)</code> 来使用其 Metadata。</p>
+<p>Metadata 是 Attach 到 Item 上的属性，有一些内建的 Metadata 可用：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-well-known-item-metadata?view=vs-2022">MSBuild Well-known Item Metadata - MSBuild</a></p>
+<p>可以用一些特定的函数对 Metadata 进行计算：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/item-functions?view=vs-2022">Item Functions - MSBuild</a></p>
+<p>可以用 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-transforms?view=vs-2022">MSBuild Transforms - MSBuild</a> 这样一种语法对 Item 列表基于 Metadata 来进行一些变换（类似于 Mapping 操作）。</p>
+<h2 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h2><p>默认的 Targets 有这些 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets?view=vs-2022#default-build-targets">MSBuild Targets - MSBuild</a></p>
+<p>如何确定 Target 的执行顺序见 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/target-build-order?view=vs-2022#determine-the-target-build-order">Target Build Order - MSBuild</a></p>
+<p>这里比较容易引起困惑的是 DependsOnTargets 和 AfterTargets，他们的区别见 <a target="_blank" rel="noopener" href="https://github.com/MicrosoftDocs/visualstudio-docs/issues/2994#issuecomment-480017831">DependsOnTargets Vs AfterTargets · Issue #2994 · MicrosoftDocs&#x2F;visualstudio-docs</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;Target Name=&quot;x&quot; DependsOnTargets=&quot;y&quot; /&gt; means:</span><br><span class="line"></span><br><span class="line">If something wants to run x, y must run first.</span><br><span class="line"></span><br><span class="line">&lt;Target Name=&quot;a&quot; AfterTargets=&quot;b&quot; /&gt; means:</span><br><span class="line"></span><br><span class="line">If something runs b, then run a after it.</span><br><span class="line"></span><br><span class="line">They differ in a couple of ways. BeforeTargets and AfterTargets are</span><br><span class="line">generally used for *extending* the build: &quot;I have a custom target I</span><br><span class="line">want to run after ResolveReferences&quot;. The target that&#x27;s being</span><br><span class="line">hooked onto doesn&#x27;t need to know anything about the new target.</span><br><span class="line"></span><br><span class="line">In contrast, DependsOnTargets is the basic building block of the</span><br><span class="line">target-dependency graph. When authoring a target, use</span><br><span class="line">DependsOnTargets to ensure that all of your inputs (both file and</span><br><span class="line">MSBuild item/property) have already been brought up to date.</span><br></pre></td></tr></table></figure>
+
+<p>空的 <code>proj</code> 就没有 Target，但是一般我们都用 <code>vcxproj</code> 什么的，通过 SDK 就给注入了一堆 target。</p>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><p>内置的 Task 有这些 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-task-reference?view=vs-2022#in-this-section">MSBuild Task Reference - MSBuild</a>（定义于 Microsoft.Common.CurrentVersion.Targets）</p>
+<table>
+<thead>
+<tr>
+<th><code>.targets</code> file</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Microsoft.Common.targets</td>
+<td>Defines the steps in the standard build process for Visual Basic and C# projects.<br>Imported by the <code>Microsoft.CSharp.targets</code> and <code>Microsoft.VisualBasic.targets</code> files, which include the following statement: <code>&lt;Import Project=&quot;Microsoft.Common.targets&quot; /&gt;</code></td>
+</tr>
+<tr>
+<td>Microsoft.CSharp.targets</td>
+<td>Defines the steps in the standard build process for Visual C# projects.<br>Imported by Visual C# project files (<code>.csproj</code>), which include the following statement: <code>&lt;Import Project=&quot;$(MSBuildToolsSpeed)\Microsoft.CSharp.targets&quot; /&gt;</code></td>
+</tr>
+<tr>
+<td>Microsoft.VisualBasic.targets</td>
+<td>Defines the steps in the standard build process for Visual Basic projects.<br>Imported by Visual Basic project files (<code>.vbproj</code>), which include the following statement: <code>&lt;Import Project=&quot;$(MSBuildToolsSpeed)\Microsoft.VisualBasic.targets&quot; /&gt;</code></td>
+</tr>
+</tbody></table>
+<p>C++ 的好像是 <code>Microsoft.Cpp.targets</code> 看起来好像跟 <code>Microsoft.Commons.targets</code> 没关系（看这里的可能更靠谱 <code>C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\Microsoft.Common.tasks</code>）。</p>
+<p>如果需要自定义 Task 可以参考 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/task-writing?view=vs-2022">Task Writing - MSBuild</a> 和 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022">Create a custom task - MSBuild</a>。如果只需要嵌入非常简单的小段代码，可以考虑 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-inline-tasks?view=vs-2022">MSBuild Inline Tasks - MSBuild</a>。</p>
+<h2 id="Directory-Build-props"><a href="#Directory-Build-props" class="headerlink" title="Directory.Build.props"></a>Directory.Build.props</h2><h3 id="递归引用的小技巧"><a href="#递归引用的小技巧" class="headerlink" title="递归引用的小技巧"></a>递归引用的小技巧</h3><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022">https://docs.microsoft.com/zh-cn/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022</a></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Import</span> <span class="attr">Project</span>=<span class="string">&quot;$([MSBuild]::GetDirectoryNameOfFileAbove(&#x27;$(MSBuildThisFileDirectory)..&#x27;, &#x27;Directory.Build.props&#x27;))\Directory.Build.props&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="MSBuildSdks"><a href="#MSBuildSdks" class="headerlink" title="MSBuildSdks"></a>MSBuildSdks</h3><p><a target="_blank" rel="noopener" href="https://github.com/microsoft/MSBuildSdks">https://github.com/microsoft/MSBuildSdks</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022">https://docs.microsoft.com/zh-cn/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022</a></p>
+<p>这里面搞了几个比较有用的扩展：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/MSBuildSdks/blob/main/src/Traversal">Microsoft.Build.Traversal</a> 一般用来搞一个 <code>dirs.proj</code>，递归的引用子目录中的其他项目。这样方便在一个特别大的仓库中组织几百个项目。最终可以用 SlnGen 工具生成 <code>sln</code> 文件使用 IDE 进行开发。这么搞的原因是大型 <code>sln</code> 文件性能比较差。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/MSBuildSdks/blob/main/src/CentralPackageVersions">Microsoft.Build.CentralPackageVersions</a> 中心化配置依赖版本，这样就能将整个仓库中所有项目使用的依赖版本对齐了，互相引用和链接的时候也不会出什么依赖版本不一致的问题。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/MSBuildSdks/blob/main/src/NoTargets">Microsoft.Build.NoTargets</a> Build 过程为空，这样方便在编译时期处罚一些自定义的任务，比如说 <code>robocopy</code> 什么的。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/MSBuildSdks/blob/main/src/Artifacts">Microsoft.Build.Artifacts</a> 把项目产物放到一个集中的地方，方便比如说 Azure DevOps Pipeline 编译完了之后把所有产物收集起来（Azure Artifacts）。</li>
+</ol>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="XML-文件-Schema"><a href="#XML-文件-Schema" class="headerlink" title="XML 文件 Schema"></a>XML 文件 Schema</h3><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-project-file-schema-reference?view=vs-2022">https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-project-file-schema-reference?view=vs-2022</a></p>
+<blockquote>
+<p>The schema link in an MSBuild project file is not required in Visual Studio 2017 and later. If present, it should be <code>http://schemas.microsoft.com/developer/msbuild/2003</code> regardless of the version of Visual Studio.</p>
+</blockquote>
+<p>但是看现在 SDK 的项目自动都把 Schema 抹掉了，也不知道是为啥。</p>
+<h3 id="一般把扩展拆成-props-和-targets-两个文件"><a href="#一般把扩展拆成-props-和-targets-两个文件" class="headerlink" title="一般把扩展拆成 .props 和 .targets 两个文件"></a>一般把扩展拆成 .props 和 .targets 两个文件</h3><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2022#choose-between-adding-properties-to-a-props-or-targets-file">https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2022#choose-between-adding-properties-to-a-props-or-targets-file</a></p>
+<p>说这个主要是写 nuget 包的时候会用到。</p>
+<blockquote>
+<p>When using explicit imports, you can import from a <code>.props</code> or <code>.targets</code> file at any point. Here is the widely used convention:</p>
+<ul>
+<li><code>.props</code> files are imported early in the import order.</li>
+<li><code>.targets</code> files are imported late in the build order.</li>
+</ul>
+</blockquote>
+<h3 id="根根据项目类型自定义配置"><a href="#根根据项目类型自定义配置" class="headerlink" title="根根据项目类型自定义配置"></a>根根据项目类型自定义配置</h3><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2022#custom-configuration-based-on-project-language">https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2022#custom-configuration-based-on-project-language</a></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">PropertyGroup</span> <span class="attr">Condition</span>=<span class="string">&quot;&#x27;$(MSBuildProjectExtension)&#x27; == &#x27;.vbproj&#x27;&quot;</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!-- Put VB-only property definitions here --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PropertyGroup</span> <span class="attr">Condition</span>=<span class="string">&quot;&#x27;$(MSBuildProjectExtension)&#x27; == &#x27;.fsproj&#x27;&quot;</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!-- Put F#-only property definitions here --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PropertyGroup</span> <span class="attr">Condition</span>=<span class="string">&quot;&#x27;$(MSBuildProjectExtension)&#x27; == &#x27;.csproj&#x27;&quot;</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!-- Put C#-only property definitions here --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">PropertyGroup</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="从-proj-文件生成-sln-文件"><a href="#从-proj-文件生成-sln-文件" class="headerlink" title="从 proj 文件生成 sln 文件"></a>从 <code>proj</code> 文件生成 <code>sln</code> 文件</h3><p><a target="_blank" rel="noopener" href="https://microsoft.github.io/slngen/">https://microsoft.github.io/slngen/</a></p>
+<h3 id="编译-NET-Framework-目标工程"><a href="#编译-NET-Framework-目标工程" class="headerlink" title="编译 .NET Framework 目标工程"></a>编译 .NET Framework 目标工程</h3><p>可以用这个 <a target="_blank" rel="noopener" href="https://github.com/Microsoft/dotnet/tree/master/releases/reference-assemblies">https://github.com/Microsoft/dotnet/tree/master/releases/reference-assemblies</a> 而不安装 .NET Framework SDK</p>
+<h3 id="C-SDK"><a href="#C-SDK" class="headerlink" title="C++ SDK"></a>C++ SDK</h3><p><a target="_blank" rel="noopener" href="https://www.nuget.org/packages/Microsoft.Windows.SDK.NET.Ref/">https://www.nuget.org/packages/Microsoft.Windows.SDK.NET.Ref/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nuget.org/packages/Microsoft.Windows.SDK.CPP/">https://www.nuget.org/packages/Microsoft.Windows.SDK.CPP/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Build-System/msbuild-summary/" title="MSBuild 总结">http://hcoona.github.io/Build-System/msbuild-summary/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Tips/" rel="tag"># Tips</a>
+              <a href="/tags/MSBuild/" rel="tag"># MSBuild</a>
+              <a href="/tags/Build-System/" rel="tag"># Build System</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Data-Structure/instrusive-linked-list-summary/" rel="prev" title="C++ 侵入式链表总结">
+                  <i class="fa fa-angle-left"></i> C++ 侵入式链表总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Tips/dotnet-structure-log-scope/" rel="next" title="让 .NET 的 Logger 结构化的打印 Scope">
+                  让 .NET 的 Logger 结构化的打印 Scope <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

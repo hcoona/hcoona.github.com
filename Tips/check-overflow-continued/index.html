@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="检查加法溢出的几种方法的比较">
+<meta property="og:url" content="http://hcoona.github.io/Tips/check-overflow-continued/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-02-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.300Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Tips">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Tips/check-overflow-continued/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Tips/check-overflow-continued/","path":"Tips/check-overflow-continued/","title":"检查加法溢出的几种方法的比较"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>检查加法溢出的几种方法的比较 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Tips/check-overflow-continued/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">原理简述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B5%8C%E5%85%A5%E6%B1%87%E7%BC%96%E6%A3%80%E6%9F%A5%E5%A4%84%E7%90%86%E5%99%A8-Overflow-%E6%A0%87%E8%AE%B0"><span class="nav-number">1.1.</span> <span class="nav-text">嵌入汇编检查处理器 Overflow 标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86-32-%E4%BD%8D%E5%8A%A0%E6%B3%95%E8%BD%AC%E6%8D%A2%E4%B8%BA-64-%E4%BD%8D%E5%8A%A0%E6%B3%95%EF%BC%8C%E7%84%B6%E5%90%8E%E5%86%8D%E4%B8%8E-INT-MAX-%E6%88%96-INT-MIN-%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83"><span class="nav-number">1.2.</span> <span class="nav-text">将 32 位加法转换为 64 位加法，然后再与 INT_MAX 或 INT_MIN 进行比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%BF%90%E7%AE%97%E7%BB%93%E6%9E%9C%E6%89%80%E5%9C%A8%E7%9A%84%E5%8C%BA%E9%97%B4%E8%BF%9B%E8%A1%8C%E5%88%A4%E6%96%AD%E5%92%8C%E9%AA%8C%E8%AF%81"><span class="nav-number">1.3.</span> <span class="nav-text">对运算结果所在的区间进行判断和验证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%BB%A3%E7%A0%81%E7%AE%80%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">实验代码简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">汇编代码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E8%AE%A1%E7%AE%80%E8%BF%B0"><span class="nav-number">4.</span> <span class="nav-text">实验设计简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">实验结果分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Tips/check-overflow-continued/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="检查加法溢出的几种方法的比较 | HCOONa's blog">
+      <meta itemprop="description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          检查加法溢出的几种方法的比较
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2014-02-20 00:00:00" itemprop="dateCreated datePublished" datetime="2014-02-20T00:00:00+08:00">2014-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tips/" itemprop="url" rel="index"><span itemprop="name">Tips</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C/C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。</p>
+<p>但是需要注意的是，即便是其他的体系结构，也很有可能提供了类似的指令用于检测溢出位。[1]</p>
+<p>为方便起见，下面讨论将以两个 32 bit 有符号整数的加法操作为例。对于无符号整数的操作，只需检查 Carry 位即可。[2]</p>
+<p>本文中用到的方法有三种：</p>
+<ol>
+<li>使用嵌入汇编代码检查处理器的 Overflow 标记；</li>
+<li>将 32 位加法转换为 64 位加法，然后再与 <code>INT_MAX</code> 或 <code>INT_MIN</code> 进行比较；</li>
+<li>对运算结果所在的区间进行判断和验证。</li>
+</ol>
+<h2 id="原理简述"><a href="#原理简述" class="headerlink" title="原理简述"></a>原理简述</h2><h3 id="嵌入汇编检查处理器-Overflow-标记"><a href="#嵌入汇编检查处理器-Overflow-标记" class="headerlink" title="嵌入汇编检查处理器 Overflow 标记"></a>嵌入汇编检查处理器 Overflow 标记</h3><p>该方法的理论基础是这样的：[3]</p>
+<pre><code>The status register in a traditional processor design includes at least three central flags: Zero, Carry, and Overflow, which are set or cleared automatically as effects of arithmetic and bit manipulation operations.
+</code></pre>
+<p>在 X86 体系结构中，我们可以利用这些标记来判断最近的一次算数操作是否发生了溢出。特别的，X86 提供了 <code>JO</code> 和 <code>JNO</code> 指令，根据 Overflow 标记进行条件跳转。[4]</p>
+<p>可惜事情并不是总这么美好，有时编译器会使用 <code>LEA</code> 指令对算数操作进行优化。由于 <code>LEA</code> 指令不是一个算数操作指令，所以并不会设置 Overflow 标记，从而会令我们这种检测方式失效。一个折中的解决方法是，使用嵌入汇编指令，强制编译器生成 <code>ADD</code> 指令进行加法运算。</p>
+<h3 id="将-32-位加法转换为-64-位加法，然后再与-INT-MAX-或-INT-MIN-进行比较"><a href="#将-32-位加法转换为-64-位加法，然后再与-INT-MAX-或-INT-MIN-进行比较" class="headerlink" title="将 32 位加法转换为 64 位加法，然后再与 INT_MAX 或 INT_MIN 进行比较"></a>将 32 位加法转换为 64 位加法，然后再与 <code>INT_MAX</code> 或 <code>INT_MIN</code> 进行比较</h3><p>显然，32 位加法操作至多可能生成 33 位的结果，X86 处理器中提供对 64 位整数运算的一些支持，因此我们可以使用 64 位整数运算进行计算，然后将运算结果与 32 位整数的边界值进行比较，从而判断溢出。</p>
+<h3 id="对运算结果所在的区间进行判断和验证"><a href="#对运算结果所在的区间进行判断和验证" class="headerlink" title="对运算结果所在的区间进行判断和验证"></a>对运算结果所在的区间进行判断和验证</h3><p>由于补码的定义，导致一旦发生溢出，结果的区间是可以预先判断的。如果两个正整数相加发生了溢出，则结果一定小于其中任一操作数；如果两个负整数相加发生了溢出，则结果一定大于其中任一操作数。[5]</p>
+<p>根据这一原理，我们可以对结果所在的区间进行验证，从而得知是否发生了溢出。</p>
+<h2 id="实验代码简述"><a href="#实验代码简述" class="headerlink" title="实验代码简述"></a>实验代码简述</h2><p>为了最大程度发挥编译器优化的优势，我构造了以下代码用于实验：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add1</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">asm</span> (<span class="string">&quot;addl %1, %0&quot;</span></span><br><span class="line">        : <span class="string">&quot;=r&quot;</span> (a)</span><br><span class="line">        : <span class="string">&quot;r&quot;</span> (a), <span class="string">&quot;r&quot;</span> (b));</span><br><span class="line">    <span class="function"><span class="keyword">asm</span> <span class="title">goto</span> <span class="params">(<span class="string">&quot;jo %l0&quot;</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no output */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no input */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no clobber */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : OVERFLOW)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line"></span><br><span class="line">OVERFLOW:</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add2</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> tmp = (<span class="type">long</span> <span class="type">long</span>)a + (<span class="type">long</span> <span class="type">long</span>)b;</span><br><span class="line">    <span class="keyword">if</span> (tmp &lt;= (<span class="type">long</span> <span class="type">long</span>)INT_MAX &amp;&amp; tmp &gt;= (<span class="type">long</span> <span class="type">long</span>)INT_MIN) &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>)tmp;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add3</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> tmp = (<span class="type">int</span>)((<span class="type">unsigned</span> <span class="type">int</span>)a + (<span class="type">unsigned</span> <span class="type">int</span>)b);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (a &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &gt;= <span class="number">0</span> &amp;&amp; tmp &lt; a) &#123;</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &lt;= <span class="number">0</span> &amp;&amp; tmp &gt; a) &#123;</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T1</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add1</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\n&quot;</span>, a, b, c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T2</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add2</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\n&quot;</span>, a, b, c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T3</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add3</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\n&quot;</span>, a, b, c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处的 <code>Add1</code>，<code>Add2</code> 和 <code>Add3</code> 方法分别对应上面提出的三种方法的 C 语言实现。使用 <code>inline</code> 标记指示编译器进行内联以进行更深层次的优化。其中 <code>Add2</code> 和 <code>Add3</code> 方法参考了微软的 SafeInt 库。[6]</p>
+<p><code>T1</code>，<code>T2</code> 和 <code>T3</code> 方法分别对应了三个测试方法。此处没有直接为 <code>a</code> 和 <code>b</code> 指定一个值，而是使用 <code>scanf</code> 函数进行输入，以防止编译器在优化时直接进行离线计算，将生成的结果直接写入目标位置。</p>
+<h2 id="汇编代码分析"><a href="#汇编代码分析" class="headerlink" title="汇编代码分析"></a>汇编代码分析</h2><p>我使用下面的语句生成汇编代码：</p>
+<pre><code>gcc -O3 -march=native -S test.c -o test.s
+</code></pre>
+<p>顺便说一下我的实验环境：</p>
+<ul>
+<li>CPU: Intel Core2 P7450</li>
+<li>GCC: 4.8.2</li>
+</ul>
+<p>由于完整的代码比较长，这里只摘录部分关键代码。<code>T1</code> 生成的代码中，与 <code>Add1</code> 相关的代码（内联后）片段如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  movl 12(%rsp), %edx</span><br><span class="line">  movl 8(%rsp), %esi</span><br><span class="line">  addl %esi, %ecx</span><br><span class="line">  jo   .L26</span><br><span class="line">  # No Overflow</span><br><span class="line">.L26:</span><br><span class="line">  # Overflow</span><br></pre></td></tr></table></figure>
+
+<p>很简单，这段汇编代码就是将 <code>scanf</code> 函数的结果存到寄存器中，然后执行 <code>addl</code> 运算，之后（根据溢出位的设置情况）进行条件跳转。</p>
+<p><code>T2</code> 生成的代码中，与 <code>Add2</code> 相关的代码（内联后）片段如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  movl   12(%rsp), %edx</span><br><span class="line">  movl   $2147483648, %edi</span><br><span class="line">  movl   8(%rsp), %esi</span><br><span class="line">  movslq %edx, %rax</span><br><span class="line">  movslq %esi, %rcx</span><br><span class="line">  addq   %rax, %rcx</span><br><span class="line">  movl   $4294967295, %eax</span><br><span class="line">  addq   %rcx, %rdi</span><br><span class="line">  cmpq   %rax, %rdi</span><br><span class="line">  ja     .L30</span><br><span class="line">  # No Overflow</span><br><span class="line">.L30:</span><br><span class="line">  # Overflow</span><br></pre></td></tr></table></figure>
+
+<p><code>movslq</code> 可以将 <code>long</code> 长度的数据移动并进行符号位扩展到 <code>quad</code> 长度的位置。这段代码首先将 <code>scanf</code> 的结果取出到 32 位寄存器 <code>edx</code> 和 <code>esi</code> 中，然后又分别将结果进行符号扩展并移动到 64 位寄存器 <code>rax</code> 和 <code>rcx</code> 中。接下来进行 64 位加法运算，结果保存在 <code>rcx</code> 寄存器中。然后编译器做了一个人脑看来相当复杂的优化，我证明了这个优化是正确的，但是不准备在这里详细展开。</p>
+<p><code>T3</code> 生成的代码中，与 <code>Add3</code> 相关的代码（内联后）片段如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  movl	8(%rsp), %esi</span><br><span class="line">  movl	12(%rsp), %edx</span><br><span class="line">  testl	%esi, %esi</span><br><span class="line">  leal	(%rdx,%rsi), %ecx</span><br><span class="line">  js	.L34</span><br><span class="line">  cmpl	%ecx, %esi</span><br><span class="line">  jg	.L45</span><br><span class="line">.L35:</span><br><span class="line">    # No Overflow</span><br><span class="line">.L34:</span><br><span class="line">  cmpl	%ecx, %esi</span><br><span class="line">  jge	.L35</span><br><span class="line">  movl	%edx, %eax</span><br><span class="line">  shrl	$31, %eax</span><br><span class="line">  testb	%al, %al</span><br><span class="line">  je	.L35</span><br><span class="line">.L36:</span><br><span class="line">    # Overflow</span><br><span class="line">.L45:</span><br><span class="line">  testl	%edx, %edx</span><br><span class="line">  js	.L35</span><br><span class="line">  jmp	.L36</span><br></pre></td></tr></table></figure>
+
+<p>不用分析也知道，这段代码比较复杂，运行效率不会比前两段代码效率更高。</p>
+<h2 id="实验设计简述"><a href="#实验设计简述" class="headerlink" title="实验设计简述"></a>实验设计简述</h2><p>使用预先生成的随机数，分别调用 <code>Add1</code>，<code>Add2</code>，<code>Add3</code> 以及不检查溢出直接进行加法运算，统计时间性能。此时，需对这几个函数稍作修改，不能在发生溢出时调用 <code>exit</code> 函数，而是使用 <code>setjmp</code> 和 <code>longjmp</code> 进行处理。</p>
+<p>主要代码如下：</p>
+<p>（因本人工作平台迁移到 Windows，暂时无法进行实验，后面实验缺失）</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="实验结果分析"><a href="#实验结果分析" class="headerlink" title="实验结果分析"></a>实验结果分析</h2><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] ARM Processors: Condition Codes 1: Condition Flags and Codes. July, 2010. <a target="_blank" rel="noopener" href="http://community.arm.com/groups/processors/blog/2010/07/16/condition-codes-1-condition-flags-and-codes">http://community.arm.com/groups/processors/blog/2010/07/16/condition-codes-1-condition-flags-and-codes</a></p>
+<p>[2] Ian! D. Allen. The CARRY flag and OVERFLOW flag in binary arithmetic. <a target="_blank" rel="noopener" href="http://teaching.idallen.com/dat2343/10f/notes/040_overflow.txt">http://teaching.idallen.com/dat2343/10f/notes/040_overflow.txt</a></p>
+<p>[3] Status register. <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Status_register">http://en.wikipedia.org/wiki/Status_register</a></p>
+<p>[4] X86 instruction listings. <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/X86_instruction_listings">http://en.wikipedia.org/wiki/X86_instruction_listings</a></p>
+<p>[5] Randal E. Bryant and David R. O’Hallaron. Computer System: A Programmer’s Perspective, 2ed. Addison-Wesley. February 2010.</p>
+<p>[6] SafeInt. <a target="_blank" rel="noopener" href="http://safeint.codeplex.com/">http://safeint.codeplex.com/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Tips/check-overflow-continued/" title="检查加法溢出的几种方法的比较">http://hcoona.github.io/Tips/check-overflow-continued/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Tips/" rel="tag"># Tips</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Tips/twos-complement/" rel="prev" title="谈补码">
+                  <i class="fa fa-angle-left"></i> 谈补码
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Tips/different-programming-languages/" rel="next" title="从一道面试题看不同编程语言的表述能力">
+                  从一道面试题看不同编程语言的表述能力 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

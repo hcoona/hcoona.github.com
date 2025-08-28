@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="一棵二叉搜索树中，有一个节点不满足二叉搜索树的性质，找出这一节点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一道面试题的多种解法">
+<meta property="og:url" content="http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="一棵二叉搜索树中，有一个节点不满足二叉搜索树的性质，找出这一节点。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2013-09-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.299Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Interview">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/","path":"interview/different-solutions-to-an-interview-problem/","title":"一道面试题的多种解法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>一道面试题的多种解法 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">2.</span> <span class="nav-text">二叉树的中序遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AA%E7%94%A8O-1-%E7%9A%84%E7%A9%BA%E9%97%B4"><span class="nav-number">3.</span> <span class="nav-text">只用O(1)的空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E7%8A%B6%E6%80%81"><span class="nav-number">4.</span> <span class="nav-text">引入状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E8%BF%9B%E4%B8%80%E6%AD%A5"><span class="nav-number">5.</span> <span class="nav-text">更进一步</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="一道面试题的多种解法 | HCOONa's blog">
+      <meta itemprop="description" content="一棵二叉搜索树中，有一个节点不满足二叉搜索树的性质，找出这一节点。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一道面试题的多种解法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2013-09-05 00:00:00" itemprop="dateCreated datePublished" datetime="2013-09-05T00:00:00+08:00">2013-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/interview/" itemprop="url" rel="index"><span itemprop="name">interview</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">一棵二叉搜索树中，有一个节点不满足二叉搜索树的性质，找出这一节点。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>一棵二叉搜索树中，有一个节点不满足二叉搜索树的性质，找出这一节点。</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>先说一下二叉搜索树的性质：</p>
+<ol>
+<li>若它的左子树不为空，则左子树上的所有节点的值均小于它的根节点的值。</li>
+<li>若它的右子树不为空，则右子树上的所有节点的值均大于它的跟节点的值。</li>
+<li>它的左右子树也分别为一棵二叉搜索树。</li>
+</ol>
+<p>如果直接递归地判断二叉搜索树中的每一节点是否满足上述性质，固然可以解决问题，但是效率却出奇的低。实际上，中序遍历一棵二叉搜索树得到的结果，恰为一个升序序列。只需检查这一序列中不满足升序的元素，就可以找出二叉搜索树中不符合上述性质的节点。</p>
+<p>因此，首先需要解决的问题就是二叉树的中序遍历。</p>
+<h2 id="二叉树的中序遍历"><a href="#二叉树的中序遍历" class="headerlink" title="二叉树的中序遍历"></a>二叉树的中序遍历</h2><p>根据二叉树的定义，我们可以建立这样的数据结构：</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="symbol">&#x27;a</span> btree =</span><br><span class="line">    | <span class="type">Nil</span></span><br><span class="line">    | <span class="type">Node</span> <span class="keyword">of</span> (<span class="symbol">&#x27;a</span> * <span class="symbol">&#x27;a</span> btree * <span class="symbol">&#x27;a</span> btree)</span><br><span class="line">;;</span><br></pre></td></tr></table></figure>
+
+<p>对于这样的数据结构，我们只需要考虑两种情况：</p>
+<ol>
+<li>当前节点为<code>Nil</code>。</li>
+<li>当前节点为<code>Node</code>。</li>
+</ol>
+
+<p>对应的中序遍历程序如下：</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> to_inorder tree =</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">rec</span> aux tree ls =</span><br><span class="line">        <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">        | <span class="type">Nil</span> -&gt; ls</span><br><span class="line">        | <span class="type">Node</span> (d, l, r) -&gt; aux l (d :: (aux r ls))</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">    aux tree <span class="literal">[]</span></span><br><span class="line">;;</span><br></pre></td></tr></table></figure>
+
+<p>或者用我们熟悉的C++语言表示：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">btree</span></span><br><span class="line">&#123;</span><br><span class="line">    T data;</span><br><span class="line">    btree *left;</span><br><span class="line">    btree *right;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ToInOrder</span><span class="params">(btree&lt;T&gt; *node, std::vector&lt;T&gt; &amp;container)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node) &#123;</span><br><span class="line">        <span class="built_in">ToInOrder</span>(node-&gt;left, container);</span><br><span class="line">        container.<span class="built_in">push_back</span>(node-&gt;data);</span><br><span class="line">        <span class="built_in">ToInOrder</span>(node-&gt;right, container);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过二叉树中序遍历，我们可以得到所需的序列，然后检查这一序列，就可以找到不符合二叉搜索树性质的节点了。</p>
+<h2 id="只用O-1-的空间"><a href="#只用O-1-的空间" class="headerlink" title="只用O(1)的空间"></a>只用O(1)的空间</h2><p>之前所述的方法，需要O(n)的空间存放中序遍历的结果，但是实际上我们并不需要这一序列，而是只需要序列中的前一个元素的值即可。或者更进一步的，我们在中序遍历二叉搜索树的时候，如果能够知道当前节点的上一个节点，就可以验证该节点是否符合二叉搜索树的性质。</p>
+<p>为了做到这一点，我们需要知道一棵子树的最后一个节点。这样，根节点的上一个节点就是左子树的最后一个节点，右子树的上一个节点就是根节点，左子树的上一个节点就是当前子树的上一个节点。</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> check tree =</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">rec</span> do_check tree previousNode =</span><br><span class="line">        <span class="keyword">let</span> latest tree =</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">rec</span> latest_aux tree parentNode =</span><br><span class="line">                <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">                | <span class="type">Nil</span> -&gt; parentNode</span><br><span class="line">                | <span class="type">Node</span> (_, _, r) -&gt; latest_aux r tree</span><br><span class="line">            <span class="keyword">in</span></span><br><span class="line">            latest_aux tree <span class="type">Nil</span></span><br><span class="line">        <span class="keyword">in</span></span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">rec</span> check_current_right currentNode previousNode =</span><br><span class="line">            <span class="keyword">match</span> currentNode <span class="keyword">with</span></span><br><span class="line">            | <span class="type">Nil</span> -&gt; <span class="type">Nil</span></span><br><span class="line">            | <span class="type">Node</span> (d, _, r) -&gt; <span class="keyword">match</span> previousNode <span class="keyword">with</span></span><br><span class="line">                                | <span class="type">Nil</span> -&gt; do_check r currentNode</span><br><span class="line">                                | <span class="type">Node</span> (pd, _, _) -&gt; <span class="keyword">if</span> pd &gt;= d <span class="keyword">then</span></span><br><span class="line">                                                        currentNode</span><br><span class="line">                                                     <span class="keyword">else</span></span><br><span class="line">                                                        do_check r currentNode</span><br><span class="line">        <span class="keyword">in</span></span><br><span class="line">        <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">        | <span class="type">Nil</span> -&gt; <span class="type">Nil</span></span><br><span class="line">        | <span class="type">Node</span> (_, <span class="type">Nil</span>, _) -&gt; check_current_right tree previousNode</span><br><span class="line">        | <span class="type">Node</span> (_, l, _) -&gt; <span class="keyword">match</span> (do_check l previousNode) <span class="keyword">with</span></span><br><span class="line">                            | <span class="type">Nil</span> -&gt; check_current_right tree (latest l)</span><br><span class="line">                            | <span class="type">Node</span> _ <span class="keyword">as</span> ill_node -&gt; ill_node</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">    do_check tree <span class="type">Nil</span></span><br><span class="line">;;</span><br></pre></td></tr></table></figure>
+
+<p>但是实际上，我们在遍历左子树的同时，就能知道左子树的最后一个节点是谁，因此，稍作修改就可以抛弃<code>latest</code>函数。</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> check tree =</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">rec</span> do_check tree previousNode =</span><br><span class="line">        <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">        | <span class="type">Nil</span> -&gt; (<span class="literal">true</span>, previousNode)</span><br><span class="line">        | <span class="type">Node</span> (d, l, r) -&gt;</span><br><span class="line">            <span class="keyword">let</span> (l_valid, l_node) = do_check l previousNode <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">if</span> l_valid <span class="keyword">then</span></span><br><span class="line">                <span class="keyword">match</span> l_node <span class="keyword">with</span></span><br><span class="line">                | <span class="type">Nil</span> -&gt; do_check r tree</span><br><span class="line">                | <span class="type">Node</span> (pd, _, _) -&gt; <span class="keyword">if</span> pd &gt;= d <span class="keyword">then</span></span><br><span class="line">                                        (<span class="literal">false</span>, tree)</span><br><span class="line">                                     <span class="keyword">else</span></span><br><span class="line">                                        do_check r tree</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                (l_valid, l_node)</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">match</span> (do_check tree <span class="type">Nil</span>) <span class="keyword">with</span></span><br><span class="line">    | (<span class="literal">true</span>, _) -&gt; <span class="type">Nil</span></span><br><span class="line">    | (<span class="literal">false</span>, n) -&gt; n</span><br><span class="line">;;</span><br></pre></td></tr></table></figure>
+
+<p>对应的C++语言代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="type">static</span> std::tuple&lt;<span class="type">bool</span>, btree&lt;T&gt; *&gt; <span class="built_in">DoCheck</span>(btree&lt;T&gt; *tree, btree&lt;T&gt; *previousNode)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (tree) &#123;</span><br><span class="line">        <span class="type">bool</span> leftValid;</span><br><span class="line">        btree&lt;T&gt; *leftInvalidNode;</span><br><span class="line">        std::<span class="built_in">tie</span>(leftValid, leftInvalidNode) = <span class="built_in">DoCheck</span>&lt;T&gt;(tree-&gt;left, previousNode);</span><br><span class="line">        <span class="keyword">if</span> (leftValid) &#123;</span><br><span class="line">            <span class="keyword">if</span> (leftInvalidNode) &#123;</span><br><span class="line">                <span class="keyword">if</span> (leftInvalidNode-&gt;data &gt;= tree-&gt;data) &#123;</span><br><span class="line">                    <span class="keyword">return</span> std::<span class="built_in">make_tuple</span>(<span class="literal">false</span>, tree);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="built_in">DoCheck</span>&lt;T&gt;(tree-&gt;right, tree);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">DoCheck</span>&lt;T&gt;(tree-&gt;right, tree);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> std::<span class="built_in">make_tuple</span>(leftValid, leftInvalidNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">make_tuple</span>(<span class="literal">true</span>, previousNode);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> btree&lt;T&gt; * <span class="title">Check</span><span class="params">(btree&lt;T&gt; *tree)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">bool</span> valid;</span><br><span class="line">    btree&lt;T&gt; *invalidNode;</span><br><span class="line">    std::<span class="built_in">tie</span>(valid, invalidNode) = <span class="built_in">DoCheck</span>&lt;T&gt;(tree, <span class="literal">nullptr</span>);</span><br><span class="line">    <span class="keyword">if</span> (valid) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> invalidNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可见，这样的代码比起一开始的中序遍历代码要复杂太多了。那么如何既享受中序遍历代码的简洁，又实现这样的复杂功能呢？</p>
+<h2 id="引入状态"><a href="#引入状态" class="headerlink" title="引入状态"></a>引入状态</h2><p>有的人认为，纯函数不应该具有状态。我并不认同这一看法，只要函数对于给定的输入必然给出同样的输出，那么这就是一个纯函数。适当的情况下，引入状态可以极大的简化程序的设计。对于上面提出的问题，我们只需引入状态，存储之前访问的节点的值，就可以使用非常少的代码解决问题。</p>
+<p>最直接的想法如下：</p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> check tree =</span><br><span class="line">    <span class="keyword">let</span> p = <span class="built_in">ref</span> <span class="type">Nil</span> <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">let</span> i = <span class="built_in">ref</span> <span class="type">Nil</span> <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">rec</span> check_aux tree =</span><br><span class="line">        <span class="keyword">match</span> tree <span class="keyword">with</span></span><br><span class="line">        | <span class="type">Nil</span> -&gt; <span class="literal">()</span></span><br><span class="line">        | <span class="type">Node</span> (d, l, r) -&gt; check_aux l;</span><br><span class="line">                            <span class="keyword">match</span> !p <span class="keyword">with</span></span><br><span class="line">                            | <span class="type">Node</span> (pd, _, _) <span class="keyword">when</span> pd &gt;= d -&gt; i := tree</span><br><span class="line">                            | _ -&gt; p := tree; check_aux r</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">    check_aux <span class="type">Nil</span>;</span><br><span class="line">    !i</span><br><span class="line">;;</span><br></pre></td></tr></table></figure>
+
+<p>转化成C++语言的代码就有点麻烦了。C++语言标准不允许嵌套定义函数，因此比较直接的想法是使用全局变量：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> btree&lt;<span class="type">int</span>&gt; *previousNode;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> btree&lt;<span class="type">int</span>&gt; *<span class="title">DoCheck</span><span class="params">(btree&lt;<span class="type">int</span>&gt; *tree)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (tree) &#123;</span><br><span class="line">        btree&lt;<span class="type">int</span>&gt; *r = <span class="built_in">DoCheck</span>(tree-&gt;left);</span><br><span class="line">        <span class="keyword">if</span> (r) &#123;</span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (previousNode &amp;&amp; previousNode-&gt;data &gt;= tree-&gt;data) &#123;</span><br><span class="line">                <span class="keyword">return</span> tree;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                previousNode = tree;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">DoCheck</span>(tree-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> btree&lt;<span class="type">int</span>&gt; *<span class="title">Check</span><span class="params">(btree&lt;<span class="type">int</span>&gt; *tree)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    previousNode = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">DoCheck</span>(tree);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是使用全局变量会引起两个问题。第一个问题是，线程不安全；第二个问题是，全局变量不能是泛型的。第一个问题可以通过添加关键字<code>thread_local</code>来解决，但是第二个问题怎么办？我们可以模仿闭包的思想，使用仿函数将函数和数据捆绑到一起，具体代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CheckBinarySearchTreeFunctor</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> btree&lt;T&gt; * <span class="title">operator</span><span class="params">()</span> <span class="params">(btree&lt;T&gt; *tree)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        previousNode = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">DoCheck</span>(tree);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">thread_local</span> btree&lt;T&gt; *previousNode;</span><br><span class="line">    <span class="function">btree&lt;T&gt; * <span class="title">DoCheck</span><span class="params">(btree&lt;T&gt; *tree)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>为了不在每次使用仿函数的时候都创建一个新对象，我们还可以为该仿函数类添加单例模式：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CheckBinarySearchTreeFunctor</span></span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">static</span> CheckBinarySearchTreeFunctor instance;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">CheckBinarySearchTreeFunctor CheckBinarySearchTreeFunctor::instance;</span><br></pre></td></tr></table></figure>
+
+<p>难道这就是我们的终极解决方案了吗？</p>
+<h2 id="更进一步"><a href="#更进一步" class="headerlink" title="更进一步"></a>更进一步</h2><p>上面的解决方案已经相当完美了，但是还不是终极的解决方案。为什么这么说呢？因为上面的方法将二叉树中序遍历的普遍算法和判定二叉搜索树是否正确这一特殊算法混在了一起，虽然后者应用了前者，但是却不能复用前者的算法，而是自己又实现了一遍。这使得我发现这一算法还有改进的余地。</p>
+<p>想想STL里面的<code>for_each</code>函数，可以在遍历一个数据结构的时候，执行某一动作。参考这一点，我本应该给二叉树添加上中序遍历的迭代器的，不过这对于一个面试题而言就太重量级了，不如直接改造中序遍历的函数：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">InOrderVisit</span><span class="params">(btree&lt;T&gt; *tree, std::function&lt;<span class="type">void</span>(btree&lt;T&gt;*)&gt; action)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (tree) &#123;</span><br><span class="line">        <span class="built_in">InOrderVisit</span>(tree-&gt;left, action);</span><br><span class="line">        <span class="built_in">action</span>(tree);</span><br><span class="line">        <span class="built_in">InOrderVisit</span>(tree-&gt;right, action);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，判断二叉搜索树是否合法的函数就可以写成这样了：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">btree&lt;T&gt; *<span class="title">Check</span><span class="params">(btree&lt;T&gt; *tree)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    btree&lt;T&gt; *previousNode = <span class="literal">nullptr</span>;</span><br><span class="line">    btree&lt;T&gt; *invalidNode = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="built_in">InOrderVisit</span>(tree, [&amp;](btree&lt;T&gt; *node) &#123;</span><br><span class="line">        <span class="keyword">if</span> (previousNode &amp;&amp; previousNode-&gt;data &gt;= node-&gt;data) &#123;</span><br><span class="line">            invalidNode = node;</span><br><span class="line">        &#125;</span><br><span class="line">        previousNode = node;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> invalidNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之前的<code>ToInOrder</code>方法也可以写成这样：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">std::vector&lt;T&gt; <span class="title">ToInOrder</span><span class="params">(<span class="type">const</span> btree&lt;T&gt; *tree)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::vector&lt;T&gt; container;</span><br><span class="line">    <span class="built_in">InOrderVisit</span>(tree, [&amp;container](<span class="type">const</span> btree&lt;T&gt; *node) &#123;</span><br><span class="line">        container.<span class="built_in">push_back</span>(node-&gt;data);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> container;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/" title="一道面试题的多种解法">http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Interview/" rel="tag"># Interview</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ACM/solution-to-poj-1061/" rel="prev" title="Solution to POJ 1061">
+                  <i class="fa fa-angle-left"></i> Solution to POJ 1061
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/interview/three-characteristics-of-object-oriented-programming/" rel="next" title="面向对象技术中的三大特征">
+                  面向对象技术中的三大特征 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="Autopilot是微软Bing组研发的集群管理系统，至今已有近20年的历史。Autopilot是一个内部模块高度解耦，完善发达的系统，其设计目标是自动化的管理静态集群。自动化的好处有以下几点：     节省人力   响应速度和处理时间优于人工处理   所有的处理过程都有Audit   不易出错">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management">
+<meta property="og:url" content="http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="Autopilot是微软Bing组研发的集群管理系统，至今已有近20年的历史。Autopilot是一个内部模块高度解耦，完善发达的系统，其设计目标是自动化的管理静态集群。自动化的好处有以下几点：     节省人力   响应速度和处理时间优于人工处理   所有的处理过程都有Audit   不易出错">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://hcoona.github.io/images/MS_Autopilot_Architecture.png">
+<meta property="article:published_time" content="2018-07-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.303Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Paper Note">
+<meta property="article:tag" content="Cluster Management">
+<meta property="article:tag" content="Microsoft">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://hcoona.github.io/images/MS_Autopilot_Architecture.png">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/","path":"Paper-Note/Microsoft-Autopilot/","title":"论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E6%9C%BA%E5%99%A8%E5%92%8C%E5%BA%94%E7%94%A8%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%9A%84%E5%8C%B9%E9%85%8D"><span class="nav-number">1.</span> <span class="nav-text">机器和应用生命周期的匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">系统架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E6%9C%BA%E5%99%A8%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">机器的生命周期管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E8%BD%AF%E4%BB%B6%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">软件的生命周期管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%85%B6%E4%BB%96%E7%BB%86%E8%8A%82"><span class="nav-number">5.</span> <span class="nav-text">其他细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_references"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-07-15 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-15T00:00:00+08:00">2018-07-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>Autopilot是微软Bing组研发的集群管理系统，至今已有近20年的历史。Autopilot是一个内部模块高度解耦，完善发达的系统，其设计目标是自动化的管理静态集群。自动化的好处有以下几点：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>节省人力</p>
+</li>
+<li>
+<p>响应速度和处理时间优于人工处理</p>
+</li>
+<li>
+<p>所有的处理过程都有Audit</p>
+</li>
+<li>
+<p>不易出错</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="paragraph">
+<p>Autopilot的设计依赖于这样一个前提：运行的应用的进程可以在不被预先通知的情况下杀死，而不影响整个系统的稳定性。这一假设是合理的，因为使用的物理机是通用计算机（对比商业高可靠计算机，超级计算机等），其随时有可能发生故障，因此集群管理系统并不能保证在节点失效前对运行的进程进行通知。
+集群管理系统主要需要考虑以下3个方面：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>机器的生命周期管理</p>
+</li>
+<li>
+<p>应用的生命周期管理</p>
+</li>
+<li>
+<p>两者的匹配</p>
+</li>
+</ol>
+</div>
+<div class="sect1">
+<h2 id="_机器和应用生命周期的匹配">机器和应用生命周期的匹配</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Autopilot是一个静态的管理系统，这个静态的最主要体现就是机器和应用的生命周期是静态绑定的。Autopilot首先将机器划分为不同的Machine
+type，这决定了这台机器是用于安装那些应用的（纵向切分）；其次将同一Machine
+type的机器又划分了Scale
+unit，决定了相同用途的机器的管理批次顺序（横向切分）。</p>
+</div>
+<div class="paragraph">
+<p>有时，机器的生命周期长于应用的生命周期。如果是软件故障，则会通过Reboot，Reimage，Rollback等机制将其恢复正常。如果是应用升级或降级，则按照Machine
+type和Scale
+unit将受影响的机器分成不同的stage分别按顺序进行操作。如果需要将机器改作它用，则需要重新指定机器的Machine
+type和Scale unit。</p>
+</div>
+<div class="paragraph">
+<p>有时，机器的生命周期短于软件的生命周期。此时通过Replace操作替换物理机。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_系统架构">系统架构</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Autopilot的系统架构如下（根据个人对论文的理解加工而成）：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img data-src="/images/MS_Autopilot_Architecture.png" alt="Microsoft Autopilot Architecture">
+</div>
+</div>
+<div class="paragraph">
+<p>集群中的所有节点状态由统一的中心数据库Device
+Manager进行记录。这一中心数据库使用Paxos协议实现，提供Linearizability一致性，一般由5-10台机器组成，类似于Zookeeper。集群中的所有组件都依赖于Device
+Manager中记录的信息，相互之间不进行直接的交互。这样的设计方式使得组件之间完全解耦，但是对Device
+Manager的依赖非常重。</p>
+</div>
+<div class="paragraph">
+<p>每个节点上由Application Manager进行主要的管理工作：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>与Device Manager通信决定应该保留哪些应用的数据</p>
+</li>
+<li>
+<p>通过File Sync Service下载所需的文件</p>
+</li>
+<li>
+<p>将标记为Active的Application启动</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>应用和机器的状态信息通过Watchdog Service收集并记录到Device
+Manager中。日志和Performance Counter通过Collection
+Agent收集到冷热存储中。</p>
+</div>
+<div class="paragraph">
+<p>Device Manager是整个集群的核心。Application Manager是每台机器的核心。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_机器的生命周期管理">机器的生命周期管理</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>这一点是很多软件工程师都不太了解的"神秘领域"，这一点论文中进行了一些细致描述。机器被插入机架后，可以通过每个机架上自带的控制单元进行基本的电源管理，可以远程开关机、重启而无需人工到指定位置进行物理操作。集群中所有的机器都会被Provisioning
+Service定期检查，以识别其是否是新加入集群的机器，基本运行信息是否正确（如操作系统，BIOS版本等）。如有需要，Provisioning
+Service会自动重新启动该机器，机器在启动时会进入PXE Network
+Booting，具体使用的PXE image由Provisioning
+Service决定。在此过程中，首先联系Device
+Manager决定该完成何种操作，然后自动化的进行BIOS升级，Reimage等底层操作。</p>
+</div>
+<div class="paragraph">
+<p>Reimage使用的镜像是定制过的，其中直接包含了最初始的Application
+Manager，File Sync Service，Collection
+Agent等基础服务。系统在启动过后，就可以依赖于常规机制进行应用级别的组件升级和替换。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_软件的生命周期管理">软件的生命周期管理</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>由于Autopilot是由Bing组研发的，在其构建之初就考虑到了在线服务对延迟敏感的特性，因此File
+Sync
+Service就很有必要了。系统不提供直接的接口，如SAMBA，FTP，RSYNC，SCP等方式进行文件传输，所有的跨节点运维交互都需要通过File
+Sync Service，这样的好处有2点：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>可以有效的通过限流，QoS等手段避免对在线服务的影响</p>
+</li>
+<li>
+<p>可以使用P2P技术减轻对数据源的压力</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>所有的应用需要提前进行构建操作，构建的结果成为一个manifest。论文中没有直接对其所包含的内容进行描述，但是综合提到的信息进行推断，至少包含以下内容：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>应用，数据和配置文件</p>
+</li>
+<li>
+<p>应用描述信息，以确定该应用是一个Always Running的服务，还是一个定期任务</p>
+</li>
+<li>
+<p>以上所有内容的强校验信息，用于传输错误检测和人工修改检测</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Manifest分为至少2种状态：disabled和enabled。Application
+Manager在与Device
+Manager的定期通信中得知其需要保存哪些Manifest以及它们的状态，通过File
+Sync
+Service得到所需的Manifest，将disabled状态的应用杀死，将enabled状态的应用启动。Application
+Manager会定期校验Manifest的完整性，并进行纠正。这样做允许同时保留一个应用的多个版本，用于接下来的升级或回滚。校验完整性除了可以克服TCP协议的弱CRC校验和存储错误导致的文件损坏，还可以避免因人工修改导致的配置文件漂移。</p>
+</div>
+<div class="paragraph">
+<p>系统需要知道机器和应用的状态，从而进行自动修复，这是通过Watchdog
+Service来实现的。Watchdog
+Service可以和应用Cohost，也可以完全部署于其他节点，两者也可以结合使用。使用单独的Watchdog
+Service可以允许用户根据自己应用的逻辑来对应用的状态进行检测，这种检测有时需要以内部的视角观察应用的状态，有时需要以外部的视角（用户的身份）进行观测。用户可以自行制定修复逻辑，否则系统只能进行与应用程序自身逻辑无关的修复工作，即Reboot，Reimage，Replace等操作。</p>
+</div>
+<div class="paragraph">
+<p>应用程序在运行的过程中，会产生日志和Metric两类信息，这些信息会通过Collection
+Agent收集起来，根据热度进入不同的路径，并对接报警系统或查询系统。</p>
+</div>
+<div class="paragraph">
+<p>应用的部署流程根据论文中的内容推测如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>用户提交部署请求</p>
+</li>
+<li>
+<p>系统根据请求将应用打包成Manifest</p>
+</li>
+<li>
+<p>Deployment Service将Manifest信息更新到Device Manager中</p>
+</li>
+<li>
+<p>Deployment Service通知Application Manager与Device Manager进行数据同步</p>
+</li>
+<li>
+<p>未能通知到的Application Manager在与Device
+Manager的定期同步中会得到最新信息</p>
+</li>
+<li>
+<p>大部分受影响的节点下载了Manifest后开始部署流程</p>
+</li>
+<li>
+<p>Deployment Service按照Machine type和Scale
+unit将部署操作分为不同的stage，按照顺序更新Device Manager</p>
+</li>
+<li>
+<p>每个stage在进行部署前，先将受影响的机器状态设置为Probe状态，然后进行更新</p>
+</li>
+<li>
+<p>Stage内有足够多的机器更新成功，并从Probe状态进入Normal状态后，认为该Stage更新成功，否则按照Stage的反顺序进行回滚</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_其他细节">其他细节</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>配置文件的更新也需要走正式的部署流程，这样的好处是配置文件引发的错误也可以被自动检测和修复。类似的，操作系统的更新也是如此。</p>
+</li>
+<li>
+<p>It is vital to keep checksums of all crucial files</p>
+</li>
+<li>
+<p>TCP/IP checksums are weak</p>
+</li>
+<li>
+<p>Computers will spontaneously start running very slowly, but keep making progress</p>
+</li>
+<li>
+<p>Throttling and load shedding are crucial in all aspects of an automated system</p>
+</li>
+<li>
+<p>Failure detectors must be able to distinguish between then symptoms of failure and overloading</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a id="autopilot"></a>[1] ISARD M. Autopilot: automatic data center management[J]. ACM SIGOPS Operating Systems Review, 2007, 41(2): 60–67.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/" title="论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management">http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Paper-Note/" rel="tag"># Paper Note</a>
+              <a href="/tags/Cluster-Management/" rel="tag"># Cluster Management</a>
+              <a href="/tags/Microsoft/" rel="tag"># Microsoft</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Tips/CAP-ACID-what-can-we-do/" rel="prev" title="CAP，ACID，我们能做什么">
+                  <i class="fa fa-angle-left"></i> CAP，ACID，我们能做什么
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Tips/cluster-management-and-devops/" rel="next" title="大规模集群管理和运维自动化">
+                  大规模集群管理和运维自动化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

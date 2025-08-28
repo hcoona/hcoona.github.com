@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="Paxos 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。文中的算法只解决了决议一条法案（decree）的情况。如果需要决议多条法案，可以将该算法执行多次，每次分别对应一条法案。可以想象，有可能存在一些步骤在多次决议时无需重复执行，因此在多次决议法案的情况下，该算法可以进一步优化，但没有在本文中进行具体展开。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：Paxos Made Simple">
+<meta property="og:url" content="http://hcoona.github.io/Paper-Note/paxos-made-simple/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="Paxos 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。文中的算法只解决了决议一条法案（decree）的情况。如果需要决议多条法案，可以将该算法执行多次，每次分别对应一条法案。可以想象，有可能存在一些步骤在多次决议时无需重复执行，因此在多次决议法案的情况下，该算法可以进一步优化，但没有在本文中进行具体展开。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-16T13:44:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.301Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Paper Note">
+<meta property="article:tag" content="Consensus Algorithm">
+<meta property="article:tag" content="Consistency Theory">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Paper-Note/paxos-made-simple/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/paxos-made-simple/","path":"Paper-Note/paxos-made-simple/","title":"论文笔记：Paxos Made Simple"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>论文笔记：Paxos Made Simple | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/paxos-made-simple/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%85%B6%E4%BB%96%E7%BB%86%E8%8A%82"><span class="nav-number">2.</span> <span class="nav-text">其他细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/paxos-made-simple/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：Paxos Made Simple | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：Paxos Made Simple
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-03-16 21:44:00" itemprop="dateCreated datePublished" datetime="2018-03-16T21:44:00+08:00">2018-03-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>Paxos 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。文中的算法只解决了决议一条法案（decree）的情况。如果需要决议多条法案，可以将该算法执行多次，每次分别对应一条法案。可以想象，有可能存在一些步骤在多次决议时无需重复执行，因此在多次决议法案的情况下，该算法可以进一步优化，但没有在本文中进行具体展开。</p>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="sect1">
+<h2 id="_算法原理">算法原理</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>为了确保算法的正确性，我们需要以下 3 个基础的 safety 性质：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Only a value that has been proposed may be chosen,</p>
+</li>
+<li>
+<p>Only a single value is chosen, and</p>
+</li>
+<li>
+<p>A process never learns that a value has been chosen unless it actually has been.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>其中 1 排除了选中错误的提案的情况，2 排除了节点之间不一致的情况，3 排除了事先选中提案的情况（non-triviality）。</p>
+</div>
+<div class="paragraph">
+<p>除了需要保证算法的正确性，我们还需要保证算法确实能够进行到我们想要的状态。但是在此时我们还无需精确地定义 liveness 条件，而是考虑如何在保证正确性的情况下，使得某一个值最终能被选中，并且一个进程最终能够得知这一结果。</p>
+</div>
+<div class="paragraph">
+<p>根据以上要求，我们引入 3 个角色：提议者（proposer），仲裁者（acceptor）和学习者（learner）。每个进程都可以扮演其中一个或多个角色。</p>
+</div>
+<div class="paragraph">
+<p>最简单的方法就是我们选定唯一一个仲裁者，所有提议者都向这一仲裁者提议，仲裁者只需接受第一个收到的提案即可满足上述所有要求。但是这种方法一旦这唯一的仲裁者失效，我们就不能获得任何进展了。因此我们必须设立多个仲裁者，集体进行多数表决。多数表决可以满足上面提到的所有基础 safety 性质，尤其是 2（反证法可证明）。</p>
+</div>
+<div class="paragraph">
+<p>在不考虑节点失效和消息丢失的情况下，我们希望即便全局只存在 1 个提案，我们也能选中这一提案。这就要求我们满足如下性质：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>P1</strong>
+</td>
+<td class="hdlist2">
+<p>An acceptor must accept the first proposal that it receives.</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>但是这一要求会带来这样一个问题，每个提议者同时分别向一个不同的仲裁者提交不同的提案，此时每个仲裁者都接受了一个不同的提案，从而无法形成多数派。这一问题并非只能由非常罕见的情况触发，例如即便是只有两个提案同时分别被恰好一半的仲裁者所接受，此时由于一个仲裁者节点失效，导致剩下的仲裁者以同样的数量分别支持两个不同的提案，此时虽然有且仅有一个提案被选中了，我们却不能得知这是哪个提案。</p>
+</div>
+<div class="paragraph">
+<p>因此性质 P1 和多数表决选中提案的方式决定了我们必须允许仲裁者接受多个提案。为此我们将每一个不同的提案内容进行标号，使得每一个不同的提案内容都具有不同的标号，而标号具有全序关系。这样，每个提案就都具有 \((n, v)\) 这样的形式。因此我们就可以允许仲裁者选中多个提案，只需保证这些提案具有相同的提案内容 \(v\)  即可。通过在提案编号上应用数学归纳法，我们可以用如下性质来保证这一点：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>P2</strong>
+</td>
+<td class="hdlist2">
+<p>If a proposal with value \(v\) is chosen, then every higher-numbered proposal that is chosen has value \(v\) .</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>一个提案想被选中，必须先由仲裁者接受。因此我们可以考虑在仲裁者接受提案时，对其加以约束以满足性质 P2：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>P2a</strong>
+</td>
+<td class="hdlist2">
+<p>If a proposal with value \(v\) is chosen, then every higher-numbered proposal accepted by any acceptor has value \(v\) .</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>由于通信是异步的，就会存在某个仲裁者，其并不清楚其他某个仲裁者已经接受了一个提案这种情况。此时，如果这一仲裁者收到了一份新的提案，由于性质 P1，它必须接受这份提案，而这就有可能和性质 P2a 相违背。由于所有提案都是先由提议者提出的才被仲裁者接受的，因此我们可以考虑加强条件，由提议者保证这一性质：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>P2b</strong>
+</td>
+<td class="hdlist2">
+<p>If a proposal with value \(v\) is chosen, then every higher-numbered proposal issued by any proposer has value \(v\).</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>对提案编号 \(n\) 使用数学归纳法，可知满足以下性质即可保证性质 P2b：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>P2c</strong>
+</td>
+<td class="hdlist2">
+<p>For any \(v\) and \(n\), if a proposal with value \(v\) and number \(n\) is issued, then there is a set \(\mathbb&#123;S&#125;\) consisting of a majority of acceptors such that either (a) no acceptor in \(\mathbb&#123;S&#125;\) has accepted any proposal numbered less than \(n\), or (b) \(v\) is the value of the highest-numbered proposal among all proposals numbered less than \(n\) accepted by the acceptors in \(\mathbb&#123;S&#125;\).</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>为了满足性质 P2c，提议者若想提议编号为 \(n\) 的提案，必须知道是否存在小于编号 \(n\) 的提案已经或者将要（在编号为 \(n\) 的提案被多数仲裁者所接受之前）被多数仲裁者所接受。我们可以获知已经被接受的提案，但是很难预测将要发出的编号为 \(n\) 的提案被多数仲裁者接受之前是否还会有其他提案被多数仲裁者所接受。为了避免这一情况，我们可以提前要求仲裁者做出承诺，不去接受小于编号为 \(n\) 的任何提案。由于 P2c 蕴含 P2b，P2b 蕴含 P2a，P2a 蕴含 P2，我们可以使用如下的算法来保证 P2c，进而满足性质 P2：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A proposer chooses a new proposal number \(n\) and sends a request to each member of some set of acceptors, asking it to respond with:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>A promise never again to accept a proposal numbered less than \(n\), and</p>
+</li>
+<li>
+<p>The proposal with the highest number less than \(n\) that it has accepted, if any.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>I&#8217;ll call such a request a <em>prepare</em> request with number \(n\)</p>
+</div>
+</li>
+<li>
+<p>If the proposer receives the requested responses from a majority of the acceptors, then it can issue a proposal with number \(n\) and value \(v\), where \(v\) is the value of the highest-numbered proposal among the responses, or is any value selected by the proposer if the responders reported no proposals.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>这一方法实际上违背了性质 P1。考虑到性质 P1 适用于只发起 accept 请求的情况，而我们的算法实际上存在两种请求：prepare 和 accept。收到一个 prepare 请求意味着接下来还会收到一个具有相同提案编号的 accept 请求，因此如果我们收到一个不同编号的 accept 请求时，总是可以忽略这一请求，同时不违背我们至少可以保证还有一个提案可以接受这一性质。由此我们可以得到性质 P1 的加强形式：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>P1a</strong>
+</td>
+<td class="hdlist2">
+<p>An acceptor can accept a proposal numbered \(n\) iff it has not responded to a <em>prepare</em> request having a number greater than \(n\).</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>由于 P1a 蕴含 P1 ，我们就得到了一个能够满足所有 safety 性质的算法。对其细节进行一些优化，可以得到以下版本：</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>Phase 1</strong></dt>
+<dd>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A proposer selects a proposal number \(n\) and sends a prepare request with number \(n\) to a majority of acceptors.</p>
+</li>
+<li>
+<p>If an acceptor receives a <em>prepare</em> request with number n greater than that of any <em>prepare</em> request to which it has already responded, then it responds to the request with a promise not to accept any more proposals numbered less than n and with the highest-numbered proposal (if any) that it has accepted.</p>
+</li>
+</ol>
+</div>
+</dd>
+<dt class="hdlist1"><strong>Phase 2</strong></dt>
+<dd>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the proposer receives a response to its <em>prepare</em> requests (numbered \(n\)) from a majority of acceptors, then it sends an accept request to each of those acceptors for a proposal numbered \(n\) with a value \(v\), where \(v\) is the value of the highest-numbered proposal among the responses, or is any value if the responses reported no proposals.</p>
+</li>
+<li>
+<p>If an acceptor receives an <em>accept</em> request for a proposal numbered \(n\), it accepts the proposal unless it has already responded to a <em>prepare</em> request having a number greater than \(n\).</p>
+</li>
+</ol>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>提议者只需遵循上述算法，就允许发起多个提议。提议者也可以在任何时间放弃一个已经发起的提案而不影响正确性。一个仲裁者如果因为已经承诺不再接受更低编号的提案而忽略（ignore）一个提议时，尽管不影响正确性，但是为了性能考虑，最好告诉该提议者目前已知的最大提案编号。</p>
+</div>
+<div class="paragraph">
+<p>这一算法可以正确的选中一个提案，但是还需要学习者使得所有进程都知道这一结果。尽管可以让所有的仲裁者在自己选中某一提案的时候都将这一结果告知所有的学习者，这一方案需要多次（两个集合的笛卡儿积的大小）广播，性能较低。此时只需选择几个 distinguished learner 告知，再由它们告知所有 learner 即可。需要考虑到，由于消息可能丢失，可能所有的 distinguished learner 都不能得知当前被选中的提案。此时只需令提议者再次发起提案，直到有一个提案被选中，即可知道被选中的提案是什么。</p>
+</div>
+<div class="paragraph">
+<p>这一算法虽然可以保证正确性，但是不能保证在算法结束前时时都有进展，即不能保证最终一定能达到一致决议的状态。例如两个提议者交替的提议新的提案，每个提案编号都比对方的提案编号高，这样每次的 <em>prepare</em> 请求都会成立，但是 <em>accept</em> 请求都会被拒绝，使得算法不能停机。为了保证算法能够停机，我们需要选出一个唯一的 distinguished proposer，（<strong>此处开始到本段结束不确定</strong>）只有这个提议者会在发现自己的提议被多数仲裁者忽略（ignore）时，重新选择一个新的足够大的提案号重新提交提案（其他提议者在消息丢失时可以用原来的提案号重发来保证多数仲裁者能够收到这个提案，但是被仲裁者拒绝时不重新提交提案）。这意味着，在决议冲突的情况下，总是令 distinguished proposer 获胜。此外也可以采用计算机网络中冲突避免的方式来解决这一问题，比如说发生冲突时乘性增加重新提交提案的时间间隔，不冲突时加性减少时间间隔。这样就可以实现完全不需要 leader 的情况，但是潜在的风险就是 latency 增加。</p>
+</div>
+<div class="paragraph">
+<p>如果系统中足够多的部分（包括提议者，仲裁者和通信网络等组件）工作正常，那么选举出唯一的 distinguished proposer 即可保证 liveness。（原文并没有证明这一点，不过据说在 <a href="#paxos_revisiting">[4]</a> 中有一个关于 liveness 的证明，目测在 <a href="#paxos_parliament">[3]</a> 中含有一个不太正式的证明，在 <a href="#paxos_generalized">[5]</a> 中有一个对该算法加强形式的算法的证明，但是我都还没有看）论文 <a href="#impossibility">[2]</a> 中蕴含了这样一个结论，一个可靠的选举算法必须依赖于随机性或 real time（比如说 timeout 机制）。无论选举的结果如何，本论文中提到的算法的正确性都是可以保证的。（无论是否有 distinguished proposer，无论是否只有一个 distinguished proposer，都可以保证算法的正确性）</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_其他细节">其他细节</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>算法需要保证每个不同的提案都有不同的提案编号，这可以通过事先给每个提议者分别指定一个不相交的数集来做到。例如，一共有 3 个提议者，则提议者 1 的提案编号只能从除以 3 余 0 的非负整数集合中取。</p>
+</div>
+<div class="paragraph">
+<p>算法中的提案内容 \(v\) 可能需要多次传递，因此也应该保证其大小不会过大。但是有的时候确实需要对一个较大的对象达成共识，比如说 block replica。个人认为可以使用类似于 GFS 中的控制流和数据流相分离的策略 <a href="#gfs">[6]</a>，通过流式传输以节点链的顺序将较大的值事先标记并传播到每一个节点上，各个节点使用 LRU 之类的策略缓存这一内容，然后通过 Paxos 算法进行决议，这样提案内容 \(v\) 只需能够索引到这一较大的值即可。</p>
+</div>
+<div class="paragraph">
+<p>之前的算法只能对单一法令（decree）进行决议。在实际使用中，我们经常需要使用这样的算法维护分布式节点中每个节点的状态一致 <a href="#stm">[7]</a>。为此我们可以令每个节点保存最近的若干条状态机的指令，对指令日志进行 replica 的方式来保证状态机状态的一致。这样，我们只需确定每一条状态机指令在这个日志中的位置，即可保证状态机的一致性，即对指令日志中的每个位置运行一次 single-decree Paxos 算法。（<strong>此处开始到本段结束为个人理解</strong>）令每个进程都同时扮演提议者，仲裁者和学习者这三种角色。由于我们同时需要至少一个 distinguished learner 和唯一一个 distinguished proposer，因此不妨通过选主算法在这些进程中选出一个 leader，同时扮演 distinguished learner 和 distinguished proposer。所有的状态机指令总是发给 leader。如果状态机指令发给了其他节点，由于在决议冲突中总是 leader 获胜，将会导致该指令总是失败。每个节点保持运行固定数量的 single-decree Paxos 算法实例（instance），比如说 \(\alpha\) 个。在没有接收到任何状态机指令的时候，这些算法实例即可完成算法的 Phase 1，并且总是 leader 获胜。当 leader 收到状态机指令时，只需将该指令确定位置，并令对应该位置的 Paxos 算法实例进行 Phase 2 即可（原作者说这应该是共识算法的复杂度下界，貌似论文 <a href="#lb">[8]</a> 证明了这一点，但是我还没看）。由于通信是异步的，因此可能会导致状态机指令中编号靠前的指令还没有提交完成 Phase 2，但是后面的指令已经提交完成 Phase 2。此时，若 leader 失效，重新选主，就会在状态机指令日志中留下一些空洞。而且由于原来的 leader 失效，也没有其他节点能够知道对应该位置的状态机指令是什么。为了不使整个状态机的运行卡住，新的 leader 可以选择在这些位置填入空指令来跳过这些空洞位置，使得整个过程继续运行下去。上面提到的针对状态机指令进行 replica 的算法，只适用于固定的节点集合。如果需要在运行时调整节点集合，最简单的方法就是将调整集合的指令也作为一条状态机指令，当前的节点集合作为状态机所维护的状态。</p>
+</div>
+<div class="paragraph">
+<p>从两阶段提交（2PC）的角度理解 Paxos：Phase 1 要求多数节点做 Promise（<em>prepare</em>），Phase 2 要求这些节点 Commit（<em>accept</em>）。从 Quoraum 的角度理解：已经选出 Leader 的情况下，直接执行 Phase 2，此时只需写成功多数节点即可。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reference">Reference</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a id="paxos_simple"></a>[1] Leslie Lamport. 2001. Paxos Made Simple. ACM SIGACT News 32, 4 (2001), 51–58. DOI:https://doi.org/10.1145/568425.568433</p>
+</li>
+<li>
+<p><a id="impossibility"></a>[2] Michael J. Fischer, Nancy A. Lynch, and Michael S. Paterson. 1985. Impossibility of distributed consensus with one faulty process. J. ACM 32, 2 (April 1985), 374–382. DOI:https://doi.org/10.1145/3149.214121</p>
+</li>
+<li>
+<p><a id="paxos_parliament"></a>[3] Leslie Lamport. 1998. The Part-Time Parliament. ACM Trans. Comput. Sys-tems 16, 2 (1998), 133–169. DOI:https://doi.org/10.1145/279227.279229</p>
+</li>
+<li>
+<p><a id="paxos_revisiting"></a>[4] Roberto De Prisco, Butler Lampson, and Nancy Lynch. 2000. Revisiting the paxos algorithm. Theor. Comput. Sci. 243, 1–2 (2000), 35–91. DOI:https://doi.org/10.1016/S0304-3975(00)00042-6</p>
+</li>
+<li>
+<p><a id="paxos_generalized"></a>[5] Leslie Lamport. 2005. Generalized Consensus and Paxos. April (2005), 60. DOI:https://doi.org/MSR-TR-2005-33</p>
+</li>
+<li>
+<p><a id="gfs"></a>[6] Sanjay Ghemawat, Howard Gobioff, and Shun-Tak Leung. 2003. The Google file system. Proc. Ninet. ACM Symp. Oper. Syst. Princ. - SOSP ’03 (2003), 29. DOI:https://doi.org/10.1145/945449.945450</p>
+</li>
+<li>
+<p><a id="stm"></a>[7] Fred B. Schneider and Fred B. 1990. Implementing fault-tolerant services using the state machine approach: a tutorial. ACM Comput. Surv. 22, 4 (December 1990), 299–319. DOI:https://doi.org/10.1145/98163.98167</p>
+</li>
+<li>
+<p><a id="lb"></a>[8] Leslie Lamport. 2006. Lower bounds for asynchronous consensus. Distrib. Comput. 19, 2 (2006), 104–125. DOI:https://doi.org/10.1007/s00446-006-0155-x</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Paper-Note/paxos-made-simple/" title="论文笔记：Paxos Made Simple">http://hcoona.github.io/Paper-Note/paxos-made-simple/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Paper-Note/" rel="tag"># Paper Note</a>
+              <a href="/tags/Consensus-Algorithm/" rel="tag"># Consensus Algorithm</a>
+              <a href="/tags/Consistency-Theory/" rel="tag"># Consistency Theory</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Paper-Note/amazon-dynamo/" rel="prev" title="论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store">
+                  <i class="fa fa-angle-left"></i> 论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/raft/" rel="next" title="论文笔记：[USENIX ATC&#39;14] In Search of an Understandable Consensus Algorithm (Raft)">
+                  论文笔记：[USENIX ATC'14] In Search of an Understandable Consensus Algorithm (Raft) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

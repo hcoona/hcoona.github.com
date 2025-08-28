@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="在翻旧文的时候，发现这么一篇文章：关于一道C&#43;&#43;笔试题的纠结，学计算机的伤不起啊。当时可能是觉得 Placement new 的语法[1]比较新鲜，所以印象比较深刻。现在则是觉得那篇文章中的笔试题挺有水准的，于是记一篇文章，特别说明这一问题——C&#43;&#43; 的引用类型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 的引用类型">
+<meta property="og:url" content="http://hcoona.github.io/PL/reference-type-in-cpp/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="在翻旧文的时候，发现这么一篇文章：关于一道C&#43;&#43;笔试题的纠结，学计算机的伤不起啊。当时可能是觉得 Placement new 的语法[1]比较新鲜，所以印象比较深刻。现在则是觉得那篇文章中的笔试题挺有水准的，于是记一篇文章，特别说明这一问题——C&#43;&#43; 的引用类型。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2012-11-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.298Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Programming Language">
+<meta property="article:tag" content="Tips">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/PL/reference-type-in-cpp/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/PL/reference-type-in-cpp/","path":"PL/reference-type-in-cpp/","title":"C++ 的引用类型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C++ 的引用类型 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/PL/reference-type-in-cpp/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_c_%E7%9A%84%E7%B1%BB%E5%9E%8B%E9%BB%98%E8%AE%A4%E6%98%AF%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">C++ 的类型默认是值类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_c_%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%AE%9A%E4%B9%89%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">C++ 也可以定义引用类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E4%BD%BF%E7%94%A8_c_%E5%AE%9A%E4%B9%89%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">使用 C++ 定义引用类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_c11_%E7%9A%84%E6%96%B0%E8%AF%AD%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">C++11 的新语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E7%A6%81%E6%AD%A2%E4%BD%BF%E7%94%A8%E6%A0%88%E5%88%86%E9%85%8D%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.</span> <span class="nav-text">禁止使用栈分配对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/PL/reference-type-in-cpp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++ 的引用类型 | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ 的引用类型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2012-11-23 00:00:00" itemprop="dateCreated datePublished" datetime="2012-11-23T00:00:00+08:00">2012-11-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PL/" itemprop="url" rel="index"><span itemprop="name">PL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>在翻旧文的时候，发现这么一篇文章：<a target="_blank" rel="noopener" href="http://www.cnblogs.com/icyplayer/archive/2011/06/23/2087965.html">关于一道C&#43;&#43;笔试题的纠结，学计算机的伤不起啊</a>。当时可能是觉得
+Placement new
+的语法<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>比较新鲜，所以印象比较深刻。现在则是觉得那篇文章中的笔试题挺有水准的，于是记一篇文章，特别说明这一问题——C&#43;&#43;
+的引用类型。</p>
+</div>
+<div class="paragraph">
+<p> <span id="more"></span> </p>
+</div>
+<div class="sect1">
+<h2 id="_c_的类型默认是值类型">C&#43;&#43; 的类型默认是值类型</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>C&#43;&#43; 的 class
+默认是值类型的。我们常常会从内存布局的角度来看待一个值类型。默认情况下，值类型可以复制，也就是说，值类型具有一个拷贝构造函数以及一个拷贝赋值操作符。值类型对象反映的是其内容，当拷贝发生时，总是会产生两个相互独立的对象，修改其中的一个对象不会改变另一个对象的内容。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_c_也可以定义引用类型">C&#43;&#43; 也可以定义引用类型</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>我们可以通过一定的设置，构造出 C&#43;&#43;
+的引用类型，这样的类型具有多态的行为方式，从而可以支持面向对象编程。我们总是以实现多态行为为目的来看待引用类型的，比如说其基类是什么，有没有虚函数，等等。我们应当禁用一个引用类型的拷贝构造函数以及拷贝赋值操作符，并且使用虚析构函数。引用类型的对象反映的是其身份——这是对什么对象的引用？因此，引用类型也常被成为多态类型。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_使用_c_定义引用类型">使用 C&#43;&#43; 定义引用类型</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>虽然C#里面的引用类型用的都是指针或者是引用，但是 C&#43;&#43;
+中的引用类型并不受此限制。但是在传递一个引用类型的对象时，只能传递引用或指针，而不能传递值，否则与引用类型的意图不符合。</p>
+</div>
+<div class="paragraph">
+<p>因此我们需要做的就是：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>禁用</strong>拷贝构造函数。</p>
+</li>
+<li>
+<p><strong>禁用</strong>拷贝赋值操作符。</p>
+</li>
+<li>
+<p><strong>显式</strong>提供一个构造函数。</p>
+</li>
+<li>
+<p><strong>显式</strong>提供一个<strong>虚</strong>析构函数。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>示例代码如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">MyRefType</span>
+&#123;
+<span class="keyword">private</span>:
+    <span class="built_in">MyRefType</span>(<span class="type">const</span> MyRefType &amp;);
+    MyRefType &amp; <span class="keyword">operator</span>=(<span class="type">const</span> MyRefType &amp;);
+<span class="keyword">public</span>:
+    <span class="built_in">MyRefType</span>() &#123; &#125;
+    <span class="keyword">virtual</span> ~<span class="built_in">MyRefType</span>() &#123; &#125;
+&#125;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这样一来，我们就定义了一个引用类型的对象<code>MyRefType</code>。注意，<code>MyRefType</code>可以分配在栈上，也可以分配在堆上，这一点是与
+C#、Java
+等语言不同的。但是，如果需要传递`MyRefType`的对象，则必须传递引用或者是指针，否则将会出现编译错误：（错误信息依编译器不同而变化）</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Cannot access private member declared in class <code>MyRefType</code>.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>测试用例如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cpp"><span class="function">MyRefType <span class="title">CreateMyRefTypeInstance</span><span class="params">()</span></span>;
+<span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span>
+<span class="function"></span>&#123;
+    MyRefType instance1;
+    MyRefType instance2 = instance1;
+    MyRefType instance3 = <span class="built_in">CreateMyRefTypeInstance</span>();
+    <span class="keyword">return</span> <span class="number">0</span>;
+&#125;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>其中第 19 行和第 20 行编译时期会报错。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_c11_的新语法">C&#43;&#43;11 的新语法</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>C&#43;&#43;11
+中提出了新的语法用于删除默认函数或者是显式提供默认函数。<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>使用了新语法的示例如下：<sup class="footnote" id="_footnote_delete-syntax">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">MyRefType</span>
+&#123;
+    <span class="built_in">MyRefType</span>(<span class="type">const</span> MyRefType &amp;) = <span class="keyword">delete</span>;
+    MyRefType &amp; <span class="keyword">operator</span>=(<span class="type">const</span> MyRefType &amp;) = <span class="keyword">delete</span>;
+<span class="keyword">public</span>:
+    <span class="built_in">MyRefType</span>() = <span class="keyword">default</span>;
+    <span class="keyword">virtual</span> ~<span class="built_in">MyRefType</span>() = <span class="keyword">default</span>;
+&#125;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>个人认为，使用这种方式来实现引用对象，代码可读性要上一个台阶。</p>
+</div>
+<div class="paragraph">
+<p>但是 C&#43;&#43;11 提出了一个叫做 Move
+的新语义，可以用于转移对象的所有权。对此有何影响，还不可知。Bjarne
+Stroustrup 的 C&#43;&#43;11 FAQ 中的 control of defaults: move and copy
+中提到了一些这方面的 <a target="_blank" rel="noopener" href="http://www.stroustrup.com/C&#43;&#43;11FAQ.html#default2">建议</a>。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_禁止使用栈分配对象">禁止使用栈分配对象</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>下面绕来绕去又回到了那个 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/icyplayer/archive/2011/06/23/2087965.html">笔试题</a>，即如何禁止使用栈分配对象？一般说来有两种方法：限制访问构造函数或者限制访问析构函数。并且同时，我们应该把这个对象视为一个引用类型的对象，否则我们就可以合理的创建一个在栈上的拷贝。印象中
+Bjarne Stroustrup 在 <em>The Design and Evolution of C&#43;&#43;</em>
+中曾经提到过，将析构函数设为 <code>protected</code>（未求证），就像这样：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">HeapOnlyRefType1</span>
+&#123;
+<span class="keyword">private</span>:
+    <span class="built_in">HeapOnlyRefType1</span>(<span class="type">const</span> HeapOnlyRefType1 &amp;);
+    HeapOnlyRefType1 &amp; <span class="keyword">operator</span>=(<span class="type">const</span> HeapOnlyRefType1 &amp;);
+<span class="keyword">public</span>:
+    <span class="built_in">HeapOnlyRefType1</span>() &#123; &#125;
+    <span class="function"><span class="type">void</span> <span class="title">destory</span><span class="params">(<span class="type">void</span>)</span> </span>&#123; <span class="keyword">delete</span> <span class="keyword">this</span>; &#125;
+<span class="keyword">protected</span>:
+    <span class="keyword">virtual</span> ~<span class="built_in">HeapOnlyRefType1</span>() &#123; &#125;
+&#125;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这样一来，由于不能使用析构函数，自然就不能在栈上创建该对象了。需要注意的是，该类型的全局变量和临时对象也不能创建，因为它们最终还是要被销毁的，但是编译器却不能使用析构函数。为了避免内存泄漏，我们使用`destory`方法来销毁这一类型的对象。</p>
+</div>
+<div class="paragraph">
+<p>另一种方式，具有更高的灵活性，也是我比较习惯使用的一种方式，即通过禁用构造函数来限制这一对象，就像这样：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">HeapOnlyRefType2</span>
+&#123;
+<span class="keyword">private</span>:
+    <span class="built_in">HeapOnlyRefType2</span>(<span class="type">const</span> HeapOnlyRefType2 &amp;);
+    HeapOnlyRefType2 &amp; <span class="keyword">operator</span>=(<span class="type">const</span> HeapOnlyRefType2 &amp;);
+<span class="keyword">protected</span>:
+    <span class="built_in">HeapOnlyRefType2</span>() &#123; &#125;
+<span class="keyword">public</span>:
+    <span class="function"><span class="type">static</span> HeapOnlyRefType2 * <span class="title">CreateInstance</span><span class="params">(<span class="type">void</span>)</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">HeapOnlyRefType2</span>(); &#125;
+    <span class="keyword">virtual</span> ~<span class="built_in">HeapOnlyRefType2</span>() &#123; &#125;
+&#125;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这样一来，今后我们还可以通过修改实例方法，来控制该类型对象的创建。比如说使用单例模式（Singleton
+Pattern）或者其他创建模式，或者使用一些对象策略，比如说缓存，等等。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_参考资料">参考资料</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>[1] C&#43;&#43;0x/C&#43;&#43;11 Support in GCC - GNU Project - Free Software Foundation
+(FSF)[EB/OL]. [2012-11-23].
+<a target="_blank" rel="noopener" href="http://gcc.gnu.org/projects/cxx0x.html" class="bare">http://gcc.gnu.org/projects/cxx0x.html</a>.</p>
+</li>
+<li>
+<p>[2] C&#43;&#43;11 Features (Modern C&#43;&#43;)[EB/OL]. [2012-11-23].
+<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/vstudio/hh567368.aspx" class="bare">http://msdn.microsoft.com/en-us/library/vstudio/hh567368.aspx</a>.</p>
+</li>
+<li>
+<p>[3] 陈皓. C&#43;&#43;11 中值得关注的几大变化（详解）[EB/OL]. [2012-11-23].
+<a target="_blank" rel="noopener" href="http://coolshell.cn/articles/5265.html" class="bare">http://coolshell.cn/articles/5265.html</a>.</p>
+</li>
+<li>
+<p>[4] More C&#43;&#43; Idioms/Requiring or Prohibiting Heap-based Objects[J].
+Wikibooks, open books for an open world.</p>
+</li>
+<li>
+<p>[5] Placement syntax[J]. Wikipedia, the free encyclopedia, 2012.</p>
+</li>
+<li>
+<p>[6] STROUSTRUP B. The Design and Evolution of C&#43;&#43;[M]. 第1版.
+Addison-Wesley Professional, 1994.</p>
+</li>
+<li>
+<p>[7] Value Types (Modern C&#43;&#43;)[EB/OL]. [2012-11-23].
+<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/vstudio/hh438479.aspx" class="bare">http://msdn.microsoft.com/en-us/library/vstudio/hh438479.aspx</a>.</p>
+</li>
+<li>
+<p>[8] What’s New for Visual C&#43;&#43; in Visual Studio 2012[EB/OL].
+[2012-11-23].
+<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/hh409293.aspx" class="bare">http://msdn.microsoft.com/en-us/library/hh409293.aspx</a>.</p>
+</li>
+<li>
+<p>[9] 赵昱. 关于一道C&#43;&#43;笔试题的纠结，学计算机的伤不起啊[EB/OL].
+[2012-11-23].
+<a target="_blank" rel="noopener" href="http://www.cnblogs.com/icyplayer/archive/2011/06/23/2087965.html" class="bare">http://www.cnblogs.com/icyplayer/archive/2011/06/23/2087965.html</a>.</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>2012/12/3 补充：</strong>现在最新版本的Visual Studio 2012 Update 1
+已经支持<sup class="footnoteref">[<a class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>中所提到的语法了。</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. 见 <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Placement_syntax" class="bare">http://en.wikipedia.org/wiki/Placement_syntax</a>
+</div>
+<div class="footnote" id="_footnotedef_2">
+<a href="#_footnoteref_2">2</a>. 见<a target="_blank" rel="noopener" href="http://coolshell.cn/articles/5265.html">C&#43;&#43;11 中值得关注的几大变化（详解）</a>
+</div>
+<div class="footnote" id="_footnotedef_3">
+<a href="#_footnoteref_3">3</a>. Visual Studio 的最新版本 2012 仍然<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/vstudio/hh567368.aspx">不支持这一语法</a>，但是GCC从4.4开始就<a target="_blank" rel="noopener" href="http://gcc.gnu.org/projects/cxx0x.html">支持这一语法</a>了。因此请使用GCC4.4以上的版本来实践这一语法。
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/PL/reference-type-in-cpp/" title="C++ 的引用类型">http://hcoona.github.io/PL/reference-type-in-cpp/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Programming-Language/" rel="tag"># Programming Language</a>
+              <a href="/tags/Tips/" rel="tag"># Tips</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ACM/solution-to-poj-1001/" rel="prev" title="POJ 1001 解题分析">
+                  <i class="fa fa-angle-left"></i> POJ 1001 解题分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/ACM/solution-to-poj-1045/" rel="next" title="Solution to POJ 1045">
+                  Solution to POJ 1045 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

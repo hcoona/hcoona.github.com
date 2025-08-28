@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="Slicer [1] 是 Google 内部支持应用按照 Sharding 的方式进行扩展的，与 RPC 框架集成的基础组件。论文中提到其对比其他通用 Sharding 框架论文的独特之处有：     控制侧和数据侧分离   高效的负载均衡算法，在尽可能减少 key churn 的情况下提供很好的负载均衡效率   提供一些在大规模生产环境下的 evaluation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：[OSDI&#39;16] Slicer: Auto-Sharding for Datacenter Applications">
+<meta property="og:url" content="http://hcoona.github.io/Paper-Note/google-slicer/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="Slicer [1] 是 Google 内部支持应用按照 Sharding 的方式进行扩展的，与 RPC 框架集成的基础组件。论文中提到其对比其他通用 Sharding 框架论文的独特之处有：     控制侧和数据侧分离   高效的负载均衡算法，在尽可能减少 key churn 的情况下提供很好的负载均衡效率   提供一些在大规模生产环境下的 evaluation">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://hcoona.github.io/images/slicer-abstract-architecture.png">
+<meta property="og:image" content="http://hcoona.github.io/images/slicer-backend-service-architecture.png">
+<meta property="og:image" content="http://hcoona.github.io/images/centrifuge-cross-datacenter.png">
+<meta property="article:published_time" content="2019-10-13T04:52:50.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.304Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Distributed Storage">
+<meta property="article:tag" content="Paper Note">
+<meta property="article:tag" content="Google">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://hcoona.github.io/images/slicer-abstract-architecture.png">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Paper-Note/google-slicer/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/google-slicer/","path":"Paper-Note/google-slicer/","title":"论文笔记：[OSDI'16] Slicer: Auto-Sharding for Datacenter Applications"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>论文笔记：[OSDI'16] Slicer: Auto-Sharding for Datacenter Applications | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/google-slicer/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF%E5%92%8C%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">基本思路和整体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">2.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%BC%BA%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">强一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E4%B8%8E%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-number">4.</span> <span class="nav-text">与一致性哈希的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">5.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/google-slicer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：[OSDI&#39;16] Slicer: Auto-Sharding for Datacenter Applications | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：[OSDI'16] Slicer: Auto-Sharding for Datacenter Applications
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-13 12:52:50" itemprop="dateCreated datePublished" datetime="2019-10-13T12:52:50+08:00">2019-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>Slicer <a href="#1">[1]</a> 是 Google 内部支持应用按照 Sharding 的方式进行扩展的，与 RPC 框架集成的基础组件。论文中提到其对比其他通用 Sharding 框架论文的独特之处有：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>控制侧和数据侧分离</p>
+</li>
+<li>
+<p>高效的负载均衡算法，在尽可能减少 key churn 的情况下提供很好的负载均衡效率</p>
+</li>
+<li>
+<p>提供一些在大规模生产环境下的 evaluation</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="paragraph">
+<p>个人认为其独特之处有：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>将存储系统经常需要解决的 Sharding 问题独立出一个基础组件集成到 RPC 框架中，这个想法本身就比较有意思</p>
+</li>
+<li>
+<p>在 Sharding 的基础上可以做一些比较特别的事情，例如：</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>指导应用进行 Sharding 的重分布（类似于 rehashing）</p>
+</li>
+<li>
+<p>支持 Sharding 的分裂与合并</p>
+</li>
+<li>
+<p>屏蔽失效的节点，并且指导应用将失效节点的负载转移到健康节点上继续提供服务</p>
+</li>
+<li>
+<p>为热点增加副本数以承载更高的读负载（论文中提到了这个想法但是貌似没进行实现）</p>
+</li>
+<li>
+<p>提供 key range 粒度的租约控制（论文中使用租约控制来保证这个 key range 同时至多只存在一个服务提供者，但是并没有在生产环境中使用这一功能）</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect1">
+<h2 id="_基本思路和整体架构">基本思路和整体架构</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Slicer 整体上是在 Centrifuge <a href="#2">[2]</a> 上进行改进，总体有 3 个主要部分，见<a href="#slicer-architecture">Abstract Slicer architecture</a>：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Slicer Service: 系统核心部分，负责控制 Shard 的分布并提供查询</p>
+</li>
+<li>
+<p>Clerk: 嵌入到客户端 RPC 库中的部分，负责和 Slicer Service 进行交互，指导 RPC 请求的路由</p>
+</li>
+<li>
+<p>Slicelet: 嵌入到服务器端的部分，负责和 Slicer Service 进行交互，接受 Slicer Service 对于 Shard 重分布的控制</p>
+</li>
+</ol>
+</div>
+<div id="slicer-architecture" class="imageblock text-center text-center">
+<div class="content">
+<img data-src="/images/slicer-abstract-architecture.png" alt="Abstract Slicer architecture">
+</div>
+<div class="title">Figure 1. Abstract Slicer architecture</div>
+</div>
+<div class="paragraph">
+<p>这里的核心思想在于由 Slicer Service 控制 Logical Shard（论文中为 key range）和 Physical Server（论文中称为 task）之间的映射关系，并且根据反馈信息进行适当的调整。</p>
+</div>
+<div class="paragraph">
+<p>出于 Availability 的考虑，Slicer 对于 Slicer Service 进行了进一步的拆分，见<a href="#slicer-backend-architecture">Slicer backend service architecture</a>：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Assigner: 负责调整和控制 Logical Shard 和 Physical Server 之间的映射关系</p>
+</li>
+<li>
+<p>Distributor: 负责查询（被动分发）Assigner 的控制结果</p>
+</li>
+<li>
+<p>Backup Distributor: Assigner 挂掉时的后备方案</p>
+</li>
+<li>
+<p>Store: Assigner 背后的可靠存储</p>
+</li>
+</ol>
+</div>
+<div id="slicer-backend-architecture" class="imageblock text-center text-center">
+<div class="content">
+<img data-src="/images/slicer-backend-service-architecture.png" alt="Slicer backend service architecture">
+</div>
+<div class="title">Figure 2. Slicer backend service architecture</div>
+</div>
+<div class="paragraph">
+<p>这样的另一个额外的好处是，如果 Client 和 Assigner 在不同的 DataCenter 中的话，可以将 Distributor 和 Client 部署在同一个 DataCenter 内，节省跨 DataCenter 流量，提升效率（Distributor 自带缓存）。</p>
+</div>
+<div class="paragraph">
+<p>另一种常见的跨 DataCenter 策略是使用传统的 SLB 进行跨 DataCenter 的中转，见<a href="#centrifuge-cross-datacenter">Centrifuge cross datacenter</a>。</p>
+</div>
+<div id="centrifuge-cross-datacenter" class="imageblock text-center">
+<div class="content">
+<img data-src="/images/centrifuge-cross-datacenter.png" alt="Centrifuge cross datacenter">
+</div>
+<div class="title">Figure 3. Datacenter applications are often divided into multiple component services, and servicing clients requests frequently requires communicating with multiple such services. Centrifuge is designed to replace only the internal network load balancers used by the component services.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_负载均衡">负载均衡</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Slicer 使用 RPC 的 Metrics 数据作为输入，对 Shard 进行负载均衡评估，然后进行调整。从之前的架构可以发现，产生一个调整（Assignment）到生效是最终一致的。</p>
+</div>
+<div class="paragraph">
+<p>Slicer 的负载均衡考虑了以下几个方面：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>使得尖峰负载尽可能低</p>
+</li>
+<li>
+<p>在调整的过程中，减少 key churn 的情况</p>
+</li>
+<li>
+<p>key range 的合并和分裂</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>但是不考虑根据负载增加一些 Logical Shard 的副本数量，或者自动调整 Physical Server 的资源。</p>
+</div>
+<div class="paragraph">
+<p>我们首先考虑怎么抽象负载指标的问题。在 Slicer 中，使用 Load imbalance value 这一经验指标抽象整个系统的负载均衡状况。定义一个 Physical Server 的 load 为其所负责的 Logical Shard 数量，则 Load imbalance value 为整个系统中的最大 load 与平均 load 的比值。</p>
+</div>
+<div class="paragraph">
+<p>个人觉得这个经验指标看起来有点问题：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>其假设整个系统的负载在 key 上是均匀分布的，实际上即便是对于哈希分布的 key space 也可能是不成立的</p>
+</li>
+<li>
+<p>其假设 Logical Shard 的大小是一致的，但是后面又会对 Logical Shard 进行分裂与合并</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>然后是怎么抽象 key churn 的问题。在 Slicer 中，使用一轮调整产生的 key 重分配的比例作为 key churn 的指标。Slicer 对于 CPU 负载较低的 Physical Server 不会进行 key range 的重分配，以此避免过度优化产生的 key churn 开销。</p>
+</div>
+<div class="paragraph">
+<p>Slicer 进行负载均衡的算法也是经验得出的，里面的一些 threshold 的具体 number 也是经验得出的，在此不再赘述。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_强一致性">强一致性</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Slicer 通过租约（Lease）机制实现强一致性（这里强一致性指同一时刻至多只有一个 Physical Server 对 key 提供服务）。需要注意的是租约机制蕴含了时钟对齐的要求。显然我们没办法对每个 key 提供租约管理，一个简单的思路是对 key range 粒度进行租约管理。但是 Slicer 更进一步的可以只使用至多 3 个 Chubby locks 完成租约管理，并且由于租约管理是由 Chubby 进行的，所以即使 Slicer 挂掉也不会影响用户服务。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>job lease: 首先需要一个锁来保证同一时刻内只有一个 Assigner 负责整个分配</p>
+</li>
+<li>
+<p>guard lease: Assigner 会为每一轮分配生成一个租约，只有得到租约许可的 slicelet 才可以提供服务，这样当分配更新时，持有过期信息的 slicelet 就会停止提供服务，避免因信息不同步导致的多个 slicelet 对同一个 key 提供服务的情况</p>
+</li>
+<li>
+<p>bridge lease: 如果只使用 guard lease，则在每一轮分配期间，都会导致全服务的 guard lease 整体失效。但是显然每一轮分配只改变了一小部分 key range 的分布，其他没有发生变化的部分不应该受影响。因此对这部分没有变化的分配，引入一个 bridge lease，使其不受 guard lease 失效的影响。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>个人觉得这个想法还是比较有意思的，相当于 Slicer 既可以控制分配，也可以控制选主，这样只要用户自己实现 replication 机制，就可以很容易的做一个有状态服务了。</p>
+</div>
+<div class="paragraph">
+<p>Slicelet 中和强一致性相关的 API 如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight java">Opaque <span class="title function_">getSliceKeyHandle</span><span class="params">(String key)</span>;
+<span class="type">boolean</span> <span class="title function_">isAssignedContinuously</span><span class="params">(Opaque handle)</span>;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用的方法类似于这样（参考了 <a href="#2">[2]</a>）：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><code class="highlight java"><span class="type">boolean</span> <span class="title function_">Subscribe</span><span class="params">(String key, String address)</span> &#123;
+  <span class="comment">// (1) Check that this is the correct node</span>
+  <span class="type">Opaque</span> <span class="variable">handle</span> <span class="operator">=</span> getSliceKeyHandle(key);
+  <span class="keyword">if</span> (handle == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;
+
+  <span class="comment">// (2) Perform arbitrary operation on this state;</span>
+  <span class="comment">// store lease number with any created state</span>
+  <span class="comment">// in this case, simply add subscription</span>
+  <span class="built_in">this</span>.subscriptionLists[key].add(address);
+
+  <span class="comment">// (3) Check that lease has been continuously held;</span>
+  <span class="comment">// if so, return result</span>
+  <span class="keyword">if</span> (!isAssignedContinuously(handle)) &#123;
+    <span class="comment">// Rollback subscription</span>
+    <span class="built_in">this</span>.subscriptionLists[key].remove(address);
+    <span class="keyword">return</span> <span class="literal">false</span>;
+  &#125;
+
+  <span class="comment">// Commit subscription</span>
+  <span class="keyword">return</span> <span class="literal">true</span>;
+&#125;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_与一致性哈希的比较">与一致性哈希的比较</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>一致性哈希的一个大问题是其哈希算法固定，如果发现数据分布不符合哈希算法的预设的话，几乎没有任何机会进行调整。这在负载均衡的场景下就显得不是那么合适。另一方面，如果想要支持非对称副本数（例如有的 key range 只有 2 副本，但是有的热点 key range 有 200 副本），一致性哈希也是一个很大的限制。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_参考文献">参考文献</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a id="slicer"></a>[1] ADYA A, MYERS D, HOWELL J, etc. Slicer : Auto-Sharding for Datacenter Applications[J]. Osdi, 2016: 739–754.</p>
+</li>
+<li>
+<p><a id="centrifuge"></a>[2] ADYA A, DUNAGAN J, WOLMAN A. Centrifuge: Integrated Lease Management and Partitioning for Cloud Services[C]. NSDI’10 Proceedings of the 7th USENIX conference on Networked systems design and implementation. USENIX Association, 2010.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Paper-Note/google-slicer/" title="论文笔记：[OSDI&#39;16] Slicer: Auto-Sharding for Datacenter Applications">http://hcoona.github.io/Paper-Note/google-slicer/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Distributed-Storage/" rel="tag"># Distributed Storage</a>
+              <a href="/tags/Paper-Note/" rel="tag"># Paper Note</a>
+              <a href="/tags/Google/" rel="tag"># Google</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Paper-Note/architecture-of-a-database-system/" rel="prev" title="论文笔记：[FTNDB&#39;07] Architecture of a Database System">
+                  <i class="fa fa-angle-left"></i> 论文笔记：[FTNDB'07] Architecture of a Database System
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-1/" rel="next" title="自制分布式存储系统入门篇：序章">
+                  自制分布式存储系统入门篇：序章 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

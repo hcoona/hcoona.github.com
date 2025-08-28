@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="面试中经常会问面向对象技术中的三大特征，但是却没有一本书把这三个特征讲透彻，这里尝试综合几本书中的内容，从不同角度理解这三大特征。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面向对象技术中的三大特征">
+<meta property="og:url" content="http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="面试中经常会问面向对象技术中的三大特征，但是却没有一本书把这三个特征讲透彻，这里尝试综合几本书中的内容，从不同角度理解这三大特征。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2013-10-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.299Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Interview">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/","path":"interview/three-characteristics-of-object-oriented-programming/","title":"面向对象技术中的三大特征"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>面向对象技术中的三大特征 | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%81%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF"><span class="nav-number">2.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%80%81"><span class="nav-number">3.</span> <span class="nav-text">多态</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="面向对象技术中的三大特征 | HCOONa's blog">
+      <meta itemprop="description" content="面试中经常会问面向对象技术中的三大特征，但是却没有一本书把这三个特征讲透彻，这里尝试综合几本书中的内容，从不同角度理解这三大特征。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面向对象技术中的三大特征
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2013-10-07 00:00:00" itemprop="dateCreated datePublished" datetime="2013-10-07T00:00:00+08:00">2013-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/interview/" itemprop="url" rel="index"><span itemprop="name">interview</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">面试中经常会问面向对象技术中的三大特征，但是却没有一本书把这三个特征讲透彻，这里尝试综合几本书中的内容，从不同角度理解这三大特征。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>面试中经常会问面向对象技术中的三大特征，但是却没有一本书把这三个特征讲透彻，这里尝试综合几本书中的内容，从不同角度理解这三大特征。</p>
+<p>现在一般认为，面向对象技术中的三大特征分别是：封装（Encapsulation）、继承（Inheritance）和多态（Polymorphism）。</p>
+<p>老实说，我不知道这个答案是怎么出来的，为此我特意在Google和各大学术搜索引擎上找了半天，也没找到出处；反倒是<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Object-oriented_programming#Fundamental_features_and_concepts">维基百科</a>，给出了几大特性，还有出处。</p>
+<pre><code>Benjamin C. Pierce and some other researchers view any attempt to distill OOP to a minimal set of features as futile. He nonetheless identifies fundamental features that support the OOP programming style in most object-oriented languages:
+
+- Dynamic dispatch – when a method is invoked on an object, the object itself determines what code gets executed by looking up the method at run time in a table associated with the object. This feature distinguishes an object from an abstract data type (or module), which has a fixed (static) implementation of the operations for all instances. It is a programming methodology that gives modular component development while at the same time being very efficient.
+- Encapsulation (or multi-methods, in which case the state is kept separate)
+- Subtype polymorphism
+- Object inheritance (or delegation)
+- Open recursion – a special variable (syntactically it may be a keyword), usually called this or self, that allows a method body to invoke another method body of the same object. This variable is late-bound; it allows a method defined in one class to invoke another method that is defined later, in some subclass thereof.
+
+Similarly, in his 2003 book, Concepts in programming languages, John C. Mitchell identifies four main features: dynamic dispatch, abstraction, subtype polymorphism, and inheritance. Michael Lee Scott in Programming Language Pragmatics considers only encapsulation, inheritance and dynamic dispatch.
+</code></pre>
+<p>既然如此，我就不讨论其出处和最初解释了，直接解释封装、继承和多态这三个概念，以免面试官以为我不懂面向对象技术。</p>
+<h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><p>封装的主要意义是可以限制对于对象内容的访问。在C++中，有三种（不算友元的话）访问级别：public、protected和private。在Java、C#或其他语言中，可能还会有更加细致的访问控制方式。</p>
+<p>这种对于对象内部访问的控制，有两点好处：</p>
+<ol>
+<li>可以保护内部数据不被意外修改。</li>
+<li>可以对外隐藏内部实现细节，待以后需要修改实现方法时，不会破坏其他已有代码。</li>
+</ol>
+<p>下面举例说明这两点。</p>
+<p>首先，看看没有面向对象技术的C语言如何实现一个栈：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> STACK_SIZE_MAX 10000</span></span><br><span class="line"><span class="type">int</span> stack[STACK_SIZE_MAX];</span><br><span class="line"><span class="type">int</span> stackTop = <span class="number">0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PUSH_STACK(x) (stack[stackTop++]=(x))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TOP_STACK() (stack[stackTop-1])</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> POP_STACK() (stack[--stackTop])</span></span><br></pre></td></tr></table></figure>
+
+<p>可谓短小精悍，但是这段代码有几个问题：</p>
+<ol>
+<li>只能存储<code>int</code>类型。</li>
+<li>只有一个栈。</li>
+<li>线程不安全。</li>
+<li>栈的大小有限。</li>
+<li><code>stack</code>变量和<code>stackTop</code>变量有可能被意外或者有意的修改。</li>
+</ol>
+<p>第一个问题，即使是使用面向对象技术，也不能解决，而是通过泛型解决的。当然了，如果不考虑类型安全性，也可以使用<code>void *</code>类型存储。对于第二个问题，通常是采用模仿面向对象技术的方式来实现的，代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> stack_item_type;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">stack_struct</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> capacity;</span><br><span class="line">    <span class="type">int</span> top;</span><br><span class="line">    stack_item_type * stack;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">stack_struct</span> * stack_type;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> stack_type <span class="title">new_stack_ex</span><span class="params">(<span class="type">int</span> capacity)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    stack_type stack = (stack_type)<span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(<span class="keyword">struct</span> stack_struct));</span><br><span class="line">    stack-&gt;capacity = capacity;</span><br><span class="line">    stack-&gt;top = <span class="number">0</span>;</span><br><span class="line">    stack-&gt;stack = (stack_item_type *)<span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(stack_item_type) * capacity);</span><br><span class="line">    <span class="keyword">return</span> stack;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">delete_stack_ex</span><span class="params">(stack_type stack)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">free</span>(stack-&gt;stack);</span><br><span class="line">    <span class="built_in">free</span>(stack);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">push_stack_ex</span><span class="params">(stack_type stack, stack_item_type item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    stack-&gt;stack[stack-&gt;top++] = item;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> stack_item_type <span class="title">top_stack_ex</span><span class="params">(stack_type stack)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> stack-&gt;stack[stack-&gt;top - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">pop_stack_ex</span><span class="params">(stack_type stack)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    stack-&gt;top--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>随着这样一种解决方式，问题二三四也都解决了。但是最后一个问题，必须要语言提供隐藏信息的机制支持，才能够解决。这就是C++引入的信息隐藏机制所解决的问题，即信息的封装。且看C++语言中如何实现一个栈：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="type">int</span> STACK_CAPACITY = <span class="number">10000</span>&gt;</span><br><span class="line"><span class="keyword">class</span> Stack</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">inline</span> <span class="type">void</span> <span class="built_in">Push</span>(T item) &#123; stack[top++] = item; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> T <span class="title">Top</span><span class="params">(<span class="type">void</span>)</span> </span>&#123; <span class="keyword">return</span> stack[top - <span class="number">1</span>]; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">Pop</span><span class="params">(<span class="type">void</span>)</span> </span>&#123; top--; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> stack[STACK_CAPACITY];</span><br><span class="line">    <span class="type">int</span> top;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Stack</span>(<span class="type">void</span>) : <span class="built_in">top</span>(<span class="number">0</span>) &#123; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>通过将<code>stack</code>变量和<code>top</code>变量的访问级别设为<code>private</code>，使得除了<code>Stack</code>类中的成员函数，没有任何方法能够访问这两个变量，有效的防止了意外的修改导致非预期结果。</p>
+<p>另一方面，通过限制<code>Stack</code>中内容的访问，使得调用者只能通过<code>Stack</code>类中所公布的共有方法进行访问，又对<code>Stack</code>类的实现进行了抽象。这里相当于在调用者和实现者之间建立了一个接口（契约），使得双方达成了一种共识。这样带来一个额外的好处，只要接口不发生改变，一个类的内部实现可以任意变化。例如实现者认为使用数组实现的栈对象太浪费内存了，不如使用单链表实现，于是修改了实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">ListNode</span></span><br><span class="line">&#123;</span><br><span class="line">    T data;</span><br><span class="line">    std::shared_ptr&lt;ListNode&gt; next;</span><br><span class="line">    <span class="built_in">ListNode</span>(T data, std::shared_ptr&lt;ListNode&gt; next)</span><br><span class="line">        : <span class="built_in">data</span>(data), <span class="built_in">next</span>(next)</span><br><span class="line">    &#123; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stack</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">Push</span><span class="params">(T item)</span> </span>&#123; list = std::make_shared&lt;ListNode&lt;T&gt;&gt;(item, list); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> T <span class="title">Top</span><span class="params">(<span class="type">void</span>)</span> </span>&#123; <span class="keyword">return</span> list-&gt;data; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">Pop</span><span class="params">(<span class="type">void</span>)</span> </span>&#123; list = list-&gt;next; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::shared_ptr&lt;ListNode&lt;T&gt;&gt; list;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Stack</span>(<span class="type">void</span>) : <span class="built_in">list</span>(<span class="literal">nullptr</span>) &#123; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>由于对外开放的接口没有发生任何变化，所有<code>Stack</code>类的调用者都不需修改代码，这一点是C语言等没有提供这样强的封装机制的语言所无法实现的。</p>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>继承最初的用意是直接复用父类中所写的代码，但是人们很快发现，仅仅是使用继承去复用代码，很容易造成更大的混乱，必须对此加以限制，这一限制就是里氏替换原则。里氏替换原则的内容可以描述为：“派生类（子类）对象能够替换其基类（超类）对象被使用。”以上内容并非利斯科夫的原文，而是译自罗伯特·马丁（Robert Martin）对原文的解读。这是一种符合直觉的限制，如果在用到父类型的地方不能够替换成子类型使用，说明这两个类不应该具有继承关系，即子类应该是一个（is-a）父类的特例。</p>
+<p>下面说一个违反直觉的例子，这是一个不好的例子，只是为了说明问题而构造出来的例子，大家不要模仿这个例子。</p>
+<p>直觉上，正方形是长方形的一种特例，因此应该让正方形继承自长方形。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Rectangle</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">getWidth</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> width; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">getHeight</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> height; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">getArea</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> width * height; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> width;</span><br><span class="line">    <span class="type">int</span> height;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Rectangle</span>(<span class="type">int</span> width, <span class="type">int</span> height)</span><br><span class="line">        : <span class="built_in">width</span>(width), <span class="built_in">height</span>(height)</span><br><span class="line">    &#123; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Square</span> : <span class="keyword">public</span> Rectangle</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Square</span>(<span class="type">int</span> sideLength) : <span class="built_in">base</span>(sideLength, sideLength) &#123; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这种情况下，任何使用到<code>Rectangle</code>的地方，都可以使用<code>Square</code>。但是假设<code>Rectangle</code>类还有两个成员函数：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Rectangle</span></span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">setWidth</span><span class="params">(<span class="type">int</span> width)</span> </span>&#123; <span class="keyword">this</span>-&gt;width = width; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">setHeight</span><span class="params">(<span class="type">int</span> height)</span> </span>&#123; <span class="keyword">this</span>-&gt;height = height; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Square</span> : <span class="keyword">public</span> Rectangle</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">setWidth</span><span class="params">(<span class="type">int</span> width)</span> <span class="keyword">override</span> </span>&#123; <span class="built_in">setSideLength</span>(width); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">setHeight</span><span class="params">(<span class="type">int</span> height)</span> <span class="keyword">override</span> </span>&#123; <span class="built_in">setSideLength</span>(height); &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">setSideLength</span><span class="params">(<span class="type">int</span> length)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        width = length;</span><br><span class="line">        height = length;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>则<code>Square</code>类不应该继承自<code>Rectangle</code>类，因为<code>Square</code>类处理改变宽和高的逻辑与<code>Rectangle</code>截然不同，并非对原有功能的扩充。这样一来，原本使用<code>Rectangle</code>的代码，如果使用的是<code>Square</code>，则有可能出现非预期的结果，例如这样的测试用例在传入的对象是一个<code>Square</code>的实例的时候，就会失败：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestArea</span><span class="params">(Rectangle &amp;rectangle)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> deltaWidth = <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> originArea = rectangle.<span class="built_in">getArea</span>();</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> exceptedArea = originArea + deltaWidth * rectangle.<span class="built_in">getHeight</span>();</span><br><span class="line"></span><br><span class="line">    rectangle.<span class="built_in">setWidth</span>(rectangle.<span class="built_in">getWidth</span>() + deltaWidth);</span><br><span class="line">    <span class="type">int</span> actualArea = rectangle.<span class="built_in">getArea</span>();</span><br><span class="line">    <span class="built_in">TEST_ASSERT_EQUAL</span>(exceptedArea, actualArea);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是因为原本长方形的长和宽可以被独立的改变，而正方形的要求更加严格，从而导致了对于里氏替换原则的违反。</p>
+<p>对于支持逆变和协变，以及异常的语言，要求：</p>
+<ul>
+<li>子类中，方法的参数必须是逆变的。</li>
+<li>子类中，方法的返回值必须是协变的。</li>
+<li>如果父类中的方法没有抛出异常，那么子类中的该方法也不应抛出异常。</li>
+<li>如果父类中的方法抛出了异常，那么子类中的该方法可以抛出该异常的子类异常。</li>
+</ul>
+<p>除此之外，子类的设计还应该遵循以下一般原则：</p>
+<ul>
+<li>子类中，前置条件不能被强化。</li>
+<li>子类中，后置条件不能被弱化。</li>
+<li>子类中，必须遵守父类中的不变式。</li>
+<li>子类中如果引入了父类中不存在的方法，则不得通过这些方法改变继承自父类的状态。</li>
+</ul>
+<p>上面长方形正方形的例子，就是违反了后置条件不能被弱化的原则。</p>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>多态（特指面向对象技术中的术语“多态”）是这样一种技术：直到运行时期，才确定被调用的方法应该执行的代码。</p>
+<p>通常，在C&#x2F;C++、Java、C#这一类语言中，执行的代码是在编译期间就确定的，这被称为“早绑定”。编译器知道被调用的函数所在的位置，因此在调用这一函数时，直接将参数按照调用约定压栈，然后跳转到该函数所在的位置继续执行即可。但是多态可以延迟这一过程，直到运行时期，程序才知道调用的函数的代码的真正位置。由于执行的代码实在运行时期才确定的，这又被称为“晚绑定”。很多动态语言默认就是“晚绑定”的。</p>
+<p>多态和继承的关系非常密切。在C++语言中，只有在父类中声明为虚函数的函数，才能在子类中被覆盖（Override），从而实现多态。</p>
+<p>多态的好处在于，我们可以在不修改现有代码的基础上，扩充功能。还用上面栈的代码做例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stack</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Push</span><span class="params">(T)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> T <span class="title">Top</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Pop</span><span class="params">(<span class="type">void</span>)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="type">int</span> CAPACITY&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ArrayStack</span> : <span class="keyword">public</span> Stack</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Push</span><span class="params">(T item)</span> <span class="keyword">override</span> </span>&#123; stack[top++] = item; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> T <span class="title">Top</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> stack[top - <span class="number">1</span>]; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Pop</span><span class="params">(<span class="type">void</span>)</span> <span class="keyword">override</span> </span>&#123; top--; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T stack[CAPACITY];</span><br><span class="line">    <span class="type">int</span> top;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">ArrayStack</span>(<span class="type">void</span>) : <span class="built_in">top</span>(<span class="number">0</span>) &#123; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LinkedListStack</span> : <span class="keyword">public</span> Stack</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Push</span><span class="params">(T item)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        list = std::make_shared&lt;ListNode&lt;T&gt;&gt;(item, list);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> T <span class="title">Top</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> list-&gt;data; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Pop</span><span class="params">(<span class="type">void</span>)</span> <span class="keyword">override</span> </span>&#123; list = list-&gt;next; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::shared_ptr&lt;ListNode&lt;T&gt;&gt; list;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">LinkedListStack</span>(<span class="type">void</span>) : <span class="built_in">list</span>(<span class="literal">nullptr</span>) &#123; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在使用的时候，比如说有这样一个函数：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">PushZero</span><span class="params">(Stack&lt;<span class="type">int</span>&gt; &amp;stack)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    stack.<span class="built_in">Push</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么这里调用的<code>Push</code>函数是哪个函数呢？首先肯定不是<code>Stack</code>类中的<code>Push</code>函数，因为<code>Stack</code>是个纯虚类，其<code>Push</code>方法根本就没有实现。其次，就要看传给这一函数的参数，其运行时期的真正类型是什么。如果传进来的<code>stack</code>变量是<code>ArrayStack</code>类型的，那么调用的就是<code>ArrayStack</code>类中的<code>Push</code>方法，如果传进来的是<code>LinkedListStack</code>类型的，那么调用的就是<code>LinkedListStack</code>中的<code>Push</code>方法。如果我们实现了另一个类，比如是这样的：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VectorStack</span> : <span class="keyword">public</span> Stack</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Push</span><span class="params">(T item)</span> <span class="keyword">override</span> </span>&#123; stack.<span class="built_in">push_back</span>(item); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> T <span class="title">Top</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> stack.<span class="built_in">back</span>(); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Pop</span><span class="params">(<span class="type">void</span>)</span> <span class="keyword">override</span> </span>&#123; stack.<span class="built_in">pop_back</span>(); &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::vector&lt;T&gt; stack;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>那么如果传给<code>PushZero</code>的参数<code>stack</code>是<code>VectorStack</code>类型的，那么调用的就是<code>VectorStack</code>中的<code>Push</code>方法。注意，我们实现并不知道还会有<code>VectorStack</code>这样一个类，但是在之后，我们为了扩充<code>Stack</code>类的功能，新写了这样一个类，却没有修改<code>PushZero</code>函数中的任何代码，就可以发挥<code>VectorStack</code>类的作用。</p>
+<p>C++语言中实现这一功能是采用的虚函数列表的方式，具体情况参见*The Design and Evolution of C++*中的3.5 Virtual Functions。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/" title="面向对象技术中的三大特征">http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Interview/" rel="tag"># Interview</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/interview/different-solutions-to-an-interview-problem/" rel="prev" title="一道面试题的多种解法">
+                  <i class="fa fa-angle-left"></i> 一道面试题的多种解法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/interview/the-differences-between-overloading-and-overriding/" rel="next" title="重载和覆盖的区别">
+                  重载和覆盖的区别 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

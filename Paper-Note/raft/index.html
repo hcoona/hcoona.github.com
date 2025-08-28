@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+
+    <meta name="description" content="Raft 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。在已经提出 Paxos 算法用于解决这一问题的情况下继续提出 Raft 算法，主要是为了解决 Paxos 理解困难的问题。Paxos 算法更偏向于理论研究，对于实现的很多细节虽然略有提及，但是并没有进行深入的讲解和讨论，因此对于算法的实现和优化而言还有很多困难。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：[USENIX ATC&#39;14] In Search of an Understandable Consensus Algorithm (Raft)">
+<meta property="og:url" content="http://hcoona.github.io/Paper-Note/raft/index.html">
+<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:description" content="Raft 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。在已经提出 Paxos 算法用于解决这一问题的情况下继续提出 Raft 算法，主要是为了解决 Paxos 理解困难的问题。Paxos 算法更偏向于理论研究，对于实现的很多细节虽然略有提及，但是并没有进行深入的讲解和讨论，因此对于算法的实现和优化而言还有很多困难。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-29T03:23:00.000Z">
+<meta property="article:modified_time" content="2025-08-28T05:15:47.301Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Distributed System">
+<meta property="article:tag" content="Paper Note">
+<meta property="article:tag" content="Consensus Algorithm">
+<meta property="article:tag" content="Consistency Theory">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Paper-Note/raft/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/raft/","path":"Paper-Note/raft/","title":"论文笔记：[USENIX ATC'14] In Search of an Understandable Consensus Algorithm (Raft)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>论文笔记：[USENIX ATC'14] In Search of an Understandable Consensus Algorithm (Raft) | HCOONa's blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/raft/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">基本思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">2.</span> <span class="nav-text">实现细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E6%88%90%E5%91%98%E5%8F%98%E6%8D%A2"><span class="nav-number">3.</span> <span class="nav-text">成员变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E4%B8%8E_paxos_%E7%9A%84%E7%AE%80%E5%8D%95%E5%AF%B9%E6%AF%94"><span class="nav-number">4.</span> <span class="nav-text">与 Paxos 的简单对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_references"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
+      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/raft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：[USENIX ATC&#39;14] In Search of an Understandable Consensus Algorithm (Raft) | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：[USENIX ATC'14] In Search of an Understandable Consensus Algorithm (Raft)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-03-29 11:23:00" itemprop="dateCreated datePublished" datetime="2018-03-29T11:23:00+08:00">2018-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>Raft 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。在已经提出 Paxos 算法用于解决这一问题的情况下继续提出 Raft 算法，主要是为了解决 Paxos 理解困难的问题。Paxos 算法更偏向于理论研究，对于实现的很多细节虽然略有提及，但是并没有进行深入的讲解和讨论，因此对于算法的实现和优化而言还有很多困难。</p>
+</div>
+<div class="paragraph">
+<p><span id="more"></span></p>
+</div>
+<div class="paragraph">
+<p><strong>个人认为</strong>，Raft 算法本身，在理解上并不比 Paxos 具有更多优势。就好像数学中的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Non-standard_analysis">非标准分析</a>之于<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/(ε,_δ)-definition_of_limit">\(\epsilon-\delta\)极限表示法</a>下的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Real_analysis">标准实分析</a>。虽然使用非标准分析表述微积分内部的概念比较易于理解，但是其保证其正确的基础证明非常难以理解，而标准实分析中表述微积分内部的概念虽然有点绕，但是其基础证明的难度却没有那么高。对比而言，Paxos 的 safety 和 liveness 性质就很好理解，而 Raft 协议虽然给出了一些性质约束，但是由此能够得出 linearizability consistency 的证明却要难以理解的多 <a href="#raft_fv">[3]</a>。此外，这篇论文中还给出了在 Paxos Made Simple <a href="#paxos">[2]</a> 中没有讨论清楚的一些实现细节，因此对算法的实现人员比较友好，但是相对而言，对其进行进一步优化的难度也要大得多。</p>
+</div>
+<div class="sect1">
+<h2 id="_基本思路">基本思路</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Single-decree Paxos 协议中，如果想要高效的推进算法进度，也是需要选主的。但是 Paxos 论文中引入选主这一问题相当晚，直到最后一步没有 lead 时候有可能不能推进算法进行的时候，才提出可以引入主节点，通过总是让主节点获胜的方法来使得算法进行下去。而在 Multi-decrees Paxos 的场景中，如果已经有了（唯一的）主节点，又可以对算法进行相当程度的优化。Raft 协议就是针对这一点进行展开的，即先选出唯一的主节点，再由该主节点主导 log replication 过程。在此，Raft 协议还做了一个假设，即 <strong>client 的请求只由主节点进行处理</strong>。考虑到上述要求，Raft 协议的第一部分要求就是选主，对此有如下限制：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>任意时刻最多只能有 1 个主节点</p>
+</li>
+<li>
+<p>client 的请求只由主节点进行处理</p>
+</li>
+<li>
+<p>主节点从不修改自己的（状态机指令）日志，至对其进行 append 操作</p>
+</li>
+<li>
+<p>主节点已经提交过的日志，在换主后，必将出现在新主节点的日志中</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>用论文中的说法就是这样的：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>Election Safety</strong>
+</td>
+<td class="hdlist2">
+<p>at most one leader can be elected in a given term. §5.2</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>Client interaction</strong>
+</td>
+<td class="hdlist2">
+<p>Clients of Raft send all of their requests to the leader. §8</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>Leader Append-Only</strong>
+</td>
+<td class="hdlist2">
+<p>a leader never overwrites or deletes entries in its log; it only appends new entries. §5.3</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>Leader Completeness</strong>
+</td>
+<td class="hdlist2">
+<p>if a log entry is committed in a given term, then that entry will be present in the logs of the leaders for all higher-numbered terms. §5.4 （此处 term 表示 leader 的任期）</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>其中 <em>Leader Append-Only</em> 和 <em>Leader Completeness</em> 这两个性质约束了选主的时候，新的主节点必须拥有最新的 committed 的日志。</p>
+</div>
+<div class="paragraph">
+<p>在有了主节点之后，问题就简单了。主节点只需将 client 的请求定序，并复制给其他节点即可。由此引申出如下性质：</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+<strong>Log Matching</strong>
+</td>
+<td class="hdlist2">
+<p>if two logs contain an entry with the same index and term, then the logs are identical in all entries up through the given index. §5.3</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>State Machine Safety</strong>
+</td>
+<td class="hdlist2">
+<p>if a server has applied a log entry at a given index to its state machine, no other server will ever apply a different log entry for the same index. §5.4.3</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>直觉上应该没什么问题，主节点永远拥有最新的状态，所有的请求都发给主节点，主节点在 replica 到多数后回应请求结果。liveness 主要集中在选主上面，即是否能在这样的约束条件下保证能够选出主节点，本论文没有证明这一结论。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_实现细节">实现细节</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Raft 协议的核心在于选主。Raft 使用心跳机制用于检测主节点的存活，从而触发选主流程。每个节点有三种状态：跟随者（Follower），候选者（Candidate），领导者（Leader）。每个节点初始处于跟随者的状态。如果它认为领导者节点已经失效，则进行选主流程：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>首先增加 term 顺序号，然后将自己的状态转为一个候选者。</p>
+</li>
+<li>
+<p>然后提议选举自己成为领导者，并将这一请求广播给其他节点</p>
+</li>
+<li>
+<p>重复上述步骤，直到以下几种情况发生：</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>赢得选举</p>
+</li>
+<li>
+<p>其他节点已经成为了领导者</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>当一个节点得到多数节点的认可时，可认为其赢得选举。每个节点按照先到先得的原则同意其他节点的选举请求（此处原因可参考 Paxos，即只有一个节点选举时也会赢得选举）。考虑到 <em>Leader Append-Only</em> 和 <em>Leader Completeness</em> 这两个性质，在此过程中应该对选主过程做出合理限制，以免新任领导者节点没有最新的 committed 的状态，从而违背 <em>State Machine Safety</em> 性质。这一限制即，在选主请求中，携带当前自己已知的最新的 committed index。每个节点在应答其他节点的选主请求时，如果对方具有比自己当前最新 committed index 更低的值，就拒绝其选主请求。</p>
+</div>
+<div class="paragraph">
+<p>Raft 选择随机等待重试的方法来尽量避免选举平局的出现。根据 <a href="#imp">[4]</a> 中的结论，<strong>在不依赖于真实物理时间的情况下（包括随机量）</strong>，只需有 1 个节点失效即有可能导致选主失败，因此我们只能尽量避免这一情况，而不存在确定性的策略，没有 corner case 的解决这一问题。尽管还有其他可能的策略来尽量避免这一局面的出现，但是 Raft 论文的作者认为随机 back-off 的策略比较简单而且不容易出现 corner case，个人认同这一观点。</p>
+</div>
+<div class="paragraph">
+<p>有了主节点（领导者）后，其他问题就好办了。所有的客户端请求都统一发给主节点，这些请求在主节点上被定序，然后顺序的进行处理。主节点将接到的请求广播给所有其他节点，一旦多数节点确认接收到这一请求，即可认为该请求已经 committed，至此主节点将这一操作应用到自身的状态机上，并将结果返回给客户端。</p>
+</div>
+<div class="paragraph">
+<p>尽管主节点可能在没有来得及将一个请求发送给多数节点时就挂掉了，此时会有两种可能性</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>这一请求被下一任领导者继续完成</p>
+</li>
+<li>
+<p>这一请求被下一任领导者放弃，并使用其他内容覆盖</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>尽管这两种情况可能以任意顺序交替发生，但是仍然可以保证当且仅当一个请求被扩散到多数节点后才被 committed，一旦 committed 就不会被重写覆盖。原论文 <a href="#raft">[1]</a> 中没有进行形式化证明，但是直觉上感觉是正确的，因为在选主的时候做出了合理的限制。论文 <a href="#raft_fv">[3]</a> 中含有正确性证明（不确定，没看完）。</p>
+</div>
+<div class="paragraph">
+<p>一般来说，一个状态机系统的操作日志不会是无限长的。因此在必要的时候，我们要对状态机操作日志进行压缩（compact）。Raft 论文中使用状态机快照（snapshot）来进行日志压缩，但是其他多种方案也可以达到这一目的，例如 LSM（Log-Structured Merge tree）。一个快照可以被看作是在此时之前的所有操作日志顺序执行的结果。在保留了一定数目的操作日志后，更老的日志子集就被状态机快照所取代。快照的一个问题是，有可能某个节点落后主节点太多，以至于所需的操作日志已经变成了快照而不可获取单独的操作日志项。这既有可能是因为慢节点，也有可能是因为网络分区，还有可能是新添加的节点。对于此种情况，该节点只能获取最新的快照，进行状态机恢复，然后继续获取并应用在此之后的操作日志。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_成员变换">成员变换</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>成员变换之所以成为一个问题，是因为由于成员组成不同，在切换的时刻，可能由这两组不同的成员分别各自选出主节点，从而出现两个主节点，违背了 <em>Election Safety</em> 性质。</p>
+</div>
+<div class="paragraph">
+<p>Paxos 由于不要求一定有主节点，也不要求只有一个主节点，因此可以不用进行特殊处理，只是将成员列表作为状态机的一个状态即可。Paxos 论文 <a href="#paxos">[2]</a> 中设计每个提议者（proposer）最多只能缓冲 \(\alpha\) 条来自客户端的指令，因此只需将成员变更的命令放在将要提交的第 \(\alpha + 1\) 条指令处即可。在此成员变更指令生效前，新加入的节点只作为学习者（learner）的角色即可。此外也可以参考论文 <a href="#paxos_vert">[5]</a> 中的方法。</p>
+</div>
+<div class="paragraph">
+<p>Raft 处理这一问题采用重叠（overlapped）集群的方式，在成员变更的过程中，要求两个重叠集群一致认可同一个主节点。需要注意的是，被移出集群的节点可能形成一个小的封闭系统自发选主，从而干扰正常集群。在此需要进行特殊处理，即当一个跟随者（Follower）认为领导者存活时（通过心跳包），不再接受其他节点的选主请求。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_与_paxos_的简单对比">与 Paxos 的简单对比</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Raft 应该算是 Paxos 的一个简化特例版本，由于提供了更多的工程细节，省略了一些证明的过程，所以变得更容易理解和实现。但是如果需要进一步优化，则 Paxos 应该是一个更好的选择。目前已知的两个优化的点是：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>无主节点的并行提交（Raft 的前提就是有且只有一个主节点，这上面完全优化不了）</p>
+</li>
+<li>
+<p>状态机指令的可交换性（例如 key-value store 场景下对两个不同 key 的操作是可交换的，Raft 不存在并行提交，所以对此也无从优化）</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references">References</h2>
+<div class="sectionbody">
+<div class="ulist bibliography">
+<ul class="bibliography">
+<li>
+<p><a id="raft"></a>[1] Diego Ongaro, and John Ousterhout. 2014. In Search of an Understandable Consensus Algorithm. Atc ’14 22, 2 (2014), 305–320. DOI:https://doi.org/10.1145/1529974.1529978</p>
+</li>
+<li>
+<p><a id="paxos"></a>[2] Leslie Lamport. 2001. Paxos Made Simple. ACM SIGACT News 32, 4 (2001), 51–58. DOI:https://doi.org/10.1145/568425.568433</p>
+</li>
+<li>
+<p><a id="raft_fv"></a>[3] Doug Woos, James R Wilcox, and Steve Anton, et al. 2016. Planning for change in a formal verification of the raft consensus protocol. In Proceedings of the 5th ACM SIGPLAN Conference on Certified Programs and Proofs - CPP 2016, 154–165. DOI:https://doi.org/10.1145/2854065.2854081</p>
+</li>
+<li>
+<p><a id="imp"></a>[4] Michael J. Fischer, Nancy A. Lynch, and Michael S. Paterson. 1985. Impossibility of distributed consensus with one faulty process. J. ACM 32, 2 (April 1985), 374–382. DOI:https://doi.org/10.1145/3149.214121</p>
+</li>
+<li>
+<p><a id="paxos_vert"></a>[5] Leslie Lamport, Dahlia Malkhi, and Lidong Zhou. 2009. Vertical paxos and primary-backup replication. Proc. 28th ACM Symp. Princ. Distrib. Comput. - Pod. ’09 February (2009), 312. DOI:https://doi.org/10.1145/1582716.1582783</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Shuai Zhang
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Paper-Note/raft/" title="论文笔记：[USENIX ATC&#39;14] In Search of an Understandable Consensus Algorithm (Raft)">http://hcoona.github.io/Paper-Note/raft/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+              <a href="/tags/Paper-Note/" rel="tag"># Paper Note</a>
+              <a href="/tags/Consensus-Algorithm/" rel="tag"># Consensus Algorithm</a>
+              <a href="/tags/Consistency-Theory/" rel="tag"># Consistency Theory</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Paper-Note/paxos-made-simple/" rel="prev" title="论文笔记：Paxos Made Simple">
+                  <i class="fa fa-angle-left"></i> 论文笔记：Paxos Made Simple
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Paper-Note/facebook-haystack/" rel="next" title="论文笔记：[OSDI&#39;10] Finding a needle in Haystack: Facebook&#39;s photo storage">
+                  论文笔记：[OSDI'10] Finding a needle in Haystack: Facebook's photo storage <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
