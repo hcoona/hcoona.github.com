@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,13 +18,13 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
     <meta name="description" content="总结侵入式链表的主要优缺点和在 C++ 语言参考实现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ 侵入式链表总结">
 <meta property="og:url" content="http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="总结侵入式链表的主要优缺点和在 C++ 语言参考实现">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://hcoona.github.io/images/circular-doubly-linked-list.png">
@@ -47,9 +45,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>C++ 侵入式链表总结 | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -66,20 +64,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -91,12 +89,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -105,12 +103,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -162,14 +160,13 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux"><span class="nav-number">1.</span> <span class="nav-text">Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Doom3"><span class="nav-number">2.</span> <span class="nav-text">Doom3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Boost-Intrusive"><span class="nav-number">3.</span> <span class="nav-text">Boost Intrusive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM"><span class="nav-number">4.</span> <span class="nav-text">LLVM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%80%9D%E8%80%83"><span class="nav-number"></span> <span class="nav-text">其他思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Unrolled-linked-lists"><span class="nav-number">1.</span> <span class="nav-text">Unrolled linked lists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E7%94%A8%E9%93%BE%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">不用链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number"></span> <span class="nav-text">参考资料</span></a></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux"><span class="nav-number">1.</span> <span class="nav-text">Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Doom3"><span class="nav-number">2.</span> <span class="nav-text">Doom3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Boost-Intrusive"><span class="nav-number">3.</span> <span class="nav-text">Boost Intrusive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM"><span class="nav-number">4.</span> <span class="nav-text">LLVM</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%80%9D%E8%80%83"><span class="nav-number"></span> <span class="nav-text">其他思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Unrolled-linked-lists"><span class="nav-number">1.</span> <span class="nav-text">Unrolled linked lists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E7%94%A8%E9%93%BE%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">不用链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number"></span> <span class="nav-text">参考资料</span></a></li></div>
         </div>
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -183,22 +180,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -225,20 +222,20 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="C++ 侵入式链表总结 | HCOONa's blog">
       <meta itemprop="description" content="总结侵入式链表的主要优缺点和在 C++ 语言参考实现">
     </span>
@@ -269,7 +266,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Data-Structure/" itemprop="url" rel="index"><span itemprop="name">Data Structure</span></a>
         </span>
     </span>
@@ -286,10 +283,10 @@
     
     <div class="post-body" itemprop="articleBody"><p>最近突然想要看一看性能相关的优化，正好看到了侵入式链表这部分，在此做一个简单的总结。</p>
 <p>这里简单的说一下什么是侵入式链表，方便读者快速决定是否需要继续读下去。一个常见的非侵入式链表是这样的：</p>
-<figure class="highlight cxx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">ListNode</span> &#123;</span><br><span class="line">  ListNode* prev;</span><br><span class="line">  ListNode* next;</span><br><span class="line">  T value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cxx"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">ListNode</span> {</span><br><span class="line">  ListNode* prev;</span><br><span class="line">  ListNode* next;</span><br><span class="line">  T value;</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
 
 <p>可以说，非侵入式链表的实现方式是，链表节点中包含数据。侵入式链表的实现方式与之相反，是业务数据结构中包含链表节点结构：</p>
-<figure class="highlight cxx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IntrusiveListNode</span> &#123;</span><br><span class="line">  IntrusiveListNode* prev;</span><br><span class="line">  IntrusiveListNode* next;</span><br><span class="line">  T* owner;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">UserData</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  InstruiveListNode list;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cxx"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IntrusiveListNode</span> {</span><br><span class="line">  IntrusiveListNode* prev;</span><br><span class="line">  IntrusiveListNode* next;</span><br><span class="line">  T* owner;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">UserData</span> {</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  InstruiveListNode list;</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
 
 <p>侵入式链表的常见使用场景是对比 <code>std::list&lt;T*&gt;</code> 这样的使用方法的，其他场景一般不适用于侵入式链表。例如在实现 LRU 时，需要把 entry 同时加入 HashMap 和 List 中，使用前者提供 $O(1)$ 复杂度的查询，使用后者维持 Recency 序关系。由于一个值对象不能同时属于两个非侵入式容器，所以其中一个容器必然保存的是指针或者迭代器。此时，拿到一个 Entry 的时候就可以操作这个 Entry 所在的链表，非常方便，而且效率也比较高。</p>
 <p><strong>侵入式的好处</strong></p>
@@ -306,23 +303,23 @@
 <p>如其注释所说，其实现了一个双向循环链表。</p>
 <p><img data-src="/images/circular-doubly-linked-list.png" alt="circular doubly linked list"></p>
 <p>侵入式链表结构的定义见 <a target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/v5.18/include/linux/types.h">https://github.com/torvalds/linux/blob/v5.18/include/linux/types.h</a></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> *<span class="title">next</span>, *<span class="title">prev</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> {</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> *<span class="title">next</span>, *<span class="title">prev</span>;</span></span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
 
 <p>使用上的相关方法见 <a target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/v5.18/include/linux/list.h">https://github.com/torvalds/linux/blob/v5.18/include/linux/list.h</a></p>
 <p>在使用时，以调度模块为例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/kernel/sched/sched.h#L376</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_group</span> &#123;</span></span><br><span class="line">  <span class="comment">// 省略一些业务逻辑</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">list</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/kernel/sched/core.c</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Default task group.</span></span><br><span class="line"><span class="comment"> * Every task in system belongs to this group at bootup.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_group</span> <span class="title">root_task_group</span>;</span></span><br><span class="line">LIST_HEAD(task_groups);</span><br><span class="line"></span><br><span class="line">list_add(&amp;root_task_group.<span class="built_in">list</span>, &amp;task_groups);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/kernel/sched/sched.h#L376</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_group</span> {</span></span><br><span class="line">  <span class="comment">// 省略一些业务逻辑</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">list</span>;</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/kernel/sched/core.c</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Default task group.</span></span><br><span class="line"><span class="comment"> * Every task in system belongs to this group at bootup.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_group</span> <span class="title">root_task_group</span>;</span></span><br><span class="line">LIST_HEAD(task_groups);</span><br><span class="line"></span><br><span class="line">list_add(&amp;root_task_group.<span class="built_in">list</span>, &amp;task_groups);</span><br></pre></td></tr></tbody></table></figure>
 
 <p>这里的问题在于 <code>struct list_head</code> 中的指针也都是 <code>struct list_head</code> 类型的，怎么拿到用户类型的数据？考虑到 C 语言中所有结构体内部数据都是按照约定好的 layout 排布的。我们可以通过 <code>offsetof</code> 计算偏移量来找到用户结构体的起始位置了，再进行一下类型强制转换就可以了。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/include/linux/list.h#L519</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * list_entry - get the struct for this entry</span></span><br><span class="line"><span class="comment"> * @ptr:        the &amp;struct list_head pointer.</span></span><br><span class="line"><span class="comment"> * @type:       the type of the struct this is embedded in.</span></span><br><span class="line"><span class="comment"> * @member:     the name of the list_head within the struct.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> list_entry(ptr, type, member) \</span></span><br><span class="line"><span class="meta">        container_of(ptr, type, member)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/include/linux/container_of.h#L17</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * container_of - cast a member of a structure out to the containing structure</span></span><br><span class="line"><span class="comment"> * @ptr:          the pointer to the member.</span></span><br><span class="line"><span class="comment"> * @type:         the type of the container struct this is embedded in.</span></span><br><span class="line"><span class="comment"> * @member:       the name of the member within the struct.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> container_of(ptr, type, member) (&#123;                            \</span></span><br><span class="line"><span class="meta">        void *__mptr = (void *)(ptr);                                 \</span></span><br><span class="line"><span class="meta">        static_assert(__same_type(*(ptr), ((type *)0)-&gt;member) ||     \</span></span><br><span class="line"><span class="meta">                      __same_type(*(ptr), void),                      \</span></span><br><span class="line"><span class="meta">                      <span class="string">&quot;pointer type mismatch in container_of()&quot;</span>);     \</span></span><br><span class="line"><span class="meta">        ((type *)(__mptr - offsetof(type, member))); &#125;)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/include/linux/list.h#L519</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * list_entry - get the struct for this entry</span></span><br><span class="line"><span class="comment"> * @ptr:        the &amp;struct list_head pointer.</span></span><br><span class="line"><span class="comment"> * @type:       the type of the struct this is embedded in.</span></span><br><span class="line"><span class="comment"> * @member:     the name of the list_head within the struct.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> list_entry(ptr, type, member) \</span></span><br><span class="line"><span class="meta">        container_of(ptr, type, member)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://github.com/torvalds/linux/blob/v5.18/include/linux/container_of.h#L17</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * container_of - cast a member of a structure out to the containing structure</span></span><br><span class="line"><span class="comment"> * @ptr:          the pointer to the member.</span></span><br><span class="line"><span class="comment"> * @type:         the type of the container struct this is embedded in.</span></span><br><span class="line"><span class="comment"> * @member:       the name of the member within the struct.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> container_of(ptr, type, member) ({                            \</span></span><br><span class="line"><span class="meta">        void *__mptr = (void *)(ptr);                                 \</span></span><br><span class="line"><span class="meta">        static_assert(__same_type(*(ptr), ((type *)0)-&gt;member) ||     \</span></span><br><span class="line"><span class="meta">                      __same_type(*(ptr), void),                      \</span></span><br><span class="line"><span class="meta">                      <span class="string">"pointer type mismatch in container_of()"</span>);     \</span></span><br><span class="line"><span class="meta">        ((type *)(__mptr - offsetof(type, member))); })</span></span><br></pre></td></tr></tbody></table></figure>
 
 <p>注意，offsetof 只能对 Standard Layout 的类型起作用。例如 virtual inheritance 的场景就不适用。所以在 C++ 中使用这个技巧要十分谨慎。</p>
 <p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1129894/why-cant-you-use-offsetof-on-non-pod-structures-in-c">https://stackoverflow.com/questions/1129894/why-cant-you-use-offsetof-on-non-pod-structures-in-c</a></p>
 <h3 id="Doom3"><a href="#Doom3" class="headerlink" title="Doom3"></a>Doom3</h3><p><a target="_blank" rel="noopener" href="https://github.com/Edgarins29/Doom3/blob/d80c4d8341a35a8d9bc71324dcfc2be583295c03/neo/idlib/containers/LinkList.h">https://github.com/Edgarins29/Doom3/blob/d80c4d8341a35a8d9bc71324dcfc2be583295c03/neo/idlib/containers/LinkList.h</a></p>
 <p>上面已经介绍了 Linux 是如何实现一个侵入式链表的，并且提出了这种方法对于 C++ 语言来说有一些限制，不能用于 non-standard layout 的数据结构。大部分情况下我们都不会遇到这样的限制，但是一旦真的遇到了该怎么解决呢？Doom 代码中也有一个类似的实现，其通过添加一个额外的 <code>owner</code> 成员来解决这一问题。</p>
-<figure class="highlight cxx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">type</span> &gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">idLinkList</span> &#123;</span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// 省略</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  idLinkList* head;</span><br><span class="line">  idLinkList* next;</span><br><span class="line">  idLinkList* prev;</span><br><span class="line">  type*       owner;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cxx"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">type</span> &gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">idLinkList</span> {</span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">// 省略</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">  idLinkList* head;</span><br><span class="line">  idLinkList* next;</span><br><span class="line">  idLinkList* prev;</span><br><span class="line">  type*       owner;</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
 
 <p>使用的时候类似于这样：</p>
-<figure class="highlight cxx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">idEntity</span> &#123;</span><br><span class="line">  idLinkList&lt;idEntity&gt; spawnNode;  <span class="comment">// for being linked into spawnedEntities list</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">idEntity::<span class="built_in">idEntity</span>() &#123;</span><br><span class="line">  spawnNode.<span class="built_in">SetOwner</span>( <span class="keyword">this</span> );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">idLinkList&lt;type&gt;::InsertBefore</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Places the node before the existing node in the list.  If the existing node is the head,</span></span><br><span class="line"><span class="comment">then the new node is placed at the end of the list.</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">type</span> &gt;</span><br><span class="line"><span class="type">void</span> idLinkList&lt;type&gt;::<span class="built_in">InsertBefore</span>(idLinkList &amp;node) &#123;</span><br><span class="line">  <span class="built_in">Remove</span>();</span><br><span class="line"></span><br><span class="line">  next       = &amp;node;</span><br><span class="line">  prev       = node.prev;</span><br><span class="line">  node.prev  = <span class="keyword">this</span>;</span><br><span class="line">  prev-&gt;next = <span class="keyword">this</span>;</span><br><span class="line">  head       = node.head;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">idLinkList&lt;type&gt;::AddToEnd</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Adds node at the end of the list</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">type</span> &gt;</span><br><span class="line"><span class="type">void</span> idLinkList&lt;type&gt;::<span class="built_in">AddToEnd</span>(idLinkList &amp;node) &#123;</span><br><span class="line">  <span class="built_in">InsertBefore</span>(*node.head);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ent-&gt;spawnNode.<span class="built_in">AddToEnd</span>(spawnedEntities);</span><br></pre></td></tr></table></figure>
+<figure class="highlight cxx"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">idEntity</span> {</span><br><span class="line">  idLinkList&lt;idEntity&gt; spawnNode;  <span class="comment">// for being linked into spawnedEntities list</span></span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">idEntity::<span class="built_in">idEntity</span>() {</span><br><span class="line">  spawnNode.<span class="built_in">SetOwner</span>( <span class="keyword">this</span> );</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">idLinkList&lt;type&gt;::InsertBefore</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Places the node before the existing node in the list.  If the existing node is the head,</span></span><br><span class="line"><span class="comment">then the new node is placed at the end of the list.</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">type</span> &gt;</span><br><span class="line"><span class="type">void</span> idLinkList&lt;type&gt;::<span class="built_in">InsertBefore</span>(idLinkList &amp;node) {</span><br><span class="line">  <span class="built_in">Remove</span>();</span><br><span class="line"></span><br><span class="line">  next       = &amp;node;</span><br><span class="line">  prev       = node.prev;</span><br><span class="line">  node.prev  = <span class="keyword">this</span>;</span><br><span class="line">  prev-&gt;next = <span class="keyword">this</span>;</span><br><span class="line">  head       = node.head;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">idLinkList&lt;type&gt;::AddToEnd</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Adds node at the end of the list</span></span><br><span class="line"><span class="comment">================</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">type</span> &gt;</span><br><span class="line"><span class="type">void</span> idLinkList&lt;type&gt;::<span class="built_in">AddToEnd</span>(idLinkList &amp;node) {</span><br><span class="line">  <span class="built_in">InsertBefore</span>(*node.head);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">ent-&gt;spawnNode.<span class="built_in">AddToEnd</span>(spawnedEntities);</span><br></pre></td></tr></tbody></table></figure>
 
 <h3 id="Boost-Intrusive"><a href="#Boost-Intrusive" class="headerlink" title="Boost Intrusive"></a>Boost Intrusive</h3><p><a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_79_0/doc/html/intrusive/list.html">https://www.boost.org/doc/libs/1_79_0/doc/html/intrusive/list.html</a></p>
 <p>Boost 的侵入式容器为通用性做了很多考虑，搞得代码特别复杂。如果你的场景比较简单，个人建议还是谨慎考虑是否直接使用 Boost 的侵入式容器。如何需要混合使用多种类型的非侵入式容器（链表，哈希表，b树等等），再考虑一下要不要使用 Boost。</p>
@@ -376,7 +373,7 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/Paper-Note/seda/" rel="prev" title="论文笔记：[SOSP&#39;01] SEDA: An Architecture for Well-Conditioned, Scalable Internet Services">
+                <a href="/Paper-Note/seda/" rel="prev" title="论文笔记：[SOSP'01] SEDA: An Architecture for Well-Conditioned, Scalable Internet Services">
                   <i class="fa fa-angle-left"></i> 论文笔记：[SOSP'01] SEDA: An Architecture for Well-Conditioned, Scalable Internet Services
                 </a>
             </div>
@@ -402,14 +399,14 @@
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -432,5 +429,6 @@
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

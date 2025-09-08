@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,13 +18,13 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
     <meta name="description" content="哈希表（hash table）是一种快速查找场景下常用的数据结构，本文对其主要问题及其高级应对方法进行有限的总结和讨论：     负载不够均衡，此时会有哈希冲突（collision）出现，导致哈希表性能下降   负载高时，若不进行空间扩展则性能下降，若进行空间扩展，扩展行为的（瞬间）代价通常较高">
 <meta property="og:type" content="article">
 <meta property="og:title" content="哈希表总结及其高级话题讨论">
 <meta property="og:url" content="http://hcoona.github.io/Data-Structure/hash-table-summary-and-advanced-topics/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="哈希表（hash table）是一种快速查找场景下常用的数据结构，本文对其主要问题及其高级应对方法进行有限的总结和讨论：     负载不够均衡，此时会有哈希冲突（collision）出现，导致哈希表性能下降   负载高时，若不进行空间扩展则性能下降，若进行空间扩展，扩展行为的（瞬间）代价通常较高">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://hcoona.github.io/images/hash-table-problems-mindmap.png">
@@ -47,9 +45,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>哈希表总结及其高级话题讨论 | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -66,20 +64,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -91,12 +89,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Data-Structure/hash-table-summary-and-advanced-topics/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -105,12 +103,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -167,9 +165,8 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -183,22 +180,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -225,20 +222,20 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Data-Structure/hash-table-summary-and-advanced-topics/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="哈希表总结及其高级话题讨论 | HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
@@ -269,7 +266,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Data-Structure/" itemprop="url" rel="index"><span itemprop="name">Data Structure</span></a>
         </span>
     </span>
@@ -357,14 +354,14 @@
 <p>如果哈希函数 \(h\) 选得足够好，并且 \(U\) 的大小小于等于 \(R\)，就有可能形成完美哈希的情况。<strong>对于静态哈希表，有确定性的策略 <a href="#perfect">[1]</a> 可以找到这样的 \(h\) 来达成最小完美哈希</strong>。对于动态哈希表，由于我们不能预测 \(U\) 中元素的分布，我们不能预先设计 \(h\) 以达成完美哈希。特别的，由于 \(U\) 中的元素是变动的，\(U \subset S\) 且 \(S\) 的大小远大于 \(R\)，因此对于使用确定性策略构成的哈希函数 \(h\)，总是存在一个对抗性的集合 \(U\)，可以使得哈希冲突尽可能的多。因此，<strong>对于动态哈希表，必须使用非确定性的策略来构成哈希函数 \(h\)，才有可能保证避免哈希冲突</strong>。这一问题称为 Dynamic Perfect Hashing 问题。一个可行的方案是预先准备一族哈希函数，在使用过程中随机从中选择一个哈希函数。可以想象，这一族哈希函数应该具有某种性质，使得相同分布的输入不会产生相同分布的输出。这样一来，针对某一个特定哈希函数的对抗性策略就不会对其他哈希函数生效，因此随机选择哈希函数即可抵抗确定性的对抗策略。当然，这涉及到一个问题，即在查找的时候该怎么知道用哪一个哈希函数进行查找？这一问题在后面<a href="#collision-resolution">冲突解决</a>中的 <a href="#_two_way_chaining">Two-way Chaining</a> 中进一步讨论。</p>
 </div>
 <div class="paragraph">
-<p>如果存在这样一组哈希函数，\(H = \&#123;h: U \rightarrow R\&#125;\) 满足 \(\forall x, y \in U, x \ne y: \Pr_&#123;h \in H&#125;[h(x) = h(y)] \le 1/&#123;|R|&#125;\)，则称 \(H\) 为全域哈希族（universal hashing） <a href="#universal">[2]</a>。这一数学式的意义是，在 \(U\) 中任选两个不同的元素 \(x, y\)，在 \(H\) 中任选一个哈希函数 \(h\)，则 \(h(x), h(y)\) 是独立（均匀分布）的。</p>
+<p>如果存在这样一组哈希函数，\(H = \{h: U \rightarrow R\}\) 满足 \(\forall x, y \in U, x \ne y: \Pr_{h \in H}[h(x) = h(y)] \le 1/{|R|}\)，则称 \(H\) 为全域哈希族（universal hashing） <a href="#universal">[2]</a>。这一数学式的意义是，在 \(U\) 中任选两个不同的元素 \(x, y\)，在 \(H\) 中任选一个哈希函数 \(h\)，则 \(h(x), h(y)\) 是独立（均匀分布）的。</p>
 </div>
 <div class="paragraph">
 <p>全域哈希族的加强形式为全域<sub>k</sub>哈希（universal<sub>k</sub> hashing) <a href="#new">[3]</a>，其需要满足如下条件：给定 k 个两两不等的元素 \((x_1, ..., x_k) \in U^k\)，和 k 个哈希值（无需两两不等）\((y_1, ..., y_k) \in R^k\)，有</p>
 </div>
 <div class="stemblock">
 <div class="content">
-\[\Pr_&#123;h \in H&#125; [ h(x_1) = y_1 \land \dots \land h(x_k) = y_k ] = m^&#123;-k&#125;\]
+\[\Pr_{h \in H} [ h(x_1) = y_1 \land \dots \land h(x_k) = y_k ] = m^{-k}\]
 </div>
 </div>
 <div class="paragraph">
@@ -372,9 +369,9 @@
 </div>
 <div class="stemblock">
 <div class="content">
-\[\forall \text&#123;distinct&#125; (x_1, \ldots, x_k) \in U^k, \forall (y_1, \ldots, y_k) \in R^k,
+\[\forall \text{distinct} (x_1, \ldots, x_k) \in U^k, \forall (y_1, \ldots, y_k) \in R^k,
 
-\Pr_&#123;h \in H&#125; [ h(x_1) = y_1 \land \dots \land h(x_k) = y_k ] \lt \mu/|R|^k\]
+\Pr_{h \in H} [ h(x_1) = y_1 \land \dots \land h(x_k) = y_k ] \lt \mu/|R|^k\]
 </div>
 </div>
 <div class="paragraph">
@@ -491,14 +488,14 @@ end</code></pre>
 </div>
 <div class="stemblock">
 <div class="content">
-\[h_0: U \rightarrow &#123;0, 1, \dots, N - 1&#125;, h_i: U \rightarrow &#123;0, 1, \dots, 2^i N - 1&#125;\]
+\[h_0: U \rightarrow {0, 1, \dots, N - 1}, h_i: U \rightarrow {0, 1, \dots, 2^i N - 1}\]
 </div>
 </div>
 <div class="paragraph">
-<p>对于任意给定的 \(x \in U\) 或者有 \(h_i(x) = h_&#123;i - 1&#125;(x)\)，或者有 \(h_i(c) = h_&#123;i - 1&#125;(c) + 2^&#123;i - 1&#125; N\)。一般来说简单取模即可符合这一要求。</p>
+<p>对于任意给定的 \(x \in U\) 或者有 \(h_i(x) = h_{i - 1}(x)\)，或者有 \(h_i(c) = h_{i - 1}(c) + 2^{i - 1} N\)。一般来说简单取模即可符合这一要求。</p>
 </div>
 <div class="paragraph">
-<p>当哈希数组需要扩张大小时，从前向后进行，当前正在扩张的 bucket 下标记为 p。对于在 p 之前的位置，使用 \(h_&#123;i + 1&#125;\)，对于 p 及其之后的位置仍然使用 \(h_i\)。这样就可以非常平滑的，每次操作只扩张一个 bucket，而不需要把所有的元素都 rehash。<a id="spiral-better"></a> 不过这样做有一个缺点，就是有可能有一个位置上比较靠后的 bucket 一直比较拥挤，经过很多次插入后，才能对这个 bucket 进行扩张以缓解性能下降。对于这一问题，Spiral Storage 的方法处理的比较好。</p>
+<p>当哈希数组需要扩张大小时，从前向后进行，当前正在扩张的 bucket 下标记为 p。对于在 p 之前的位置，使用 \(h_{i + 1}\)，对于 p 及其之后的位置仍然使用 \(h_i\)。这样就可以非常平滑的，每次操作只扩张一个 bucket，而不需要把所有的元素都 rehash。<a id="spiral-better"></a> 不过这样做有一个缺点，就是有可能有一个位置上比较靠后的 bucket 一直比较拥挤，经过很多次插入后，才能对这个 bucket 进行扩张以缓解性能下降。对于这一问题，Spiral Storage 的方法处理的比较好。</p>
 </div>
 </div>
 <div class="sect2">
@@ -545,7 +542,7 @@ end</code></pre>
 <p>哈希函数的选择同单机场景。这里只讨论动态大小调整的问题。</p>
 </div>
 <div class="paragraph">
-<p>尽管在早期有将 Linear Hashing 和 Extendible Hashing 扩展到多机的尝试 <a href="#linear_star">[8]</a><a href="#extendible_star">[9]</a>，但是最终被一致性哈希所统治。多机场景下，由于不希望出现单点瓶颈，所以使用 P2P 结构，更多的问题在于如何快速的将请求匹配到实际存储数据的节点。这一问题被归类为如何将对等节点自组织成某种结构，并在其上进行消息路由，这方面的总结见 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34323809">论文笔记：关于 P2P 的一些综述</a>。这些路由算法的时间复杂度一般都是 \(\mathcal&#123;O&#125;(\log n)\) 级别的。对于 LAN 环境下的快速查找场景，尤其是使用哈希表的情况下，我们一般期望常数级别的时间复杂度，这方面可以参考 <a href="#beehive">[10]</a><a href="#zht">[11]</a>，或者是干脆缓存所有节点的映射信息。</p>
+<p>尽管在早期有将 Linear Hashing 和 Extendible Hashing 扩展到多机的尝试 <a href="#linear_star">[8]</a><a href="#extendible_star">[9]</a>，但是最终被一致性哈希所统治。多机场景下，由于不希望出现单点瓶颈，所以使用 P2P 结构，更多的问题在于如何快速的将请求匹配到实际存储数据的节点。这一问题被归类为如何将对等节点自组织成某种结构，并在其上进行消息路由，这方面的总结见 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34323809">论文笔记：关于 P2P 的一些综述</a>。这些路由算法的时间复杂度一般都是 \(\mathcal{O}(\log n)\) 级别的。对于 LAN 环境下的快速查找场景，尤其是使用哈希表的情况下，我们一般期望常数级别的时间复杂度，这方面可以参考 <a href="#beehive">[10]</a><a href="#zht">[11]</a>，或者是干脆缓存所有节点的映射信息。</p>
 </div>
 <div class="paragraph">
 <p>哈希表的动态大小调整，个人觉得 Amazon Dynamo <a href="#dynamo">[12]</a> 做的比较好，最近 Google 也出了一篇论文 <a href="#load">[13]</a> 似乎能保证移动数据量的上界。</p>
@@ -588,7 +585,7 @@ end</code></pre>
 <p><a id="linear"></a>[6] Hiemstra, D., Kushmerick, N., Domeniconi, C., Paice, C. D., Carroll, M. W., Jensen, C. S., … Mankovskii, S. (2009). Linear Hashing. In Encyclopedia of Database Systems (Vol. 0, pp. 1619–1622). Boston, MA: Springer US. <a target="_blank" rel="noopener" href="https://doi.org/10.1007/978-0-387-39940-9_742" class="bare">https://doi.org/10.1007/978-0-387-39940-9_742</a></p>
 </li>
 <li>
-<p><a id="extendible"></a>[7] Ronald Fagin, Jurg Nievergelt, Nicholas Pippenger, and H. Raymond Strong. 1979. Extendible hashing&#8201;&#8212;&#8201;a fast access method for dynamic files. ACM Trans. Database Syst. 4, 3 (1979), 315–344. DOI:https://doi.org/10.1145/320083.320092</p>
+<p><a id="extendible"></a>[7] Ronald Fagin, Jurg Nievergelt, Nicholas Pippenger, and H. Raymond Strong. 1979. Extendible hashing — a fast access method for dynamic files. ACM Trans. Database Syst. 4, 3 (1979), 315–344. DOI:https://doi.org/10.1145/320083.320092</p>
 </li>
 <li>
 <p><a id="linear_star"></a>[8] Witold Litwin, Marie-Anne Neimat, and Donovan A Schneider. 1993. LH<sup>*</sup>: Linear Hashing for distributed files. Proc. 1993 ACM SIGMOD Int. Conf. Manag. data (1993), 327–336. DOI:https://doi.org/10.1145/170035.170084</p>
@@ -689,14 +686,14 @@ end</code></pre>
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -719,5 +716,6 @@ end</code></pre>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

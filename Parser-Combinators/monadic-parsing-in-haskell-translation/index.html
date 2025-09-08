@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-Hans">
-<head>
+<!DOCTYPE html><html lang="zh-Hans"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,13 +18,13 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
     <meta name="description" content="这是对 Monadic parsing in Haskell 一文的翻译。 引言（Introduction）本文是一篇关于在 Haskell 中定义递归下降解析器（recursive descent parsers）的教程。秉持“一站式服务”的精神，文章把三个领域的材料整合到一个来源中。这三个领域分别是函数式解析器（functional parsers）（Burge, 1975; Wadler,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[翻译] Monadic parsing in Haskell">
 <meta property="og:url" content="http://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="这是对 Monadic parsing in Haskell 一文的翻译。 引言（Introduction）本文是一篇关于在 Haskell 中定义递归下降解析器（recursive descent parsers）的教程。秉持“一站式服务”的精神，文章把三个领域的材料整合到一个来源中。这三个领域分别是函数式解析器（functional parsers）（Burge, 1975; Wadler,">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-08-26T16:00:00.000Z">
@@ -45,9 +43,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>[翻译] Monadic parsing in Haskell | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -64,20 +62,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -89,12 +87,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -103,12 +101,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -165,9 +163,8 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -181,22 +178,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -223,20 +220,20 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="[翻译] Monadic parsing in Haskell | HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
@@ -267,7 +264,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Parser-Combinators/" itemprop="url" rel="index"><span itemprop="name">Parser Combinators</span></a>
         </span>
     </span>
@@ -288,75 +285,75 @@
 <span id="more"></span>
 
 <h2 id="解析器的类型（A-type-for-parsers）"><a href="#解析器的类型（A-type-for-parsers）" class="headerlink" title="解析器的类型（A type for parsers）"></a>解析器的类型（A type for parsers）</h2><p>我们先为解析器（parser）定义一个类型：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">Parser</span> a = <span class="type">Parser</span> (<span class="type">String</span> -&gt; [(<span class="title">a</span>,<span class="type">String</span>)])</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">Parser</span> a = <span class="type">Parser</span> (<span class="type">String</span> -&gt; [(<span class="title">a</span>,<span class="type">String</span>)])</span></span><br></pre></td></tr></tbody></table></figure>
 
 <p>也就是说，解析器是一个以字符字符串为参数并返回结果列表的函数。约定是：空结果列表表示解析器失败，而非空列表表示成功。成功时，每个结果是一个二元组，其第一分量是通过解析和处理参数字符串前缀得到的类型为 <code>a</code> 的值，第二分量是未被解析的参数字符串后缀。返回结果列表使我们能够为二义性文法（ambiguous grammars）构建解析器：当参数字符串可被多种方式解析时，将返回多个结果。</p>
 <h2 id="一个解析器的单子（A-monad-of-parsers）"><a href="#一个解析器的单子（A-monad-of-parsers）" class="headerlink" title="一个解析器的单子（A monad of parsers）"></a>一个解析器的单子（A monad of parsers）</h2><p>我们定义的第一个解析器是 <code>item</code>：如果参数字符串非空，它会成功地消费第一个字符；否则失败：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">item</span> :: <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">item</span>  = <span class="type">Parser</span> (\cs -&gt; <span class="keyword">case</span> cs <span class="keyword">of</span></span><br><span class="line">                          <span class="string">&quot;&quot;</span> -&gt; []</span><br><span class="line">                          (c:cs) -&gt; [(c,cs)])</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">item</span> :: <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">item</span>  = <span class="type">Parser</span> (\cs -&gt; <span class="keyword">case</span> cs <span class="keyword">of</span></span><br><span class="line">                          <span class="string">""</span> -&gt; []</span><br><span class="line">                          (c:cs) -&gt; [(c,cs)])</span><br></pre></td></tr></tbody></table></figure>
 
 <p>接着我们定义两个反映解析器单子本质的组合子。在 Haskell 中，“单子（monad）”这一概念由一个内置的类定义来刻画：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Monad</span> m <span class="keyword">where</span></span></span><br><span class="line">   return :: a -&gt; m a</span><br><span class="line">   (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Monad</span> m <span class="keyword">where</span></span></span><br><span class="line">   return :: a -&gt; m a</span><br><span class="line">   (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</span><br></pre></td></tr></tbody></table></figure>
 
 <p>也就是说，如果一个类型构造器（type constructor）<code>m</code>配备了具有上述类型的 <code>return</code> 与 <code>(&gt;&gt;=)</code> 函数，那么它就是类 <code>Monad</code> 的成员。类型构造器 <code>Parser</code> 可以如下成为 <code>Monad</code> 类的一个实例（instance）：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> <span class="type">Parser</span> <span class="keyword">where</span></span></span><br><span class="line">   return a = <span class="type">Parser</span> (\cs -&gt; [(a,cs)])</span><br><span class="line">   p &gt;&gt;= f = <span class="type">Parser</span> (\cs -&gt; concat [parse (f a) cs&#x27; |</span><br><span class="line">                               (a,cs&#x27;) &lt;- parse p cs])</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> <span class="type">Parser</span> <span class="keyword">where</span></span></span><br><span class="line">   return a = <span class="type">Parser</span> (\cs -&gt; [(a,cs)])</span><br><span class="line">   p &gt;&gt;= f = <span class="type">Parser</span> (\cs -&gt; concat [parse (f a) cs' |</span><br><span class="line">                               (a,cs') &lt;- parse p cs])</span><br></pre></td></tr></tbody></table></figure>
 
-<p>解析器 <code>return a</code> 在不消费任何参数字符串的情况下成功，并返回单个值 <code>a</code>。操作符 <code>(&gt;&gt;=)</code> 是解析器的一个“序列操作符（sequencing operator）”。使用由 <code>parse (Parser p) = p</code> 定义的解析器解构函数（deconstructor），解析器 <code>p &gt;&gt;= f</code> 首先将解析器 <code>p</code> 应用于参数字符串 <code>cs</code>，得到形如 <code>(a,cs&#39;)</code> 的结果列表，其中 <code>a</code> 是一个值，<code>cs&#39;</code> 是一个字符串。对每个这样的二元组，<code>f a</code> 是一个解析器，被应用到字符串 <code>cs&#39;</code> 上。结果是一个列表的列表，随后被拼接（concatenate）为最终的结果列表。</p>
+<p>解析器 <code>return a</code> 在不消费任何参数字符串的情况下成功，并返回单个值 <code>a</code>。操作符 <code>(&gt;&gt;=)</code> 是解析器的一个“序列操作符（sequencing operator）”。使用由 <code>parse (Parser p) = p</code> 定义的解析器解构函数（deconstructor），解析器 <code>p &gt;&gt;= f</code> 首先将解析器 <code>p</code> 应用于参数字符串 <code>cs</code>，得到形如 <code>(a,cs')</code> 的结果列表，其中 <code>a</code> 是一个值，<code>cs'</code> 是一个字符串。对每个这样的二元组，<code>f a</code> 是一个解析器，被应用到字符串 <code>cs'</code> 上。结果是一个列表的列表，随后被拼接（concatenate）为最终的结果列表。</p>
 <p>用于解析器的 <code>return</code> 与 <code>(&gt;&gt;=)</code> 满足一些简单的定律：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">           return a &gt;&gt;= f ＝ f a</span><br><span class="line">             p &gt;&gt;= return ＝ p</span><br><span class="line">p &gt;&gt;= (\a -&gt; (f a &gt;&gt;= g)) ＝ (p &gt;&gt;= (\a -&gt; f a)) &gt;&gt;= g</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tbody><tr><td class="code"><pre><span class="line">           return a &gt;&gt;= f ＝ f a</span><br><span class="line">             p &gt;&gt;= return ＝ p</span><br><span class="line">p &gt;&gt;= (\a -&gt; (f a &gt;&gt;= g)) ＝ (p &gt;&gt;= (\a -&gt; f a)) &gt;&gt;= g</span><br></pre></td></tr></tbody></table></figure>
 
 <p>事实上，这些定律对任何单子都必须成立，而不仅仅是解析器这个特例。这些定律断言 —— 忽略右参数传给 <code>(&gt;&gt;=)</code> 时涉及绑定（binding）这一事实 —— <code>return</code> 是 <code>(&gt;&gt;=)</code> 的左、右单位（单位律），并且 <code>(&gt;&gt;=)</code> 具有结合律。单位律允许我们对某些解析器进行化简，而结合律允许在多次串接时省略括号。</p>
 <h2 id="do-记法（The-do-notation）"><a href="#do-记法（The-do-notation）" class="headerlink" title="do 记法（The do notation）"></a>do 记法（The do notation）</h2><p>使用 <code>(&gt;&gt;=)</code> 构造的典型解析器具有如下结构：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">p1 &gt;&gt;= \a1 -&gt;</span><br><span class="line">p2 &gt;&gt;= \a2 -&gt;</span><br><span class="line">...</span><br><span class="line">pn &gt;&gt;= \an -&gt;</span><br><span class="line">f a1 a2 ... an</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tbody><tr><td class="code"><pre><span class="line">p1 &gt;&gt;= \a1 -&gt;</span><br><span class="line">p2 &gt;&gt;= \a2 -&gt;</span><br><span class="line">...</span><br><span class="line">pn &gt;&gt;= \an -&gt;</span><br><span class="line">f a1 a2 ... an</span><br></pre></td></tr></tbody></table></figure>
 
 <p>这样的解析器有一个很自然的操作性解读：先应用解析器 <code>p1</code> 并把其结果值记为 <code>a1</code>；然后应用 <code>p2</code>，把其结果值记为 <code>a2</code>；……；接着应用 <code>pn</code>，把其结果值记为 <code>an</code>；最后通过应用一个语义动作（semantic action）<code>f</code> 来组合所有结果。对大多数解析器而言，语义动作通常为 <code>return (g a1 a2 ... an)</code>（其中 <code>g</code> 是某个函数），但并不总是如此。例如，可能需要在返回结果之前解析更多的参数字符串，稍后定义的组合子 <code>chainl1</code> 就是这种情况。</p>
 <p>Haskell 为上述形状的解析器提供了特殊语法，使它们可以用如下更易读的形式来表达：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">do</span> a1 &lt;- p1</span><br><span class="line">   a2 &lt;- p2</span><br><span class="line">   ...</span><br><span class="line">   an &lt;- pn</span><br><span class="line">   f a1 a2 ... an</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">do</span> a1 &lt;- p1</span><br><span class="line">   a2 &lt;- p2</span><br><span class="line">   ...</span><br><span class="line">   an &lt;- pn</span><br><span class="line">   f a1 a2 ... an</span><br></pre></td></tr></tbody></table></figure>
 
 <p>如果愿意，这种记法也可以写在单行里，通过使用圆括号与分号来实现：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">do</span> &#123;a1 &lt;- p1; a2 &lt;- p2; ...; an &lt;- pn; f a1 a2 ... an&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">do</span> {a1 &lt;- p1; a2 &lt;- p2; ...; an &lt;- pn; f a1 a2 ... an}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>实际上，Haskell 中的 do 记法可以用于任何单子，不仅仅是解析器。子表达式 <code>ai &lt;- pi</code> 被称为“生成器（generator）”，因为它们为变量 <code>ai</code> 生成值。在一个特殊情形下，如果我们并不关心生成器 <code>ai &lt;- pi</code> 产生的值，那么这个生成器可以简写为仅仅 <code>pi</code>。</p>
 <p>示例（Example）。一个消费三个字符、丢弃第二个字符，并把另外两个作为一对返回的解析器可以定义如下：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">p</span> :: <span class="type">Parser</span> (<span class="type">Char</span>,<span class="type">Char</span>)</span><br><span class="line"><span class="title">p</span> = <span class="keyword">do</span> &#123;c &lt;- item; item; d &lt;- item; return (c,d)&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">p</span> :: <span class="type">Parser</span> (<span class="type">Char</span>,<span class="type">Char</span>)</span><br><span class="line"><span class="title">p</span> = <span class="keyword">do</span> {c &lt;- item; item; d &lt;- item; return (c,d)}</span><br></pre></td></tr></tbody></table></figure>
 
 <h2 id="选择组合子（Choice-combinators）"><a href="#选择组合子（Choice-combinators）" class="headerlink" title="选择组合子（Choice combinators）"></a>选择组合子（Choice combinators）</h2><p>我们现在定义两个扩展解析器单子特性的组合子。在 Haskell 中，“带零元的单子（monad with a zero）”以及“带零元与加法的单子（monad with a zero and a plus）”由两个内置类定义来刻画：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Monad</span> m =&gt; <span class="type">MonadZero</span> m <span class="keyword">where</span></span></span><br><span class="line">   zero :: m a</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">MonadZero</span> m =&gt; <span class="type">MonadPlus</span> m <span class="keyword">where</span></span></span><br><span class="line">   (++) :: m a -&gt; m a -&gt; m a</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Monad</span> m =&gt; <span class="type">MonadZero</span> m <span class="keyword">where</span></span></span><br><span class="line">   zero :: m a</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">MonadZero</span> m =&gt; <span class="type">MonadPlus</span> m <span class="keyword">where</span></span></span><br><span class="line">   (++) :: m a -&gt; m a -&gt; m a</span><br></pre></td></tr></tbody></table></figure>
 
 <p>也就是说，如果一个类型构造器 <code>m</code> 是类 <code>Monad</code> 的成员，且还配备了类型如上所示的值 <code>zero</code>，那么 <code>m</code> 就是类 <code>MonadZero</code> 的成员。类似地，类 <code>MonadPlus</code> 在 <code>MonadZero</code> 的基础上添加了一个具有所示类型的 <code>(++)</code> 运算。类型构造器 <code>Parser</code> 可以如下成为这两个类的实例：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">MonadZero</span> <span class="type">Parser</span> <span class="keyword">where</span></span></span><br><span class="line">   zero = <span class="type">Parser</span> (\cs -&gt; [])</span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">MonadPlus</span> <span class="type">Parser</span> <span class="keyword">where</span></span></span><br><span class="line">   p ++ q = <span class="type">Parser</span> (\cs -&gt; parse p cs ++ parse q cs)</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">MonadZero</span> <span class="type">Parser</span> <span class="keyword">where</span></span></span><br><span class="line">   zero = <span class="type">Parser</span> (\cs -&gt; [])</span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">MonadPlus</span> <span class="type">Parser</span> <span class="keyword">where</span></span></span><br><span class="line">   p ++ q = <span class="type">Parser</span> (\cs -&gt; parse p cs ++ parse q cs)</span><br></pre></td></tr></tbody></table></figure>
 
 <p>解析器 <code>zero</code> 对所有参数字符串都失败，返回空结果。操作符 <code>(++)</code> 是解析器的（非确定性（non-deterministic））选择操作符（choice operator）。解析器 <code>p ++ q</code> 将两个解析器 <code>p</code> 与 <code>q</code> 都应用到参数字符串上，并把它们的结果列表相连接。</p>
 <p>用于解析器的 <code>zero</code> 与 <code>(++)</code> 满足一些简单的定律：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">    zero ++ p ＝ p</span><br><span class="line">    p ++ zero ＝ p</span><br><span class="line">p ++ (q ++ r) ＝ (p ++ q) ++ r</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tbody><tr><td class="code"><pre><span class="line">    zero ++ p ＝ p</span><br><span class="line">    p ++ zero ＝ p</span><br><span class="line">p ++ (q ++ r) ＝ (p ++ q) ++ r</span><br></pre></td></tr></tbody></table></figure>
 
 <p>事实上，这些定律对任何“带零元与加法的单子”都必须成立。这些定律断言 <code>zero</code> 是 <code>(++)</code> 的左、右单位元，且 <code>(++)</code> 具有结合律。对于解析器这一特例，还可以表明 —— 忽略与 <code>(&gt;&gt;=)</code> 相关的绑定 —— <code>zero</code> 是 <code>(&gt;&gt;=)</code> 的左、右零元，<code>(&gt;&gt;=)</code> 在右侧对 <code>(++)</code> 满足分配律，并且（如果我们忽略解析器返回结果的顺序）<code>(&gt;&gt;=)</code> 在左侧对 <code>(++)</code> 也满足分配律：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">              zero &gt;&gt;= f ＝ zero</span><br><span class="line">        p &gt;&gt;= const zero ＝ zero</span><br><span class="line">          (p ++ q) &gt;&gt;= f ＝ (p &gt;&gt;= f) ++ (q &gt;&gt;= f)</span><br><span class="line">p &gt;&gt;= (\a -&gt; f a ++ g a) ＝ (p &gt;&gt;= f) ++ (p &gt;&gt;= g)</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tbody><tr><td class="code"><pre><span class="line">              zero &gt;&gt;= f ＝ zero</span><br><span class="line">        p &gt;&gt;= const zero ＝ zero</span><br><span class="line">          (p ++ q) &gt;&gt;= f ＝ (p &gt;&gt;= f) ++ (q &gt;&gt;= f)</span><br><span class="line">p &gt;&gt;= (\a -&gt; f a ++ g a) ＝ (p &gt;&gt;= f) ++ (p &gt;&gt;= g)</span><br></pre></td></tr></tbody></table></figure>
 
 <p>零元律允许我们化简某些解析器，而分配律允许我们提升某些解析器的效率。</p>
 <p>使用 <code>(++)</code> 构造的解析器，如果参数字符串可以用多种方式解析，将返回多个结果。实际上，我们通常只对第一个结果感兴趣。因此，我们定义一个（确定性的（deterministic））选择操作符 <code>(+++)</code>，其行为与 <code>(++)</code> 相同，但至多返回一个结果：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">(+++) :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">p</span> +++ q = <span class="type">Parser</span> (\cs -&gt; <span class="keyword">case</span> parse (p ++ q) cs <span class="keyword">of</span></span><br><span class="line">                            [] -&gt; []</span><br><span class="line">                            (x:xs) -&gt; [x])</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line">(+++) :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">p</span> +++ q = <span class="type">Parser</span> (\cs -&gt; <span class="keyword">case</span> parse (p ++ q) cs <span class="keyword">of</span></span><br><span class="line">                            [] -&gt; []</span><br><span class="line">                            (x:xs) -&gt; [x])</span><br></pre></td></tr></tbody></table></figure>
 
 <p>上面给出的关于 <code>(++)</code> 的所有定律同样也适用于 <code>(+++)</code>。此外，对于 <code>(+++)</code>，左分配律的前提条件会自动满足。</p>
 <p>解析器 <code>item</code> 无条件地消费单个字符。为了支持条件解析，我们定义一个组合子 <code>sat</code>，它接受一个谓词（predicate），并产生一个解析器：若单个字符满足该谓词则消费之，否则失败：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">sat</span> :: (<span class="type">Char</span> -&gt; <span class="type">Bool</span>) -&gt; <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">sat</span> p = <span class="keyword">do</span> &#123;c &lt;- item; <span class="keyword">if</span> p c <span class="keyword">then</span> return c <span class="keyword">else</span> zero&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">sat</span> :: (<span class="type">Char</span> -&gt; <span class="type">Bool</span>) -&gt; <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">sat</span> p = <span class="keyword">do</span> {c &lt;- item; <span class="keyword">if</span> p c <span class="keyword">then</span> return c <span class="keyword">else</span> zero}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>示例（Example）。一个用于特定字符的解析器可以如下定义：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">char</span> :: <span class="type">Char</span> -&gt; <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">char</span> c = sat (c ==)</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">char</span> :: <span class="type">Char</span> -&gt; <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">char</span> c = sat (c ==)</span><br></pre></td></tr></tbody></table></figure>
 
 <p>以类似方式，通过给 <code>sat</code> 提供合适的谓词，我们可以定义针对数字、小写字母、大写字母等的解析器。</p>
 <h2 id="递归组合子（Recursion-combinators）"><a href="#递归组合子（Recursion-combinators）" class="headerlink" title="递归组合子（Recursion combinators）"></a>递归组合子（Recursion combinators）</h2><p>许多有用的解析器组合子可以通过递归来定义。其中大多数组合子事实上可以为任意“带零元与加法的单子”来定义，但为了清晰起见，下面仅针对解析器这一特例来定义。</p>
 <ul>
 <li><p>解析特定字符串：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">string</span> :: <span class="type">String</span> -&gt; <span class="type">Parser</span> <span class="type">String</span></span><br><span class="line"><span class="title">string</span> <span class="string">&quot;&quot;</span> = return <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="title">string</span> (c:cs) = <span class="keyword">do</span> &#123;char c; string cs; return (c:cs)&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">string</span> :: <span class="type">String</span> -&gt; <span class="type">Parser</span> <span class="type">String</span></span><br><span class="line"><span class="title">string</span> <span class="string">""</span> = return <span class="string">""</span></span><br><span class="line"><span class="title">string</span> (c:cs) = <span class="keyword">do</span> {char c; string cs; return (c:cs)}</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>解析解析器 <code>p</code> 的重复应用；<code>many</code> 允许零次或多次应用 <code>p</code>，而 <code>many1</code> 允许一次或多次：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">many</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">many</span> p = many1 p +++ return []</span><br><span class="line"></span><br><span class="line"><span class="title">many1</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">many1</span> p = <span class="keyword">do</span> &#123;a &lt;- p; <span class="keyword">as</span> &lt;- many p; return (a:<span class="keyword">as</span>)&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">many</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">many</span> p = many1 p +++ return []</span><br><span class="line"></span><br><span class="line"><span class="title">many1</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">many1</span> p = <span class="keyword">do</span> {a &lt;- p; <span class="keyword">as</span> &lt;- many p; return (a:<span class="keyword">as</span>)}</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>解析解析器 <code>p</code> 的重复应用，应用之间由解析器 <code>sep</code> 的应用分隔，且 <code>sep</code> 的结果值被丢弃：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">sepby</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> b -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">p</span> `sepby` sep = (p `sepby1` sep) +++ return []</span><br><span class="line"></span><br><span class="line"><span class="title">sepby1</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> b -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">p</span> `sepby1` sep = <span class="keyword">do</span> a &lt;- p</span><br><span class="line">                    <span class="keyword">as</span> &lt;- many (<span class="keyword">do</span> &#123;sep; p&#125;)</span><br><span class="line">                    return (a:<span class="keyword">as</span>)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">sepby</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> b -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">p</span> `sepby` sep = (p `sepby1` sep) +++ return []</span><br><span class="line"></span><br><span class="line"><span class="title">sepby1</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> b -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">p</span> `sepby1` sep = <span class="keyword">do</span> a &lt;- p</span><br><span class="line">                    <span class="keyword">as</span> &lt;- many (<span class="keyword">do</span> {sep; p})</span><br><span class="line">                    return (a:<span class="keyword">as</span>)</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>解析解析器 <code>p</code> 的重复应用，应用之间由解析器 <code>op</code> 的应用分隔，其中 <code>op</code> 的结果值是一个被假定为左结合（associate to the left）的运算符，并用于组合来自 <code>p</code> 的结果：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">chainl</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> (a -&gt; a -&gt; a) -&gt; a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">chainl</span> p op a = (p `chainl1` op) +++ return a</span><br><span class="line"></span><br><span class="line"><span class="title">chainl1</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> (a -&gt; a -&gt; a) -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">p</span> `chainl1` op = <span class="keyword">do</span> &#123;a &lt;- p; rest a&#125;</span><br><span class="line">                 <span class="keyword">where</span></span><br><span class="line">                    rest a = (<span class="keyword">do</span> f &lt;- op</span><br><span class="line">                                 b &lt;- p</span><br><span class="line">                                 rest (f a b))</span><br><span class="line">                             +++ return a</span><br></pre></td></tr></table></figure>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">chainl</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> (a -&gt; a -&gt; a) -&gt; a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">chainl</span> p op a = (p `chainl1` op) +++ return a</span><br><span class="line"></span><br><span class="line"><span class="title">chainl1</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> (a -&gt; a -&gt; a) -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">p</span> `chainl1` op = <span class="keyword">do</span> {a &lt;- p; rest a}</span><br><span class="line">                 <span class="keyword">where</span></span><br><span class="line">                    rest a = (<span class="keyword">do</span> f &lt;- op</span><br><span class="line">                                 b &lt;- p</span><br><span class="line">                                 rest (f a b))</span><br><span class="line">                             +++ return a</span><br></pre></td></tr></tbody></table></figure>
 
 <p>  假定解析到的运算符右结合（associate to the right）的组合子 <code>chainr</code> 与 <code>chainr1</code> 也可用类似方式定义。</p>
 </li>
@@ -364,24 +361,24 @@
 <h2 id="词法组合子（Lexical-combinators）"><a href="#词法组合子（Lexical-combinators）" class="headerlink" title="词法组合子（Lexical combinators）"></a>词法组合子（Lexical combinators）</h2><p>传统上，解析通常由一个词法阶段（lexical phase）先行，该阶段把参数字符串转换为一串记号（tokens）。然而，我们可以通过定义合适的组合子来避免单独的词法阶段。本节我们定义处理参数字符串中各记号之间空白（space）的组合子。用于处理其它词法问题（例如注释与关键字）的组合子也很容易定义。</p>
 <ul>
 <li><p>解析由空格、制表符与换行组成的字符串：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">space</span> :: <span class="type">Parser</span> <span class="type">String</span></span><br><span class="line"><span class="title">space</span> = many (sat isSpace)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">space</span> :: <span class="type">Parser</span> <span class="type">String</span></span><br><span class="line"><span class="title">space</span> = many (sat isSpace)</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>使用解析器 <code>p</code> 解析一个记号，并丢弃任何“尾随（trailing）”空白：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">token</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">token</span> p = <span class="keyword">do</span> &#123;a &lt;- p; space; return a&#125;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">token</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">token</span> p = <span class="keyword">do</span> {a &lt;- p; space; return a}</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>解析一个符号记号：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">symb</span> :: <span class="type">String</span> -&gt; <span class="type">Parser</span> <span class="type">String</span></span><br><span class="line"><span class="title">symb</span> cs = token (string cs)</span><br></pre></td></tr></table></figure>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">symb</span> :: <span class="type">String</span> -&gt; <span class="type">Parser</span> <span class="type">String</span></span><br><span class="line"><span class="title">symb</span> cs = token (string cs)</span><br></pre></td></tr></tbody></table></figure>
 </li>
 <li><p>应用解析器 <code>p</code>，并丢弃任何“前导（leading）”空白：</p>
-  <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">apply</span> :: <span class="type">Parser</span> a -&gt; <span class="type">String</span> -&gt; [(a,<span class="type">String</span>)]</span><br><span class="line"><span class="title">apply</span> p = parse (<span class="keyword">do</span> &#123;space; p&#125;)</span><br></pre></td></tr></table></figure></li>
+  <figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">apply</span> :: <span class="type">Parser</span> a -&gt; <span class="type">String</span> -&gt; [(a,<span class="type">String</span>)]</span><br><span class="line"><span class="title">apply</span> p = parse (<span class="keyword">do</span> {space; p})</span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<h2 id="示例（Example）"><a href="#示例（Example）" class="headerlink" title="示例（Example）"></a>示例（Example）</h2><p>我们用一个简单示例来说明本文定义的组合子。考虑由单个数字与运算符 +、-、*、&#x2F; 以及圆括号构成的算术表达式的标准文法（Aho 等, 1986）：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">expr ::= expr addop term | term</span><br><span class="line">term ::= term mulop factor | factor</span><br><span class="line">factor ::= digit | ( expr )</span><br><span class="line">digit ::= 0 | 1 | ... | 9</span><br><span class="line">addop ::= + | -</span><br><span class="line">mulop ::= * | /</span><br></pre></td></tr></table></figure>
+<h2 id="示例（Example）"><a href="#示例（Example）" class="headerlink" title="示例（Example）"></a>示例（Example）</h2><p>我们用一个简单示例来说明本文定义的组合子。考虑由单个数字与运算符 +、-、*、/ 以及圆括号构成的算术表达式的标准文法（Aho 等, 1986）：</p>
+<figure class="highlight text"><table><tbody><tr><td class="code"><pre><span class="line">expr ::= expr addop term | term</span><br><span class="line">term ::= term mulop factor | factor</span><br><span class="line">factor ::= digit | ( expr )</span><br><span class="line">digit ::= 0 | 1 | ... | 9</span><br><span class="line">addop ::= + | -</span><br><span class="line">mulop ::= * | /</span><br></pre></td></tr></tbody></table></figure>
 
 <p>使用 <code>chainl1</code> 组合子来实现 <code>expr</code> 与 <code>term</code> 的左递归产生式规则，这个文法可以被直接翻译成一个 Haskell 程序，该程序解析表达式并把它们求值为整数：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">expr</span> :: <span class="type">Parser</span> <span class="type">Int</span></span><br><span class="line"><span class="title">addop</span> :: <span class="type">Parser</span> (<span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span>)</span><br><span class="line"><span class="title">mulop</span> :: <span class="type">Parser</span> (<span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="title">expr</span> = term `chainl1` addop</span><br><span class="line"><span class="title">term</span> = factor `chainl1` mulop</span><br><span class="line"><span class="title">factor</span> = digit +++ <span class="keyword">do</span> &#123;symb <span class="string">&quot;(&quot;</span>; n &lt;- expr; symb <span class="string">&quot;)&quot;</span>; return n&#125;</span><br><span class="line"><span class="title">digit</span> = <span class="keyword">do</span> &#123;x &lt;- token (sat isDigit); return (ord x - ord <span class="string">&#x27;0&#x27;</span>)&#125;</span><br><span class="line"></span><br><span class="line"><span class="title">addop</span> = <span class="keyword">do</span> &#123;symb <span class="string">&quot;+&quot;</span>; return (+)&#125; +++ <span class="keyword">do</span> &#123;symb <span class="string">&quot;-&quot;</span>; return (-)&#125;</span><br><span class="line"><span class="title">mulop</span> = <span class="keyword">do</span> &#123;symb <span class="string">&quot;*&quot;</span>; return (*)&#125; +++ <span class="keyword">do</span> &#123;symb <span class="string">&quot;/&quot;</span>; return (div)&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title">expr</span> :: <span class="type">Parser</span> <span class="type">Int</span></span><br><span class="line"><span class="title">addop</span> :: <span class="type">Parser</span> (<span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span>)</span><br><span class="line"><span class="title">mulop</span> :: <span class="type">Parser</span> (<span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span>)</span><br><span class="line"></span><br><span class="line"><span class="title">expr</span> = term `chainl1` addop</span><br><span class="line"><span class="title">term</span> = factor `chainl1` mulop</span><br><span class="line"><span class="title">factor</span> = digit +++ <span class="keyword">do</span> {symb <span class="string">"("</span>; n &lt;- expr; symb <span class="string">")"</span>; return n}</span><br><span class="line"><span class="title">digit</span> = <span class="keyword">do</span> {x &lt;- token (sat isDigit); return (ord x - ord <span class="string">'0'</span>)}</span><br><span class="line"></span><br><span class="line"><span class="title">addop</span> = <span class="keyword">do</span> {symb <span class="string">"+"</span>; return (+)} +++ <span class="keyword">do</span> {symb <span class="string">"-"</span>; return (-)}</span><br><span class="line"><span class="title">mulop</span> = <span class="keyword">do</span> {symb <span class="string">"*"</span>; return (*)} +++ <span class="keyword">do</span> {symb <span class="string">"/"</span>; return (div)}</span><br></pre></td></tr></tbody></table></figure>
 
-<p>例如，对 <code>apply expr &quot; 1 - 2 * 3 + 4 &quot;</code> 求值将得到单元素结果列表 <code>[(-1,&quot;&quot;)]</code>，这正是我们期望的行为。</p>
+<p>例如，对 <code>apply expr " 1 - 2 * 3 + 4 "</code> 求值将得到单元素结果列表 <code>[(-1,"")]</code>，这正是我们期望的行为。</p>
 <h2 id="致谢（Acknowledgements）"><a href="#致谢（Acknowledgements）" class="headerlink" title="致谢（Acknowledgements）"></a>致谢（Acknowledgements）</h2><p>感谢 Luc Duponcheel、Benedict Gaster、Mark P. Jones、Colin Taylor 以及 Philip Wadler 对本文诸多草稿提出的宝贵意见。</p>
 <h2 id="参考文献（References）"><a href="#参考文献（References）" class="headerlink" title="参考文献（References）"></a>参考文献（References）</h2><ul>
 <li>Aho, A., Sethi, R. and Ullman, J. (1986) Compilers – Principles, Techniques and Tools. Addison-Wesley.</li>
@@ -390,7 +387,7 @@
 <li>Gill, A. and Marlow, S. (1995) Happy: the parser generator for Haskell. University of Glasgow. Hutton, G. (1992) Higher-order functions for parsing. J. Functional Programming, 2(3), 323–343.</li>
 <li>Jones, M. P. (1995) A system of constructor classes: overloading and implicit higher-order polymorphism. J. Functional Programming, 5(1), 1–35.</li>
 <li>Mogensen, T. (1993) Ratatosk: A parser generator and scanner generator for Gofer. University of Copenhagen (DIKU).</li>
-<li>Peterson, J. et al. (1996) The Haskell Language Report, version 1.3. Research report YALEU&#x2F;DCS&#x2F;RR-1106, Yale University.</li>
+<li>Peterson, J. et al. (1996) The Haskell Language Report, version 1.3. Research report YALEU/DCS/RR-1106, Yale University.</li>
 <li>Wadler, P. (1985) How to replace failure by a list of successes. Proc. Conf. on Functional Programming and Computer Architecture. Springer-Verlag.</li>
 <li>Wadler, P. (1990) Comprehending monads. Proc. ACM Conf. on Lisp and Functional Pro- gramming.</li>
 <li>Wadler, P. (1992a) The essence of functional programming. Proc. Principles of Programming Languages.</li>
@@ -409,10 +406,10 @@
 <li>语义动作（semantic action）</li>
 <li>序列操作符（sequencing operator）</li>
 <li>选择操作符（choice operator）</li>
-<li>左结合（associate to the left）&#x2F; 右结合（associate to the right）</li>
+<li>左结合（associate to the left）/ 右结合（associate to the right）</li>
 <li>词法阶段（lexical phase）</li>
-<li>记号（token）&#x2F; 符号记号（symbolic token）</li>
-<li>尾随空白（trailing space）&#x2F; 前导空白（leading space）</li>
+<li>记号（token）/ 符号记号（symbolic token）</li>
+<li>尾随空白（trailing space）/ 前导空白（leading space）</li>
 <li>类型构造器（type constructor）</li>
 <li>解构函数（deconstructor）</li>
 <li>带零元的单子（monad with a zero）</li>
@@ -478,14 +475,14 @@
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -508,5 +505,6 @@
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

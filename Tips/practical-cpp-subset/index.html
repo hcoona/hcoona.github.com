@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,14 +18,14 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
-    <meta name="description" content="用 C&#43;&#43; 语言也有一些年头了，在此总结一些工作中比较实用的 C&#43;&#43; 的功能子集。这里的主要使用场景是系统编程，不包括各种通用类库。">
+    <meta name="description" content="用 C++ 语言也有一些年头了，在此总结一些工作中比较实用的 C++ 的功能子集。这里的主要使用场景是系统编程，不包括各种通用类库。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="工作中常用到的 C++ 功能子集">
 <meta property="og:url" content="http://hcoona.github.io/Tips/practical-cpp-subset/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
-<meta property="og:description" content="用 C&#43;&#43; 语言也有一些年头了，在此总结一些工作中比较实用的 C&#43;&#43; 的功能子集。这里的主要使用场景是系统编程，不包括各种通用类库。">
+<meta property="og:site_name" content="HCOONa's blog">
+<meta property="og:description" content="用 C++ 语言也有一些年头了，在此总结一些工作中比较实用的 C++ 的功能子集。这里的主要使用场景是系统编程，不包括各种通用类库。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-04-09T06:45:05.000Z">
 <meta property="article:modified_time" content="2025-08-28T05:15:47.302Z">
@@ -45,9 +43,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>工作中常用到的 C++ 功能子集 | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -64,20 +62,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -89,12 +87,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Tips/practical-cpp-subset/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -103,12 +101,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -165,9 +163,8 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -181,22 +178,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -223,20 +220,20 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Tips/practical-cpp-subset/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="工作中常用到的 C++ 功能子集 | HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
@@ -267,7 +264,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Tips/" itemprop="url" rel="index"><span itemprop="name">Tips</span></a>
         </span>
     </span>
@@ -282,7 +279,7 @@
     
     
     <div class="post-body" itemprop="articleBody"><div class="paragraph">
-<p>用 C&#43;&#43; 语言也有一些年头了，在此总结一些工作中比较实用的 C&#43;&#43; 的功能子集。这里的主要使用场景是系统编程，不包括各种通用类库。</p>
+<p>用 C++ 语言也有一些年头了，在此总结一些工作中比较实用的 C++ 的功能子集。这里的主要使用场景是系统编程，不包括各种通用类库。</p>
 </div>
 <div class="paragraph">
 <p><span id="more"></span></p>
@@ -291,7 +288,7 @@
 <h2 id="_advanced_c">Advanced C</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>在工作中使用 C&#43;&#43; 更多的是将其作为一种更加先进的 C 语言来使用。C&#43;&#43; 比之 C 语言带来了以下好用的特性：</p>
+<p>在工作中使用 C++ 更多的是将其作为一种更加先进的 C 语言来使用。C++ 比之 C 语言带来了以下好用的特性：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -325,19 +322,19 @@
 </ul>
 </div>
 <div class="paragraph">
-<p>Smart Pointer 使得 C&#43;&#43; 可以在一定程度上自动管理对象的生命周期。RAII 使得我们可以将任意资源的分配和回收与对象的生命周期相关联。两者结合，使得我们可以在一定程度上自动管理资源的生命周期。这使得 C&#43;&#43; 一跃成为可以和 Python &amp; Java 一争长短的现代开发语言。</p>
+<p>Smart Pointer 使得 C++ 可以在一定程度上自动管理对象的生命周期。RAII 使得我们可以将任意资源的分配和回收与对象的生命周期相关联。两者结合，使得我们可以在一定程度上自动管理资源的生命周期。这使得 C++ 一跃成为可以和 Python &amp; Java 一争长短的现代开发语言。</p>
 </div>
 <div class="paragraph">
 <p>RAII 将资源的管理与对象的生命周期互相绑定，但是有时我们需要暂时解除这种绑定并将他们重新绑定。此时我们就需要 Move Semantics，这带来了资源所有权的 hand-off 能力。</p>
 </div>
 <div class="paragraph">
-<p>比之 Namespace + Access Control，其实我更想要的是 Module，但是这个 proposal 也是难产了好久了 <a href="#module">[1]</a>。有了 Module 之后，我还希望一个语法糖：扩展方法。也就是 <code>f(obj, &#8230;&#8203;)</code> 等同于 <code>obj.f(&#8230;&#8203;)</code> 这样的功能。这样有些方法就没必要非要写在 class 里面了。</p>
+<p>比之 Namespace + Access Control，其实我更想要的是 Module，但是这个 proposal 也是难产了好久了 <a href="#module">[1]</a>。有了 Module 之后，我还希望一个语法糖：扩展方法。也就是 <code>f(obj, …​)</code> 等同于 <code>obj.f(…​)</code> 这样的功能。这样有些方法就没必要非要写在 class 里面了。</p>
 </div>
 <div class="paragraph">
-<p>C&#43;&#43; 有了泛型是极好的，但是仍有两个缺点。一个是所有的泛型都要写到头文件里，这也是没有 Module <a href="#module">[1]</a> 的一个缺陷。另一个是没有一个好的办法约束泛型参数，Concept 这个 proposal 也是难产了好久了 <a href="#concept">[2]</a>。此外 C&#43;&#43; 的 Template 能力太强，不做库开发的话强烈建议不要使用模板元编程，只用其中泛型相关的部分即可。需要一些元编程的部分怎么办呢？单独在构建过程中加一个预处理阶段，使用其他 template engine 去展开 source code 即可，不容易出错，可读性强，而且报错信息友好。</p>
+<p>C++ 有了泛型是极好的，但是仍有两个缺点。一个是所有的泛型都要写到头文件里，这也是没有 Module <a href="#module">[1]</a> 的一个缺陷。另一个是没有一个好的办法约束泛型参数，Concept 这个 proposal 也是难产了好久了 <a href="#concept">[2]</a>。此外 C++ 的 Template 能力太强，不做库开发的话强烈建议不要使用模板元编程，只用其中泛型相关的部分即可。需要一些元编程的部分怎么办呢？单独在构建过程中加一个预处理阶段，使用其他 template engine 去展开 source code 即可，不容易出错，可读性强，而且报错信息友好。</p>
 </div>
 <div class="paragraph">
-<p>C&#43;&#43; 有结构化异常处理。我知道有些人宁愿把错误码和结果一起返回，也不愿意用异常处理机制。但是我只想说，异常处理谁用谁知道。此外，异常处理在 normal execution path 上是 zero cost 的 <a href="#exception">[3]</a>。</p>
+<p>C++ 有结构化异常处理。我知道有些人宁愿把错误码和结果一起返回，也不愿意用异常处理机制。但是我只想说，异常处理谁用谁知道。此外，异常处理在 normal execution path 上是 zero cost 的 <a href="#exception">[3]</a>。</p>
 </div>
 <div class="paragraph">
 <p>Lambda Expression 替代了函数指针，这个就不多说了，这么多年才把这个功能做对也是不容易了。</p>
@@ -351,10 +348,10 @@
 <h2 id="_面向对象编程">面向对象编程</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>面向对象编程（OOP）一般是没啥用的，也不应该用。但是 C&#43;&#43; 中泛型用起来太麻烦了，而且 RTTI 太弱了，以至于大多数情况下我们都是用继承来实现多态（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Subtyping">子类型多态</a>），而非泛型。</p>
+<p>面向对象编程（OOP）一般是没啥用的，也不应该用。但是 C++ 中泛型用起来太麻烦了，而且 RTTI 太弱了，以至于大多数情况下我们都是用继承来实现多态（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Subtyping">子类型多态</a>），而非泛型。</p>
 </div>
 <div class="paragraph">
-<p>Java 这种号称纯 OOP 的语言，其实大家用到的基于继承关系的多态功能也很少，更多的时候是搞出来一个接口，然后大家都用接口交互，或者是泛型约束于接口。实际上 Java 中的接口起到的更多的是 C&#43;&#43; 中 Concepts <a href="#concept">[2]</a> 的作用。只有在用容器去装这些*不同类型*的实例（Instance）的时候，才真正用到一点点子类型多态。这种场景并不多见，更多情况下，在配置好了的状态下，启动应用后，某个容器其实只需要装某个特定类型的实例。然而也不是没有用容器装多个类型的实例的场景，只是说比较少，而且大多数都可以通过让容器去装 lambda 函数的方式来搞定。实在搞不定的只能弄个接口类型出来了，谁让 C&#43;&#43; 中没有 <code>Object</code> 类型呢，毕竟你又不能 <code>delete (void *)p</code>。</p>
+<p>Java 这种号称纯 OOP 的语言，其实大家用到的基于继承关系的多态功能也很少，更多的时候是搞出来一个接口，然后大家都用接口交互，或者是泛型约束于接口。实际上 Java 中的接口起到的更多的是 C++ 中 Concepts <a href="#concept">[2]</a> 的作用。只有在用容器去装这些*不同类型*的实例（Instance）的时候，才真正用到一点点子类型多态。这种场景并不多见，更多情况下，在配置好了的状态下，启动应用后，某个容器其实只需要装某个特定类型的实例。然而也不是没有用容器装多个类型的实例的场景，只是说比较少，而且大多数都可以通过让容器去装 lambda 函数的方式来搞定。实在搞不定的只能弄个接口类型出来了，谁让 C++ 中没有 <code>Object</code> 类型呢，毕竟你又不能 <code>delete (void *)p</code>。</p>
 </div>
 <div class="paragraph">
 <p>而且 OOP 还搞出来不少问题，其中比较显著的问题都通过 GoF 的《设计模式》一书总结了，然而不用 OOP 就没这些问题 <a href="#patterns">[4]</a>。</p>
@@ -363,7 +360,7 @@
 <p>但是 OOP 在有些场景下还是挺有用的，比如说 UI，比如说容器。但是用的时候得小心点，OOP 总是诱惑你在不应该 OO 的地方 OO，这是基于你与生俱来的在现实世界中学习到的先验知识认为应该有继承关系，但是在数学上不存在子类型关系的地方带来的认知冲突。</p>
 </div>
 <div class="paragraph">
-<p>总之，C&#43;&#43; 有 OOP 的能力还是很好的，只是用的时候要非常非常的小心，并且还要注意 C&#43;&#43; 中值语义（Value Semantics）和对象语义（Object Semantics）的区别 <a href="#value">[5]</a>。</p>
+<p>总之，C++ 有 OOP 的能力还是很好的，只是用的时候要非常非常的小心，并且还要注意 C++ 中值语义（Value Semantics）和对象语义（Object Semantics）的区别 <a href="#value">[5]</a>。</p>
 </div>
 </div>
 </div>
@@ -371,7 +368,7 @@
 <h2 id="_其他">其他</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>C&#43;&#43; 中还有一些比较容易混淆的概念（暂时只想起来一个）：</p>
+<p>C++ 中还有一些比较容易混淆的概念（暂时只想起来一个）：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -381,10 +378,10 @@
 </ul>
 </div>
 <div class="paragraph">
-<p>C&#43;&#43; 中的 <code>const</code> 干了太多事情了。现在只需记住一个原则，Java 的 <code>final</code> 在 C&#43;&#43; 中应该用 <code>constexpr</code>，为一个对象创建只读版本的接口时才使用 <code>const</code>。</p>
+<p>C++ 中的 <code>const</code> 干了太多事情了。现在只需记住一个原则，Java 的 <code>final</code> 在 C++ 中应该用 <code>constexpr</code>，为一个对象创建只读版本的接口时才使用 <code>const</code>。</p>
 </div>
 <div class="paragraph">
-<p>使用 C&#43;&#43; 提供动态链接库接口是一件非常麻烦的事情。我的建议是不要用 pimpl 模式和 Windows COM 那样的做法；简单一点，直接包装出一个 C 版本的 API 就好了。</p>
+<p>使用 C++ 提供动态链接库接口是一件非常麻烦的事情。我的建议是不要用 pimpl 模式和 Windows COM 那样的做法；简单一点，直接包装出一个 C 版本的 API 就好了。</p>
 </div>
 <div class="paragraph">
 <p>没事别把大对象放在栈上，<code>new</code> 一个对象没多大开销，用 <code>unique_ptr</code> 也可以解决生命周期的问题。</p>
@@ -395,7 +392,7 @@
 <h2 id="_未来">未来</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>我比较期待 C&#43;&#43; 提供这些功能：</p>
+<p>我比较期待 C++ 提供这些功能：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -421,19 +418,19 @@
 <p><a id="module"></a>[1] <a target="_blank" rel="noopener" href="https://isocpp.org/files/papers/N4047.pdf">[N4047] A Module System for C++</a></p>
 </li>
 <li>
-<p><a id="concept"></a>[2] <a href="www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1758.pdf">[N1758] Concepts for C&#43;&#43;0x&#8201;&#8212;&#8201;Open Standards</a></p>
+<p><a id="concept"></a>[2] <a href="www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1758.pdf">[N1758] Concepts for C++0x — Open Standards</a></p>
 </li>
 <li>
 <p><a id="exception"></a>[3] <a target="_blank" rel="noopener" href="http://llvm.org/docs/ExceptionHandling.html">Exception Handling in LLVM</a></p>
 </li>
 <li>
-<p><a id="patterns"></a>[4] <a target="_blank" rel="noopener" href="http://norvig.com/design-patterns/design-patterns.pdf">Design Patterns in Dynamic Programming&#8201;&#8212;&#8201;Peter Norvig</a></p>
+<p><a id="patterns"></a>[4] <a target="_blank" rel="noopener" href="http://norvig.com/design-patterns/design-patterns.pdf">Design Patterns in Dynamic Programming — Peter Norvig</a></p>
 </li>
 <li>
-<p><a id="value"></a>[5] <a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/value-vs-ref-semantics#val-vs-ref-semantics">Reference and Value Semantics&#8201;&#8212;&#8201;ISO C&#43;&#43; FAQ</a></p>
+<p><a id="value"></a>[5] <a target="_blank" rel="noopener" href="https://isocpp.org/wiki/faq/value-vs-ref-semantics#val-vs-ref-semantics">Reference and Value Semantics — ISO C++ FAQ</a></p>
 </li>
 <li>
-<p><a id="await"></a>[6] <a target="_blank" rel="noopener" href="https://isocpp.org/files/papers/N4402.pdf">[N4402] Resumable Functions (revision 4) - Standard C&#43;&#43;</a></p>
+<p><a id="await"></a>[6] <a target="_blank" rel="noopener" href="https://isocpp.org/files/papers/N4402.pdf">[N4402] Resumable Functions (revision 4) - Standard C++</a></p>
 </li>
 <li>
 <p><a id="imperfect"></a>[7] Matthew Wilson. Imperfect C++: Practical Solutions for Real-Life Programming. ISBN: 978-0321228772.</p>
@@ -475,7 +472,7 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/Paper-Note/anna-kvs/" rel="prev" title="论文笔记：[ICDE&#39;18] Anna: A KVS for any scale">
+                <a href="/Paper-Note/anna-kvs/" rel="prev" title="论文笔记：[ICDE'18] Anna: A KVS for any scale">
                   <i class="fa fa-angle-left"></i> 论文笔记：[ICDE'18] Anna: A KVS for any scale
                 </a>
             </div>
@@ -501,14 +498,14 @@
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -531,5 +528,6 @@
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

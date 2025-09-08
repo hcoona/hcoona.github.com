@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,13 +18,13 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
     <meta name="description" content="在数据库领域，Transaction是一个非常重要的抽象，其关键在于保证并发请求的正确性。由于Serialisability级别的一致性所需要付出的代价较高，所以通常会使用弱一些的一致性级别来换取性能提升。特别的，在一些特殊场景下，使用弱一致性并不会带来错误。遗憾的是，ANSI SQL对于一致性级别的分类还不够细致，特别的，对于一些常见的弱一致性实现没有形式化规范。这导致人们很难确认特定供应商提">
 <meta property="og:type" content="article">
-<meta property="og:title" content="论文笔记：[CONCUR&#39;15] A Framework for Transactional Consistency Models with Atomic Visibility">
+<meta property="og:title" content="论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility">
 <meta property="og:url" content="http://hcoona.github.io/Paper-Note/transactional-consistency-models/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="在数据库领域，Transaction是一个非常重要的抽象，其关键在于保证并发请求的正确性。由于Serialisability级别的一致性所需要付出的代价较高，所以通常会使用弱一些的一致性级别来换取性能提升。特别的，在一些特殊场景下，使用弱一致性并不会带来错误。遗憾的是，ANSI SQL对于一致性级别的分类还不够细致，特别的，对于一些常见的弱一致性实现没有形式化规范。这导致人们很难确认特定供应商提">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://hcoona.github.io/images/transactional-consistency-models-figure-1.png">
@@ -53,9 +51,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -72,20 +70,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -97,12 +95,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/transactional-consistency-models/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -111,12 +109,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -173,9 +171,8 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -189,22 +186,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -231,21 +228,21 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/transactional-consistency-models/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="论文笔记：[CONCUR&#39;15] A Framework for Transactional Consistency Models with Atomic Visibility | HCOONa's blog">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility | HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
@@ -275,7 +272,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
         </span>
     </span>
@@ -309,7 +306,7 @@
 </div>
 <div class="stemblock">
 <div class="content">
-\[\mathrm&#123;Op&#125; = \&#123; \mathrm&#123;read&#125;(x,n), \mathrm&#123;write&#125;(x,n) \mid x \in \mathrm&#123;Obj&#125;, n \in \mathbb&#123;Z&#125; \&#125;\]
+\[\mathrm{Op} = \{ \mathrm{read}(x,n), \mathrm{write}(x,n) \mid x \in \mathrm{Obj}, n \in \mathbb{Z} \}\]
 </div>
 </div>
 <div class="paragraph">
@@ -317,13 +314,13 @@
 </div>
 <div class="stemblock">
 <div class="content">
-\[\begin&#123;align&#125;
-\mathrm&#123;WEvent&#125;_x &amp;= \&#123; (\tau, \mathrm&#123;write&#125;(x,n)) \mid \tau \in \mathrm&#123;EventId&#125;, n \in \mathbb&#123;Z&#125; \&#125; \\
+\[\begin{align}
+\mathrm{WEvent}_x &amp;= \{ (\tau, \mathrm{write}(x,n)) \mid \tau \in \mathrm{EventId}, n \in \mathbb{Z} \} \\
 
-\mathrm&#123;REvent&#125;_x &amp;= \&#123; (\tau, \mathrm&#123;read&#125;(x,n)) \mid \tau \in \mathrm&#123;EventId&#125;, n \in \mathbb&#123;Z&#125; \&#125; \\
+\mathrm{REvent}_x &amp;= \{ (\tau, \mathrm{read}(x,n)) \mid \tau \in \mathrm{EventId}, n \in \mathbb{Z} \} \\
 
-\mathrm&#123;HEvent&#125;_x &amp;= \mathrm&#123;WEvent&#125;_x \cup \mathrm&#123;REvent&#125;_x
-\end&#123;align&#125;\]
+\mathrm{HEvent}_x &amp;= \mathrm{WEvent}_x \cup \mathrm{REvent}_x
+\end{align}\]
 </div>
 </div>
 <div class="paragraph">
@@ -332,7 +329,7 @@
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>A <em>transaction</em> $T, S, \ldots$ is a pair $(E, \mathrm&#123;po&#125;)$, where $E \subseteq \mathrm&#123;HEvent&#125;$ is a finite, non-empty set of events with distinct identifiers, and the <em>program order</em> $\mathrm&#123;po&#125;$ is a total order over $E$. A <em>history</em> $\mathcal&#123;H&#125;$ is a (finite or infinite) set of transactions with disjoint sets of event identifiers.</p>
+<p>A <em>transaction</em> $T, S, \ldots$ is a pair $(E, \mathrm{po})$, where $E \subseteq \mathrm{HEvent}$ is a finite, non-empty set of events with distinct identifiers, and the <em>program order</em> $\mathrm{po}$ is a total order over $E$. A <em>history</em> $\mathcal{H}$ is a (finite or infinite) set of transactions with disjoint sets of event identifiers.</p>
 </div>
 <div class="paragraph">
 <p>All transactions in a history are assumed to be committed: to simplify presentation, our specifications do not constrain values read inside aborted or ongoing transactions.</p>
@@ -351,41 +348,41 @@
 <p>We call a relation <em>prefix-finite</em>, if every element has finitely many predecessors in the transitive closure of the relation.</p>
 </div>
 <div class="paragraph">
-<p>An <em>abstract execution</em> is a triple $\mathcal&#123;A&#125; = (\mathcal&#123;H&#125;, \mathrm&#123;VIS&#125;, \mathrm&#123;AR&#125;)$ where:</p>
+<p>An <em>abstract execution</em> is a triple $\mathcal{A} = (\mathcal{H}, \mathrm{VIS}, \mathrm{AR})$ where:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><em>visibility</em>: $\mathrm&#123;VIS&#125; \subseteq \mathcal&#123;H&#125; \times \mathcal&#123;H&#125;$ is a prefix-finite, acyclic relation; and</p>
+<p><em>visibility</em>: $\mathrm{VIS} \subseteq \mathcal{H} \times \mathcal{H}$ is a prefix-finite, acyclic relation; and</p>
 </li>
 <li>
-<p><em>arbitration</em>: $\mathrm&#123;AR&#125; \subseteq \mathcal&#123;H&#125; \times \mathcal&#123;H&#125;$ is a prefix-finite, total order such that $\mathrm&#123;AR&#125; \supseteq \mathrm&#123;VIS&#125;$.</p>
+<p><em>arbitration</em>: $\mathrm{AR} \subseteq \mathcal{H} \times \mathcal{H}$ is a prefix-finite, total order such that $\mathrm{AR} \supseteq \mathrm{VIS}$.</p>
 </li>
 </ol>
 </div>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>abstract execution的直观含义就不太明显了，只能认为是带有两种序关系的history。然而这里并没有定义$\mathrm&#123;VIS&#125;$和$\mathrm&#123;AR&#125;$的具体含义，只是大概解释了一下它们的直观含义：</p>
+<p>abstract execution的直观含义就不太明显了，只能认为是带有两种序关系的history。然而这里并没有定义$\mathrm{VIS}$和$\mathrm{AR}$的具体含义，只是大概解释了一下它们的直观含义：</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>$T \stackrel&#123;\mathrm&#123;VIS&#125;&#125;&#123;\longrightarrow&#125; S$大体上可以认为$S$发现了$T$，一般来说是$S$读到了$T$产生的内容。</p>
+<p>$T \stackrel{\mathrm{VIS}}{\longrightarrow} S$大体上可以认为$S$发现了$T$，一般来说是$S$读到了$T$产生的内容。</p>
 </li>
 <li>
-<p>$T \stackrel&#123;\mathrm&#123;AR&#125;&#125;&#123;\longrightarrow&#125; S$大体上可以认为是$S$写入的内容（部分或全部）覆盖了$T$写入的内容。尽管论文中是这么解释的，但是我认为理解成这样更通顺一些，即$S$“实际上”在$T$之后发生。我认为这么理解更合适的原因是因为在论文<a href="#figure-3">Figure 3(a)</a>中有$T_1 \stackrel&#123;\mathrm&#123;AR&#125;&#125;&#123;\longrightarrow&#125; T_3$（这个关系源自于$\mathrm&#123;AR&#125;$是传递自反的），但是$T_3$根本没有进行写操作，这个用原论文中的说法根本没法理解。</p>
+<p>$T \stackrel{\mathrm{AR}}{\longrightarrow} S$大体上可以认为是$S$写入的内容（部分或全部）覆盖了$T$写入的内容。尽管论文中是这么解释的，但是我认为理解成这样更通顺一些，即$S$“实际上”在$T$之后发生。我认为这么理解更合适的原因是因为在论文<a href="#figure-3">Figure 3(a)</a>中有$T_1 \stackrel{\mathrm{AR}}{\longrightarrow} T_3$（这个关系源自于$\mathrm{AR}$是传递自反的），但是$T_3$根本没有进行写操作，这个用原论文中的说法根本没法理解。</p>
 </li>
 <li>
-<p>$\mathrm&#123;AR&#125; \supseteq \mathrm&#123;VIS&#125;$意味着$( (T \stackrel&#123;\mathrm&#123;VIS&#125;&#125;&#123;\longrightarrow&#125; S) \Rightarrow (T \stackrel&#123;\mathrm&#123;AR&#125;&#125;&#123;\longrightarrow&#125; S)) \land ( (T \stackrel&#123;\mathrm&#123;AR&#125;&#125;&#123;\longrightarrow&#125; S) \nRightarrow (T \stackrel&#123;\mathrm&#123;VIS&#125;&#125;&#123;\longrightarrow&#125; S))$，也就是说我可以在不知道你的情况下就把你写入的东西给覆盖了，或者理解成尽管我“实际上”在你之前发生，但是你不知道我在你之前发生。或者可以认为$\mathrm&#123;VIS&#125;$相当于是在$\mathrm&#123;AR&#125;$中去掉了一些元素。</p>
+<p>$\mathrm{AR} \supseteq \mathrm{VIS}$意味着$( (T \stackrel{\mathrm{VIS}}{\longrightarrow} S) \Rightarrow (T \stackrel{\mathrm{AR}}{\longrightarrow} S)) \land ( (T \stackrel{\mathrm{AR}}{\longrightarrow} S) \nRightarrow (T \stackrel{\mathrm{VIS}}{\longrightarrow} S))$，也就是说我可以在不知道你的情况下就把你写入的东西给覆盖了，或者理解成尽管我“实际上”在你之前发生，但是你不知道我在你之前发生。或者可以认为$\mathrm{VIS}$相当于是在$\mathrm{AR}$中去掉了一些元素。</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>实际上$\mathrm&#123;VIS&#125;$和$\mathrm&#123;AR&#125;$是由consistency model的约束决定的，因此在这里才没有一个精确的定义。本文所使用的方法就是从通过对$\mathrm&#123;VIS&#125;$和$\mathrm&#123;AR&#125;$增加约束，将某些违反直觉的情况从abstract executions中排除。所增加的约束被定义为某种（好的）性质，通过组合这些性质进一步定义出一致性模型。</p>
+<p>实际上$\mathrm{VIS}$和$\mathrm{AR}$是由consistency model的约束决定的，因此在这里才没有一个精确的定义。本文所使用的方法就是从通过对$\mathrm{VIS}$和$\mathrm{AR}$增加约束，将某些违反直觉的情况从abstract executions中排除。所增加的约束被定义为某种（好的）性质，通过组合这些性质进一步定义出一致性模型。</p>
 </div>
 <div class="paragraph">
-<p>总之abstract execution $\mathcal&#123;A&#125;$就是带有$\mathrm&#123;VIS&#125;$和$\mathrm&#123;AR&#125;$两种序关系的event history $\mathcal&#123;H&#125;$。其中$\mathrm&#123;AR&#125;$就是comitted transaction“实际上”串行化后“生效”的顺序，$\mathrm&#123;VIS&#125;$是从用户（客户端）的视角能够发现transaction之间的逻辑因果关系。</p>
+<p>总之abstract execution $\mathcal{A}$就是带有$\mathrm{VIS}$和$\mathrm{AR}$两种序关系的event history $\mathcal{H}$。其中$\mathrm{AR}$就是comitted transaction“实际上”串行化后“生效”的顺序，$\mathrm{VIS}$是从用户（客户端）的视角能够发现transaction之间的逻辑因果关系。</p>
 </div>
 <div class="paragraph">
 <p>关于abstract execution模型的概念在论文中写的不是很详细，如果对这部分内容感兴趣，建议阅读<a href="#abstract-execution">[5]</a>。但是需要注意的是<a href="#abstract-execution">[5]</a>中具体描述的abstract execution模型和这里的场景不一样，是建立在operation上的，而<a href="#transactional-consistency-models">[1]</a>的abstract execution是建立在transaction上的。</p>
@@ -433,51 +430,51 @@
 <p>论文中为了叙述方便，还定义了一些符号。</p>
 </div>
 <div class="sect3">
-<h4 id="_r_1u">$R^&#123;-1&#125;(u)$</h4>
+<h4 id="_r_1u">$R^{-1}(u)$</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>For a relation $R \subseteq A \times A$ and an element $u \in A$, we let $R^&#123;−1&#125;(u) = \&#123; v \mid (v, u) \in R \&#125;$.</p>
+<p>For a relation $R \subseteq A \times A$ and an element $u \in A$, we let $R^{−1}(u) = \{ v \mid (v, u) \in R \}$.</p>
 </div>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>直觉上$R^&#123;-1&#125;$就是$R$的反序，但是需要注意的是$R$有可能是一个偏序关系。</p>
+<p>直觉上$R^{-1}$就是$R$的反序，但是需要注意的是$R$有可能是一个偏序关系。</p>
 </div>
 <div class="paragraph">
-<p>例如上面提到的Transaction内部的program order $\mathrm&#123;po&#125;$的反序$\mathrm&#123;po&#125;^&#123;-1&#125;$。</p>
+<p>例如上面提到的Transaction内部的program order $\mathrm{po}$的反序$\mathrm{po}^{-1}$。</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_max_mathrmra和min_mathrmra">$\max_\mathrm&#123;R&#125;(A)$和$\min_\mathrm&#123;R&#125;(A)$</h4>
+<h4 id="_max_mathrmra和min_mathrmra">$\max_\mathrm{R}(A)$和$\min_\mathrm{R}(A)$</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>For a total order $\mathrm&#123;R&#125;$ and a set $A$, we let $\max_\mathrm&#123;R&#125;(A)$ be the element $u \in A$ such that $\forall v \in A. \ v = u \lor (v, u) \in R$; if $A = \emptyset$, then $\max_\mathrm&#123;R&#125;(A)$ is undefined. In the following, the use of $\max_\mathrm&#123;R&#125;(A)$ in an expression implicitly assumes that it is defined.</p>
+<p>For a total order $\mathrm{R}$ and a set $A$, we let $\max_\mathrm{R}(A)$ be the element $u \in A$ such that $\forall v \in A. \ v = u \lor (v, u) \in R$; if $A = \emptyset$, then $\max_\mathrm{R}(A)$ is undefined. In the following, the use of $\max_\mathrm{R}(A)$ in an expression implicitly assumes that it is defined.</p>
 </div>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>直觉上，$\max_\mathrm&#123;R&#125;(A)$（$\min_\mathrm&#123;R&#125;(A)$）表示了非空集合$A$在序关系$\mathrm&#123;R&#125;$上的最后（早）一个元素。</p>
+<p>直觉上，$\max_\mathrm{R}(A)$（$\min_\mathrm{R}(A)$）表示了非空集合$A$在序关系$\mathrm{R}$上的最后（早）一个元素。</p>
 </div>
 <div class="paragraph">
-<p>例如<a href="#figure-3">figure 3(e)</a>中的$\max_&#123;\mathrm&#123;po&#125;&#125;(T_1)$就是$\mathrm&#123;write&#125;(\text&#123;acct1&#125;, -40)$。</p>
+<p>例如<a href="#figure-3">figure 3(e)</a>中的$\max_{\mathrm{po}}(T_1)$就是$\mathrm{write}(\text{acct1}, -40)$。</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_t_vdash_mathrmwrite_x_n和t_vdash_mathrmread_x_n">$T \vdash \mathrm&#123;Write&#125; \ x : n$和$T \vdash \mathrm&#123;Read&#125; \ x : n$</h4>
+<h4 id="_t_vdash_mathrmwrite_x_n和t_vdash_mathrmread_x_n">$T \vdash \mathrm{Write} \ x : n$和$T \vdash \mathrm{Read} \ x : n$</h4>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>defining certain attributes of a transaction $T = (E, \mathrm&#123;po&#125;)$. We let $T \vdash \mathrm&#123;Write&#125; \ x : n$ if $T$ writes to $x$ and the last value written is $n: \max_\mathrm&#123;po&#125;(E \cap \mathrm&#123;WEvent&#125;_x) = (\_, write(x, n))$.</p>
+<p>defining certain attributes of a transaction $T = (E, \mathrm{po})$. We let $T \vdash \mathrm{Write} \ x : n$ if $T$ writes to $x$ and the last value written is $n: \max_\mathrm{po}(E \cap \mathrm{WEvent}_x) = (\_, write(x, n))$.</p>
 </div>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>直觉上$T \vdash \mathrm&#123;Write&#125; \ x : n$（$T \vdash \mathrm&#123;Read&#125; \ x : n$）表示在Transaction $T$内部的Event，按照program order，最后（早）一个对$x$的写入（读取）为$n$。</p>
+<p>直觉上$T \vdash \mathrm{Write} \ x : n$（$T \vdash \mathrm{Read} \ x : n$）表示在Transaction $T$内部的Event，按照program order，最后（早）一个对$x$的写入（读取）为$n$。</p>
 </div>
 <div class="paragraph">
-<p>例如<a href="#figure-3">figure 3(e)</a>中$T_1 \vdash \mathrm&#123;Write&#125; \ \text&#123;acct1&#125; : -40$。</p>
+<p>例如<a href="#figure-3">figure 3(e)</a>中$T_1 \vdash \mathrm{Write} \ \text{acct1} : -40$。</p>
 </div>
 </div>
 </div>
@@ -501,27 +498,27 @@
 </div>
 <div class="stemblock">
 <div class="content">
-\[\forall(E, \mathrm&#123;po&#125;) \in \mathcal&#123;H&#125; . \forall e \in E . \forall x, n .\left(e=(\_, \operatorname&#123;read&#125;(x, n)) \land\left(\mathrm&#123;po&#125;^&#123;-1&#125;(e) \cap \mathrm&#123;HEvent&#125;_&#123;x&#125; \neq \emptyset\right)\right) \\
-\implies \max_&#123;\mathrm&#123;po&#125;&#125;\left(\mathrm&#123;po&#125;^&#123;-1&#125;(e) \cap \mathrm&#123;HEvent&#125;_&#123;x&#125;\right)=(\_,\_(x, n))
-\tag&#123;INT&#125;\]
+\[\forall(E, \mathrm{po}) \in \mathcal{H} . \forall e \in E . \forall x, n .\left(e=(\_, \operatorname{read}(x, n)) \land\left(\mathrm{po}^{-1}(e) \cap \mathrm{HEvent}_{x} \neq \emptyset\right)\right) \\
+\implies \max_{\mathrm{po}}\left(\mathrm{po}^{-1}(e) \cap \mathrm{HEvent}_{x}\right)=(\_,\_(x, n))
+\tag{INT}\]
 </div>
 </div>
 <div class="paragraph">
-<p>直觉上，INT性质保证了，在一个Transaction内，如果读$x$读到了$n$，那么在同一个Transaction内如有上一个对$x$的操作，则一定是$\operatorname&#123;read&#125;(x, n)$或$\operatorname&#123;write&#125;(x, n)$，因此被称为 <em>internal</em> consistency axiom。</p>
+<p>直觉上，INT性质保证了，在一个Transaction内，如果读$x$读到了$n$，那么在同一个Transaction内如有上一个对$x$的操作，则一定是$\operatorname{read}(x, n)$或$\operatorname{write}(x, n)$，因此被称为 <em>internal</em> consistency axiom。</p>
 </div>
 <div class="paragraph">
 <p>特别的，INT性质保证了一旦读到了一个值，那么之后无论读多少次，只要中间没有插入写操作，这个值都不会发生变化，即排除了 <em>unrepeatable reads</em> 的可能。</p>
 </div>
 <div class="stemblock">
 <div class="content">
-\[\forall T \in \mathcal&#123;H&#125; . \forall x, n . T \vdash \mathrm&#123;Read&#125; \  x : n \implies \\
-\left(\left(\mathrm&#123;VIS&#125;^&#123;-1&#125;(T) \cap\&#123;S \mid S \vdash \mathrm&#123;Write&#125; \  x :\_ \&#125;=\emptyset \land n=0\right) \lor \\
-\max_&#123;\mathrm&#123;AR&#125;&#125;\left(\mathrm&#123;VIS&#125;^&#123;-1&#125;(T) \cap\&#123;S \mid S \vdash \mathrm&#123;Write&#125; \  x :\_ \&#125;\right) \vdash \mathrm&#123;Write&#125; \  x : n\right)
-\tag&#123;EXT&#125;\]
+\[\forall T \in \mathcal{H} . \forall x, n . T \vdash \mathrm{Read} \  x : n \implies \\
+\left(\left(\mathrm{VIS}^{-1}(T) \cap\{S \mid S \vdash \mathrm{Write} \  x :\_ \}=\emptyset \land n=0\right) \lor \\
+\max_{\mathrm{AR}}\left(\mathrm{VIS}^{-1}(T) \cap\{S \mid S \vdash \mathrm{Write} \  x :\_ \}\right) \vdash \mathrm{Write} \  x : n\right)
+\tag{EXT}\]
 </div>
 </div>
 <div class="paragraph">
-<p>直觉上，EXT性质保证了，在$T_1$中第一个读到$x = n$的操作，是因为在$\mathrm&#123;VIS&#125;$序中$T_1$的上一个Transaction中如存在$T_0$，则$T_0$中最后一次对$x$的写操作写入了$n$；否则$n = 0$（读到初始值）。这里由于$\mathrm&#123;VIS&#125;$是偏序关系，可能不止一个$T_0$这样的Transaction，此时取他们之间在$\mathrm&#123;AR&#125;$序中的最后一个。EXT性质保证了第一次读到$x$的值是因为“之前”的某个其他的Transaction写入的，因此被称为 <em>external</em> consistency axiom。</p>
+<p>直觉上，EXT性质保证了，在$T_1$中第一个读到$x = n$的操作，是因为在$\mathrm{VIS}$序中$T_1$的上一个Transaction中如存在$T_0$，则$T_0$中最后一次对$x$的写操作写入了$n$；否则$n = 0$（读到初始值）。这里由于$\mathrm{VIS}$是偏序关系，可能不止一个$T_0$这样的Transaction，此时取他们之间在$\mathrm{AR}$序中的最后一个。EXT性质保证了第一次读到$x$的值是因为“之前”的某个其他的Transaction写入的，因此被称为 <em>external</em> consistency axiom。</p>
 </div>
 <div class="paragraph">
 <p>特别的，EXT性质保证了不会出现 <em>dirty reads</em>，因为没有commit（不管是abort还是on-going的）的Transaction不会出现在abstract execution中（这里不太严谨，因为没有INT性质的话不会保证中间不能读到任意奇怪的结果）。因此这一性质已经超出了Read Committed的要求（这里是我自己不太严谨的结论，不严谨的地方在于没有约定关于 <em>dirty writes</em> 的性质）。</p>
@@ -551,12 +548,12 @@
 <p><a id="unbounded-staleness"></a>在“真实时间”上过了足够久还没有被发现，极端情况下我们可以实现一个trivial数据库所有的写入其实都不生效，关于这方面的扩展讨论见<a href="#pbs">[8]</a></p>
 </li>
 <li>
-<p>有可能违背因果（Causal）关系，例如<a href="#figure-3">Figure 3(a)</a>中$T_3$已经读到了$T_2$写入的$\operatorname&#123;write&#125;(y,\text&#123;comment&#125;)$，因此也应该能读到$T_2$读到的$\operatorname&#123;read&#125;(x,\text&#123;post&#125;)$</p>
+<p>有可能违背因果（Causal）关系，例如<a href="#figure-3">Figure 3(a)</a>中$T_3$已经读到了$T_2$写入的$\operatorname{write}(y,\text{comment})$，因此也应该能读到$T_2$读到的$\operatorname{read}(x,\text{post})$</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Causal consistency要求不能违背因果关系，在当前的模型中，$\mathrm&#123;VIS&#125;$实际上捕获了因果关系，因此只需$\mathrm&#123;VIS&#125;$具有传递性即可保证因果一致性，即<a href="#figure-1">Figure 1</a>中的TRANSVIS性质。</p>
+<p>Causal consistency要求不能违背因果关系，在当前的模型中，$\mathrm{VIS}$实际上捕获了因果关系，因此只需$\mathrm{VIS}$具有传递性即可保证因果一致性，即<a href="#figure-1">Figure 1</a>中的TRANSVIS性质。</p>
 </div>
 </div>
 <div class="sect2">
@@ -572,13 +569,13 @@
 </blockquote>
 </div>
 <div class="paragraph">
-<p>例如<a href="#figure-3">Figure 3(c)</a>尽管满足causual consistency，但是$T_1$的$\operatorname&#123;write&#125;(\text&#123;acct&#125;, 50)$就被冲掉了。为此，我们引入NOCONFLICT性质来约束这种情况：</p>
+<p>例如<a href="#figure-3">Figure 3(c)</a>尽管满足causual consistency，但是$T_1$的$\operatorname{write}(\text{acct}, 50)$就被冲掉了。为此，我们引入NOCONFLICT性质来约束这种情况：</p>
 </div>
 <div class="stemblock">
 <div class="content">
-\[\forall T, S \in \mathcal&#123;H&#125; .\left(T \neq S \land T \vdash\text&#123;Write&#125; \  x :\_ \land S \vdash\text&#123;Write&#125; \  x :\_\right) \\
-\implies (T \stackrel&#123;\mathrm&#123;VIS&#125;&#125;&#123;\longrightarrow&#125; S \vee S \stackrel&#123;\mathrm&#123;VIS&#125;&#125;&#123;\longrightarrow&#125; T)
-\tag&#123;NOCONFLICT&#125;\]
+\[\forall T, S \in \mathcal{H} .\left(T \neq S \land T \vdash\text{Write} \  x :\_ \land S \vdash\text{Write} \  x :\_\right) \\
+\implies (T \stackrel{\mathrm{VIS}}{\longrightarrow} S \vee S \stackrel{\mathrm{VIS}}{\longrightarrow} T)
+\tag{NOCONFLICT}\]
 </div>
 </div>
 <div class="paragraph">
@@ -593,16 +590,16 @@
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>If $T$ observes $S$, then it also observes all $\mathrm&#123;AR&#125;$-predecessors of $S$.</p>
+<p>If $T$ observes $S$, then it also observes all $\mathrm{AR}$-predecessors of $S$.</p>
 </div>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>这里observes就是$\mathrm&#123;VIS&#125;$，由于$\mathrm&#123;AR&#125;$具有传递性，因此PREFIX性质蕴含TRANSVIS性质。形式化一点：</p>
+<p>这里observes就是$\mathrm{VIS}$，由于$\mathrm{AR}$具有传递性，因此PREFIX性质蕴含TRANSVIS性质。形式化一点：</p>
 </div>
 <div class="stemblock">
 <div class="content">
-\[\mathrm&#123;AR&#125;; \mathrm&#123;VIS&#125; \subseteq \mathrm&#123;VIS&#125; \tag&#123;PREFIX&#125;\]
+\[\mathrm{AR}; \mathrm{VIS} \subseteq \mathrm{VIS} \tag{PREFIX}\]
 </div>
 </div>
 <div class="paragraph">
@@ -634,7 +631,7 @@
 <p>尽管Snapshot Isolation已经是相当强的一种一致性级别了，但是仍然会在某些时刻出现问题，例如<a href="#figure-3">Figure 3(e)</a>中描述的 <em>write skew</em> 问题。$T_1$和$T_2$都检查了两个账户的余额之和大于100，并且分别从两个账户中取出了100。由于$T_1$和$T_2$是并发执行的，因此在检查时刻都能通过；由于$T_1$和$T_2$分别对不同的账户进行操作，因此也不会违背NOCONFLICT性质。但是最终，$T_1$和$T_2$都执行的结果将会使得最开始的检查限制被绕过，两个账户的总额变成负数。</p>
 </div>
 <div class="paragraph">
-<p>对于这一点，我们可以使用性质TOTALVIS进行限制，即令VIS具有全序。考虑到$\mathrm&#123;AR&#125; \supseteq \mathrm&#123;VIS&#125;$，我们有$\mathrm&#123;AR&#125; = \mathrm&#123;VIS&#125;$，也就是Serialisability。</p>
+<p>对于这一点，我们可以使用性质TOTALVIS进行限制，即令VIS具有全序。考虑到$\mathrm{AR} \supseteq \mathrm{VIS}$，我们有$\mathrm{AR} = \mathrm{VIS}$，也就是Serialisability。</p>
 </div>
 </div>
 </div>
@@ -679,7 +676,7 @@
 <div class="ulist bibliography">
 <ul class="bibliography">
 <li>
-<p><a id="transactional-consistency-models"></a>[1] Cerone, A., Bernardi, G., &amp; Gotsman, A. (2015). A Framework for Transactional Consistency Models with Atomic Visibility. 26th International Conference on Concurrency Theory, &#123;CONCUR&#125; 2015, Madrid, Spain, September 1.4, 2015, 42(Concur), 58–71. <a target="_blank" rel="noopener" href="https://doi.org/10.4230/LIPIcs.CONCUR.2015.58" class="bare">https://doi.org/10.4230/LIPIcs.CONCUR.2015.58</a></p>
+<p><a id="transactional-consistency-models"></a>[1] Cerone, A., Bernardi, G., &amp; Gotsman, A. (2015). A Framework for Transactional Consistency Models with Atomic Visibility. 26th International Conference on Concurrency Theory, {CONCUR} 2015, Madrid, Spain, September 1.4, 2015, 42(Concur), 58–71. <a target="_blank" rel="noopener" href="https://doi.org/10.4230/LIPIcs.CONCUR.2015.58" class="bare">https://doi.org/10.4230/LIPIcs.CONCUR.2015.58</a></p>
 </li>
 <li>
 <p><a id="critique-sql-isolation"></a>[2] BERENSON H, BERNSTEIN P, GRAY J, et al. A critique of ANSI SQL isolation levels[J]. ACM SIGMOD Record, 1995, 24(2): 1–10.</p>
@@ -694,7 +691,7 @@
 <p><a id="abstract-execution"></a>[5] BURCKHARDT S. Principles of Eventual Consistency[J]. Foundations and Trends® in Programming Languages, Hanover, MA, USA: Now Publishers Inc., 2014, 1(1–2): 1–150.</p>
 </li>
 <li>
-<p><a id="ramp-tods"></a>[6] Bailis, P., Fekete, A., Ghodsi, A., Hellerstein, J. M., &amp; Stoica, I. (2016). Scalable Atomic Visibility with RAMP Transactions. ACM Trans. Database Syst., 41(3), 15:1&#8212;&#8203;15:45. <a target="_blank" rel="noopener" href="https://doi.org/10.1145/2909870" class="bare">https://doi.org/10.1145/2909870</a></p>
+<p><a id="ramp-tods"></a>[6] Bailis, P., Fekete, A., Ghodsi, A., Hellerstein, J. M., &amp; Stoica, I. (2016). Scalable Atomic Visibility with RAMP Transactions. ACM Trans. Database Syst., 41(3), 15:1—​15:45. <a target="_blank" rel="noopener" href="https://doi.org/10.1145/2909870" class="bare">https://doi.org/10.1145/2909870</a></p>
 </li>
 <li>
 <p><a id="generalized-isolation-level"></a>[7] ADYA A, LISKOV B, O’NEIL P. Generalized isolation level definitions[C]//Proceedings of 16th International Conference on Data Engineering (Cat. No.00CB37073). IEEE Comput. Soc, 2002(March): 67–78.</p>
@@ -725,7 +722,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="http://hcoona.github.io/Paper-Note/transactional-consistency-models/" title="论文笔记：[CONCUR&#39;15] A Framework for Transactional Consistency Models with Atomic Visibility">http://hcoona.github.io/Paper-Note/transactional-consistency-models/</a>
+      <a href="http://hcoona.github.io/Paper-Note/transactional-consistency-models/" title="论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility">http://hcoona.github.io/Paper-Note/transactional-consistency-models/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
@@ -745,12 +742,12 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/Paper-Note/arc-one-up-on-lru/" rel="prev" title="论文笔记：[FAST&#39;03] ARC: A Self-Tuning, Low Overhead Replacement Cache">
+                <a href="/Paper-Note/arc-one-up-on-lru/" rel="prev" title="论文笔记：[FAST'03] ARC: A Self-Tuning, Low Overhead Replacement Cache">
                   <i class="fa fa-angle-left"></i> 论文笔记：[FAST'03] ARC: A Self-Tuning, Low Overhead Replacement Cache
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/Paper-Note/percolator/" rel="next" title="论文笔记：[OSDI&#39;10] Large-scale Incremental Processing Using Distributed Transactions and Notifications">
+                <a href="/Paper-Note/percolator/" rel="next" title="论文笔记：[OSDI'10] Large-scale Incremental Processing Using Distributed Transactions and Notifications">
                   论文笔记：[OSDI'10] Large-scale Incremental Processing Using Distributed Transactions and Notifications <i class="fa fa-angle-right"></i>
                 </a>
             </div>
@@ -771,14 +768,14 @@
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -801,5 +798,6 @@
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

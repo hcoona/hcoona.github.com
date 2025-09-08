@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,13 +18,13 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
     <meta name="description" content="W3C TraceContext V1 标准 直到 2021 年 11 月才发布。在此之前，很多系统使用自定义的 HTTP Header 字段进行请求和调用链路的追踪。例如 AWS S3 使用 X-Amzn-Trace-Id 进行跟踪。这篇文章告诉你在 ASP.NET 中如何把旧系统中的 X-Request-Id 和 X-Trace-Id 嫁接到最新的 OpenTelemetry 框架上。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ASP.NET Core 让 OpenTelemetry 适配自定义 HTTP Header">
 <meta property="og:url" content="http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="W3C TraceContext V1 标准 直到 2021 年 11 月才发布。在此之前，很多系统使用自定义的 HTTP Header 字段进行请求和调用链路的追踪。例如 AWS S3 使用 X-Amzn-Trace-Id 进行跟踪。这篇文章告诉你在 ASP.NET 中如何把旧系统中的 X-Request-Id 和 X-Trace-Id 嫁接到最新的 OpenTelemetry 框架上。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-30T16:00:00.000Z">
@@ -47,9 +45,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>ASP.NET Core 让 OpenTelemetry 适配自定义 HTTP Header | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -66,20 +64,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -91,12 +89,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -105,12 +103,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -166,9 +164,8 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -182,22 +179,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -224,20 +221,20 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="ASP.NET Core 让 OpenTelemetry 适配自定义 HTTP Header | HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
@@ -268,7 +265,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Tips/" itemprop="url" rel="index"><span itemprop="name">Tips</span></a>
         </span>
     </span>
@@ -290,11 +287,11 @@
 <p>如果你的程序前面没有 SLB 了，在 ASP.NET 框架内需要处理这个问题，该怎么进行呢？</p>
 <p>经过一番调研，发现 <code>HttpContextFactory</code> 是一个比较合适的地方。<code>HttpContextFactory</code> 创建了 <code>HttpContext</code>，然后 ASP.NET 才开始进行 pipeline 处理。相关文档参考 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-8.0">ASP.NET Core Middleware</a>。当然你在 pipeline 的最开始跑一个自己的 Middleware 干这个事情应该也是可以的，但是别人一不小心在你前面又注册个 Middleware 可能就出问题了，还是使用自定义的 <code>HttpContextFactory</code> 比较靠谱。</p>
 <p>接下来考虑一下转换的逻辑。在 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/trace-context-1/#traceparent-header">W3C TraceContext V1 标准 3.2 Traceparent Header</a> 中有详细含义的解释。这里摘取一下其中给出的例子看一下。</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Value = 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01</span><br><span class="line">base16(version) = 00</span><br><span class="line">base16(trace-id) = 4bf92f3577b34da6a3ce929d0e0e4736</span><br><span class="line">base16(parent-id) = 00f067aa0ba902b7</span><br><span class="line">base16(trace-flags) = 01  // sampled</span><br><span class="line"></span><br><span class="line">Value = 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00</span><br><span class="line">base16(version) = 00</span><br><span class="line">base16(trace-id) = 4bf92f3577b34da6a3ce929d0e0e4736</span><br><span class="line">base16(parent-id) = 00f067aa0ba902b7</span><br><span class="line">base16(trace-flags) = 00  // not sampled</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tbody><tr><td class="code"><pre><span class="line">Value = 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01</span><br><span class="line">base16(version) = 00</span><br><span class="line">base16(trace-id) = 4bf92f3577b34da6a3ce929d0e0e4736</span><br><span class="line">base16(parent-id) = 00f067aa0ba902b7</span><br><span class="line">base16(trace-flags) = 01  // sampled</span><br><span class="line"></span><br><span class="line">Value = 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00</span><br><span class="line">base16(version) = 00</span><br><span class="line">base16(trace-id) = 4bf92f3577b34da6a3ce929d0e0e4736</span><br><span class="line">base16(parent-id) = 00f067aa0ba902b7</span><br><span class="line">base16(trace-flags) = 00  // not sampled</span><br></pre></td></tr></tbody></table></figure>
 
 <p>我们使用的 <code>X-Request-Id</code> 其实并不能完美的对应上这里的 <code>parent-id</code>，但是在此时能获取到的最接近 <code>parent-id</code> 的含义就是它了。通常，我们在系统中使用的 <code>X-Trace-Id</code> 和 <code>X-Parent-Id</code> 都是 UUID。这里 <code>X-Trace-Id</code> 正好符合 <code>trace-id</code> 的要求，都是 32 个 HEX。但是 <code>X-Parent-Id</code> 的长度就远远超出了 <code>parent-id</code> 的要求，可以考虑截取其中的高 16 位或者低 16 位。</p>
 <p>样例代码</p>
-<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> Microsoft.AspNetCore.Http.Features;</span><br><span class="line"><span class="keyword">using</span> System.Diagnostics;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Microsoft.Azure.Compute.Specialized.HpcAi</span>..<span class="title">PlatformController.Middlewares</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">HttpContextFactory</span> : <span class="title">IHttpContextFactory</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">readonly</span> DefaultHttpContextFactory _defaultHttpContextFactory;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">HttpContextFactory</span>(<span class="params">IServiceProvider serviceProvider</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            _defaultHttpContextFactory = <span class="keyword">new</span> DefaultHttpContextFactory(serviceProvider);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> HttpContext <span class="title">Create</span>(<span class="params">IFeatureCollection featureCollection</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> context = _defaultHttpContextFactory.Create(featureCollection);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If request header has traceparent, it follows the W3C Trace Context specification.</span></span><br><span class="line">            <span class="comment">// Else we generate traceparent from X--TraceId.</span></span><br><span class="line">            <span class="keyword">if</span> (context.Request.Headers.ContainsKey(<span class="string">&quot;traceparent&quot;</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                context.Items[<span class="string">&quot;Has-W3C-Trace-Context&quot;</span>] = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            context.Items[<span class="string">&quot;Has-W3C-Trace-Context&quot;</span>] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!context.Request.Headers.TryGetValue(<span class="string">&quot;X-TraceId&quot;</span>, <span class="keyword">out</span> <span class="keyword">var</span> traceId))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!Guid.TryParse(traceId, CultureInfo.InvariantCulture, <span class="keyword">out</span> <span class="keyword">var</span> _))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!context.Request.Headers.TryGetValue(<span class="string">&quot;X-RequestId&quot;</span>, <span class="keyword">out</span> <span class="keyword">var</span> requestId))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!Guid.TryParse(requestId, CultureInfo.InvariantCulture, <span class="keyword">out</span> <span class="keyword">var</span> _))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            context.Request.Headers.TraceParent = <span class="string">$&quot;00-<span class="subst">&#123;traceId.ToString().Replace(<span class="string">&quot;-&quot;</span>, <span class="built_in">string</span>.Empty)&#125;</span>-<span class="subst">&#123;requestId.ToString().Replace(<span class="string">&quot;-&quot;</span>, <span class="built_in">string</span>.Empty)[<span class="number">15.</span>.]&#125;</span>-01&quot;</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> context;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params">HttpContext httpContext</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            _defaultHttpContextFactory.Dispose(httpContext);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> Microsoft.AspNetCore.Http.Features;</span><br><span class="line"><span class="keyword">using</span> System.Diagnostics;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Microsoft.Azure.Compute.Specialized.HpcAi</span>..<span class="title">PlatformController.Middlewares</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">HttpContextFactory</span> : <span class="title">IHttpContextFactory</span></span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">readonly</span> DefaultHttpContextFactory _defaultHttpContextFactory;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">HttpContextFactory</span>(<span class="params">IServiceProvider serviceProvider</span>)</span></span><br><span class="line">        {</span><br><span class="line">            _defaultHttpContextFactory = <span class="keyword">new</span> DefaultHttpContextFactory(serviceProvider);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> HttpContext <span class="title">Create</span>(<span class="params">IFeatureCollection featureCollection</span>)</span></span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">var</span> context = _defaultHttpContextFactory.Create(featureCollection);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If request header has traceparent, it follows the W3C Trace Context specification.</span></span><br><span class="line">            <span class="comment">// Else we generate traceparent from X--TraceId.</span></span><br><span class="line">            <span class="keyword">if</span> (context.Request.Headers.ContainsKey(<span class="string">"traceparent"</span>))</span><br><span class="line">            {</span><br><span class="line">                context.Items[<span class="string">"Has-W3C-Trace-Context"</span>] = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            context.Items[<span class="string">"Has-W3C-Trace-Context"</span>] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!context.Request.Headers.TryGetValue(<span class="string">"X-TraceId"</span>, <span class="keyword">out</span> <span class="keyword">var</span> traceId))</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!Guid.TryParse(traceId, CultureInfo.InvariantCulture, <span class="keyword">out</span> <span class="keyword">var</span> _))</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!context.Request.Headers.TryGetValue(<span class="string">"X-RequestId"</span>, <span class="keyword">out</span> <span class="keyword">var</span> requestId))</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!Guid.TryParse(requestId, CultureInfo.InvariantCulture, <span class="keyword">out</span> <span class="keyword">var</span> _))</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">return</span> context;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            context.Request.Headers.TraceParent = <span class="string">$"00-<span class="subst">{traceId.ToString().Replace(<span class="string">"-"</span>, <span class="built_in">string</span>.Empty)}</span>-<span class="subst">{requestId.ToString().Replace(<span class="string">"-"</span>, <span class="built_in">string</span>.Empty)[<span class="number">15.</span>.]}</span>-01"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> context;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params">HttpContext httpContext</span>)</span></span><br><span class="line">        {</span><br><span class="line">            _defaultHttpContextFactory.Dispose(httpContext);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>如果你正确配置了 OpenTelemetry，这些字段可以在后面用 <code>HttpContext.Features.Get&lt;IHttpActivityFeature&gt;()!.Activity</code> 中的 <code>TraceId</code> 和 <code>ParentId</code> 提取出来。</p>
 
@@ -359,14 +356,14 @@
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -389,5 +386,6 @@
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

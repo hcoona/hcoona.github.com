@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,14 +18,14 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
-    <meta name="description" content="C++中的&#96;const&#96;是一个非常容易混淆的概念，我认为这主要是因为&#96;const&#96;的设计不够完善导致的，尽管目前C++11中新加入了&#96;constexpr&#96;关键词，解决了一部分问题，但是还有很多本质上的问题没有得到解决，甚至很多人都没有认识到这些问题的本质。我在这里解释一下我对C++中&#96;const&#96;的理解，并且试图分析其所解决的本质问题，对于部分问题，给出一些其他方案。">
+    <meta name="description" content="C++中的`const`是一个非常容易混淆的概念，我认为这主要是因为`const`的设计不够完善导致的，尽管目前C++11中新加入了`constexpr`关键词，解决了一部分问题，但是还有很多本质上的问题没有得到解决，甚至很多人都没有认识到这些问题的本质。我在这里解释一下我对C++中`const`的理解，并且试图分析其所解决的本质问题，对于部分问题，给出一些其他方案。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="什么是 C++ 中的 const">
 <meta property="og:url" content="http://hcoona.github.io/PL/what-is-const/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
-<meta property="og:description" content="C++中的&#96;const&#96;是一个非常容易混淆的概念，我认为这主要是因为&#96;const&#96;的设计不够完善导致的，尽管目前C++11中新加入了&#96;constexpr&#96;关键词，解决了一部分问题，但是还有很多本质上的问题没有得到解决，甚至很多人都没有认识到这些问题的本质。我在这里解释一下我对C++中&#96;const&#96;的理解，并且试图分析其所解决的本质问题，对于部分问题，给出一些其他方案。">
+<meta property="og:site_name" content="HCOONa's blog">
+<meta property="og:description" content="C++中的`const`是一个非常容易混淆的概念，我认为这主要是因为`const`的设计不够完善导致的，尽管目前C++11中新加入了`constexpr`关键词，解决了一部分问题，但是还有很多本质上的问题没有得到解决，甚至很多人都没有认识到这些问题的本质。我在这里解释一下我对C++中`const`的理解，并且试图分析其所解决的本质问题，对于部分问题，给出一些其他方案。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2015-04-28T14:44:00.000Z">
 <meta property="article:modified_time" content="2025-08-28T05:15:47.300Z">
@@ -44,9 +42,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>什么是 C++ 中的 const | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -63,20 +61,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -88,12 +86,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/PL/what-is-const/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -102,12 +100,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -159,14 +157,13 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_c%E4%B8%AD%E7%9A%84const%E7%9A%843%E7%A7%8D%E7%94%A8%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">C++中的&#96;const&#96;的3种用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_const%E8%A1%A8%E7%A4%BA%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%8F%AF%E4%BF%AE%E6%94%B9"><span class="nav-number">2.</span> <span class="nav-text">&#96;const&#96;表示变量（类型）不可修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_const%E4%BF%AE%E9%A5%B0%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">&#96;const&#96;修饰成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_c%E4%B8%AD%E7%9A%84readonly%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">C#中的&#96;readonly&#96;关键字</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_c%E4%B8%AD%E7%9A%84const%E7%9A%843%E7%A7%8D%E7%94%A8%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">C++中的`const`的3种用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_const%E8%A1%A8%E7%A4%BA%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%8F%AF%E4%BF%AE%E6%94%B9"><span class="nav-number">2.</span> <span class="nav-text">`const`表示变量（类型）不可修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_const%E4%BF%AE%E9%A5%B0%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">`const`修饰成员函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_c%E4%B8%AD%E7%9A%84readonly%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">C#中的`readonly`关键字</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -180,22 +177,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -222,20 +219,20 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/PL/what-is-const/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="什么是 C++ 中的 const | HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
@@ -266,7 +263,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/PL/" itemprop="url" rel="index"><span itemprop="name">PL</span></a>
         </span>
     </span>
@@ -353,13 +350,13 @@ a = <span class="number">5</span>; <span class="comment">// Compile Error! `a` i
 <div class="listingblock">
 <div class="content">
 <pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">A</span>
-&#123;
+{
 <span class="keyword">private</span>:
     <span class="type">int</span> m_id;
 <span class="keyword">public</span>:
     <span class="function"><span class="type">int</span> <span class="title">get_id</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span></span>;
     <span class="function"><span class="type">void</span> <span class="title">set_id</span><span class="params">(<span class="type">int</span> id)</span></span>;
-&#125;</code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -387,14 +384,14 @@ a = <span class="number">5</span>; <span class="comment">// Compile Error! `a` i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre><code class="highlight cs"><span class="keyword">interface</span> <span class="title">AReadOnly</span> &#123;
+<pre><code class="highlight cs"><span class="keyword">interface</span> <span class="title">AReadOnly</span> {
     <span class="function"><span class="built_in">int</span> <span class="title">GetId</span>()</span>;
-&#125;
-<span class="keyword">class</span> <span class="title">A</span> &#123;
+}
+<span class="keyword">class</span> <span class="title">A</span> {
     <span class="keyword">private</span> <span class="built_in">int</span> m_id;
     <span class="function"><span class="keyword">public</span> <span class="title">GetId</span>()</span>;
     <span class="function"><span class="keyword">public</span> <span class="title">SetId</span>(<span class="params"><span class="built_in">int</span> id</span>)</span>;
-&#125;
+}
 
 AReadOnly a_const = <span class="keyword">new</span> A();</code></pre>
 </div>
@@ -438,7 +435,7 @@ AReadOnly a_const = <span class="keyword">new</span> A();</code></pre>
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/Paper-Note/amazon-dynamo/" rel="next" title="论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store">
+                <a href="/Paper-Note/amazon-dynamo/" rel="next" title="论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store">
                   论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store <i class="fa fa-angle-right"></i>
                 </a>
             </div>
@@ -459,14 +456,14 @@ AReadOnly a_const = <span class="keyword">new</span> A();</code></pre>
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -489,5 +486,6 @@ AReadOnly a_const = <span class="keyword">new</span> A();</code></pre>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

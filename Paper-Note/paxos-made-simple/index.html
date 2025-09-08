@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,13 +18,13 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
     <meta name="description" content="Paxos 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。文中的算法只解决了决议一条法案（decree）的情况。如果需要决议多条法案，可以将该算法执行多次，每次分别对应一条法案。可以想象，有可能存在一些步骤在多次决议时无需重复执行，因此在多次决议法案的情况下，该算法可以进一步优化，但没有在本文中进行具体展开。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="论文笔记：Paxos Made Simple">
 <meta property="og:url" content="http://hcoona.github.io/Paper-Note/paxos-made-simple/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
+<meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="Paxos 是一种分布式共识算法，用于解决在异步通信网络中存在节点失效且本地存储可靠的情况下多个分布式节点达成一致的问题。文中的算法只解决了决议一条法案（decree）的情况。如果需要决议多条法案，可以将该算法执行多次，每次分别对应一条法案。可以想象，有可能存在一些步骤在多次决议时无需重复执行，因此在多次决议法案的情况下，该算法可以进一步优化，但没有在本文中进行具体展开。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-03-16T13:44:00.000Z">
@@ -47,9 +45,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>论文笔记：Paxos Made Simple | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -66,20 +64,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -91,12 +89,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/paxos-made-simple/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -105,12 +103,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -167,9 +165,8 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -183,22 +180,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -225,20 +222,20 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/paxos-made-simple/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="论文笔记：Paxos Made Simple | HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
@@ -269,7 +266,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
         </span>
     </span>
@@ -325,7 +322,7 @@
 </div>
 <div class="hdlist">
 <table>
-<tr>
+<tbody><tr>
 <td class="hdlist1">
 <strong>P1</strong>
 </td>
@@ -333,7 +330,7 @@
 <p>An acceptor must accept the first proposal that it receives.</p>
 </td>
 </tr>
-</table>
+</tbody></table>
 </div>
 <div class="paragraph">
 <p>但是这一要求会带来这样一个问题，每个提议者同时分别向一个不同的仲裁者提交不同的提案，此时每个仲裁者都接受了一个不同的提案，从而无法形成多数派。这一问题并非只能由非常罕见的情况触发，例如即便是只有两个提案同时分别被恰好一半的仲裁者所接受，此时由于一个仲裁者节点失效，导致剩下的仲裁者以同样的数量分别支持两个不同的提案，此时虽然有且仅有一个提案被选中了，我们却不能得知这是哪个提案。</p>
@@ -343,7 +340,7 @@
 </div>
 <div class="hdlist">
 <table>
-<tr>
+<tbody><tr>
 <td class="hdlist1">
 <strong>P2</strong>
 </td>
@@ -351,14 +348,14 @@
 <p>If a proposal with value \(v\) is chosen, then every higher-numbered proposal that is chosen has value \(v\) .</p>
 </td>
 </tr>
-</table>
+</tbody></table>
 </div>
 <div class="paragraph">
 <p>一个提案想被选中，必须先由仲裁者接受。因此我们可以考虑在仲裁者接受提案时，对其加以约束以满足性质 P2：</p>
 </div>
 <div class="hdlist">
 <table>
-<tr>
+<tbody><tr>
 <td class="hdlist1">
 <strong>P2a</strong>
 </td>
@@ -366,14 +363,14 @@
 <p>If a proposal with value \(v\) is chosen, then every higher-numbered proposal accepted by any acceptor has value \(v\) .</p>
 </td>
 </tr>
-</table>
+</tbody></table>
 </div>
 <div class="paragraph">
 <p>由于通信是异步的，就会存在某个仲裁者，其并不清楚其他某个仲裁者已经接受了一个提案这种情况。此时，如果这一仲裁者收到了一份新的提案，由于性质 P1，它必须接受这份提案，而这就有可能和性质 P2a 相违背。由于所有提案都是先由提议者提出的才被仲裁者接受的，因此我们可以考虑加强条件，由提议者保证这一性质：</p>
 </div>
 <div class="hdlist">
 <table>
-<tr>
+<tbody><tr>
 <td class="hdlist1">
 <strong>P2b</strong>
 </td>
@@ -381,22 +378,22 @@
 <p>If a proposal with value \(v\) is chosen, then every higher-numbered proposal issued by any proposer has value \(v\).</p>
 </td>
 </tr>
-</table>
+</tbody></table>
 </div>
 <div class="paragraph">
 <p>对提案编号 \(n\) 使用数学归纳法，可知满足以下性质即可保证性质 P2b：</p>
 </div>
 <div class="hdlist">
 <table>
-<tr>
+<tbody><tr>
 <td class="hdlist1">
 <strong>P2c</strong>
 </td>
 <td class="hdlist2">
-<p>For any \(v\) and \(n\), if a proposal with value \(v\) and number \(n\) is issued, then there is a set \(\mathbb&#123;S&#125;\) consisting of a majority of acceptors such that either (a) no acceptor in \(\mathbb&#123;S&#125;\) has accepted any proposal numbered less than \(n\), or (b) \(v\) is the value of the highest-numbered proposal among all proposals numbered less than \(n\) accepted by the acceptors in \(\mathbb&#123;S&#125;\).</p>
+<p>For any \(v\) and \(n\), if a proposal with value \(v\) and number \(n\) is issued, then there is a set \(\mathbb{S}\) consisting of a majority of acceptors such that either (a) no acceptor in \(\mathbb{S}\) has accepted any proposal numbered less than \(n\), or (b) \(v\) is the value of the highest-numbered proposal among all proposals numbered less than \(n\) accepted by the acceptors in \(\mathbb{S}\).</p>
 </td>
 </tr>
-</table>
+</tbody></table>
 </div>
 <div class="paragraph">
 <p>为了满足性质 P2c，提议者若想提议编号为 \(n\) 的提案，必须知道是否存在小于编号 \(n\) 的提案已经或者将要（在编号为 \(n\) 的提案被多数仲裁者所接受之前）被多数仲裁者所接受。我们可以获知已经被接受的提案，但是很难预测将要发出的编号为 \(n\) 的提案被多数仲裁者接受之前是否还会有其他提案被多数仲裁者所接受。为了避免这一情况，我们可以提前要求仲裁者做出承诺，不去接受小于编号为 \(n\) 的任何提案。由于 P2c 蕴含 P2b，P2b 蕴含 P2a，P2a 蕴含 P2，我们可以使用如下的算法来保证 P2c，进而满足性质 P2：</p>
@@ -416,7 +413,7 @@
 </ol>
 </div>
 <div class="paragraph">
-<p>I&#8217;ll call such a request a <em>prepare</em> request with number \(n\)</p>
+<p>I’ll call such a request a <em>prepare</em> request with number \(n\)</p>
 </div>
 </li>
 <li>
@@ -429,7 +426,7 @@
 </div>
 <div class="hdlist">
 <table>
-<tr>
+<tbody><tr>
 <td class="hdlist1">
 <strong>P1a</strong>
 </td>
@@ -437,7 +434,7 @@
 <p>An acceptor can accept a proposal numbered \(n\) iff it has not responded to a <em>prepare</em> request having a number greater than \(n\).</p>
 </td>
 </tr>
-</table>
+</tbody></table>
 </div>
 <div class="paragraph">
 <p>由于 P1a 蕴含 P1 ，我们就得到了一个能够满足所有 safety 性质的算法。对其细节进行一些优化，可以得到以下版本：</p>
@@ -571,12 +568,12 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/Paper-Note/amazon-dynamo/" rel="prev" title="论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store">
+                <a href="/Paper-Note/amazon-dynamo/" rel="prev" title="论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store">
                   <i class="fa fa-angle-left"></i> 论文笔记：[SOSP 2007] Dynamo: Amazon's Highly Available Key-value Store
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/Paper-Note/raft/" rel="next" title="论文笔记：[USENIX ATC&#39;14] In Search of an Understandable Consensus Algorithm (Raft)">
+                <a href="/Paper-Note/raft/" rel="next" title="论文笔记：[USENIX ATC'14] In Search of an Understandable Consensus Algorithm (Raft)">
                   论文笔记：[USENIX ATC'14] In Search of an Understandable Consensus Algorithm (Raft) <i class="fa fa-angle-right"></i>
                 </a>
             </div>
@@ -597,14 +594,14 @@
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -627,5 +624,6 @@
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>

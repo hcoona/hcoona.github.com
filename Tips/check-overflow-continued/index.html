@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
@@ -20,14 +18,14 @@
   <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
 
-    <meta name="description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
+    <meta name="description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C/C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="检查加法溢出的几种方法的比较">
 <meta property="og:url" content="http://hcoona.github.io/Tips/check-overflow-continued/index.html">
-<meta property="og:site_name" content="HCOONa&#39;s blog">
-<meta property="og:description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
+<meta property="og:site_name" content="HCOONa's blog">
+<meta property="og:description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C/C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-02-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-08-28T05:15:47.300Z">
@@ -44,9 +42,9 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>检查加法溢出的几种方法的比较 | HCOONa's blog</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
 
 
 
@@ -63,20 +61,20 @@
 
 
   
-  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
-  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer></script>
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
 
   
   <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
 
 
 
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
 
 
 
@@ -88,12 +86,12 @@
   
 
   <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
 
 
-  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
   <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Tips/check-overflow-continued/"}</script>
-  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer></script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -102,12 +100,12 @@
 <link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
 
   <main class="main">
     <div class="column">
-      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -164,9 +162,8 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Shuai Zhang"
-      src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
   <p class="site-author-name" itemprop="name">Shuai Zhang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -180,22 +177,22 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/hcoona/" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hcoona&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
       </span>
   </div>
   <div class="cc-license animated" itemprop="license">
@@ -222,22 +219,22 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
     <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Tips/check-overflow-continued/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
       <meta itemprop="name" content="Shuai Zhang">
     </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="HCOONa's blog">
       <meta itemprop="description" content="">
     </span>
 
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="检查加法溢出的几种方法的比较 | HCOONa's blog">
-      <meta itemprop="description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
+      <meta itemprop="description" content="实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C/C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -266,7 +263,7 @@
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
           <a href="/categories/Tips/" itemprop="url" rel="index"><span itemprop="name">Tips</span></a>
         </span>
     </span>
@@ -281,7 +278,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C&#x2F;C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。</p>
+    <div class="post-body" itemprop="articleBody"><p>实际使用中会有需要提前检测出是否会发生算数溢出，C# 语言中提供了 checked 关键字来解决这一问题，C/C++ 语言又该怎样做呢？本文从汇编语句的层面，对几种检查加法溢出的方法进行了比较和分析。受实验环境和个人知识所限，本文的应用范围仅限于 X86-64 体系结构。</p>
 <p>但是需要注意的是，即便是其他的体系结构，也很有可能提供了类似的指令用于检测溢出位。[1]</p>
 <p>为方便起见，下面讨论将以两个 32 bit 有符号整数的加法操作为例。对于无符号整数的操作，只需检查 Carry 位即可。[2]</p>
 <p>本文中用到的方法有三种：</p>
@@ -299,7 +296,7 @@
 <h3 id="对运算结果所在的区间进行判断和验证"><a href="#对运算结果所在的区间进行判断和验证" class="headerlink" title="对运算结果所在的区间进行判断和验证"></a>对运算结果所在的区间进行判断和验证</h3><p>由于补码的定义，导致一旦发生溢出，结果的区间是可以预先判断的。如果两个正整数相加发生了溢出，则结果一定小于其中任一操作数；如果两个负整数相加发生了溢出，则结果一定大于其中任一操作数。[5]</p>
 <p>根据这一原理，我们可以对结果所在的区间进行验证，从而得知是否发生了溢出。</p>
 <h2 id="实验代码简述"><a href="#实验代码简述" class="headerlink" title="实验代码简述"></a>实验代码简述</h2><p>为了最大程度发挥编译器优化的优势，我构造了以下代码用于实验：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add1</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">asm</span> (<span class="string">&quot;addl %1, %0&quot;</span></span><br><span class="line">        : <span class="string">&quot;=r&quot;</span> (a)</span><br><span class="line">        : <span class="string">&quot;r&quot;</span> (a), <span class="string">&quot;r&quot;</span> (b));</span><br><span class="line">    <span class="function"><span class="keyword">asm</span> <span class="title">goto</span> <span class="params">(<span class="string">&quot;jo %l0&quot;</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no output */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no input */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no clobber */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : OVERFLOW)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line"></span><br><span class="line">OVERFLOW:</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add2</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> tmp = (<span class="type">long</span> <span class="type">long</span>)a + (<span class="type">long</span> <span class="type">long</span>)b;</span><br><span class="line">    <span class="keyword">if</span> (tmp &lt;= (<span class="type">long</span> <span class="type">long</span>)INT_MAX &amp;&amp; tmp &gt;= (<span class="type">long</span> <span class="type">long</span>)INT_MIN) &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>)tmp;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add3</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> tmp = (<span class="type">int</span>)((<span class="type">unsigned</span> <span class="type">int</span>)a + (<span class="type">unsigned</span> <span class="type">int</span>)b);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (a &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &gt;= <span class="number">0</span> &amp;&amp; tmp &lt; a) &#123;</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (b &lt;= <span class="number">0</span> &amp;&amp; tmp &gt; a) &#123;</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T1</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add1</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\n&quot;</span>, a, b, c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T2</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add2</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\n&quot;</span>, a, b, c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T3</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add3</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d + %d = %d\n&quot;</span>, a, b, c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add1</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="built_in">asm</span> (<span class="string">"addl %1, %0"</span></span><br><span class="line">        : <span class="string">"=r"</span> (a)</span><br><span class="line">        : <span class="string">"r"</span> (a), <span class="string">"r"</span> (b));</span><br><span class="line">    <span class="function"><span class="keyword">asm</span> <span class="title">goto</span> <span class="params">(<span class="string">"jo %l0"</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no output */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no input */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : <span class="comment">/* no clobber */</span></span></span></span><br><span class="line"><span class="params"><span class="function">        : OVERFLOW)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line"></span><br><span class="line">OVERFLOW:</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add2</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> tmp = (<span class="type">long</span> <span class="type">long</span>)a + (<span class="type">long</span> <span class="type">long</span>)b;</span><br><span class="line">    <span class="keyword">if</span> (tmp &lt;= (<span class="type">long</span> <span class="type">long</span>)INT_MAX &amp;&amp; tmp &gt;= (<span class="type">long</span> <span class="type">long</span>)INT_MIN) {</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>)tmp;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Add3</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="type">int</span> tmp = (<span class="type">int</span>)((<span class="type">unsigned</span> <span class="type">int</span>)a + (<span class="type">unsigned</span> <span class="type">int</span>)b);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (a &gt;= <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">if</span> (b &gt;= <span class="number">0</span> &amp;&amp; tmp &lt; a) {</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">if</span> (b &lt;= <span class="number">0</span> &amp;&amp; tmp &gt; a) {</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T1</span><span class="params">(<span class="type">void</span>)</span> </span>{</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add1</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d + %d = %d\n"</span>, a, b, c);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T2</span><span class="params">(<span class="type">void</span>)</span> </span>{</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add2</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d + %d = %d\n"</span>, a, b, c);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">T3</span><span class="params">(<span class="type">void</span>)</span> </span>{</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="type">int</span> c = <span class="built_in">Add3</span>(a, b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d + %d = %d\n"</span>, a, b, c);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>此处的 <code>Add1</code>，<code>Add2</code> 和 <code>Add3</code> 方法分别对应上面提出的三种方法的 C 语言实现。使用 <code>inline</code> 标记指示编译器进行内联以进行更深层次的优化。其中 <code>Add2</code> 和 <code>Add3</code> 方法参考了微软的 SafeInt 库。[6]</p>
 <p><code>T1</code>，<code>T2</code> 和 <code>T3</code> 方法分别对应了三个测试方法。此处没有直接为 <code>a</code> 和 <code>b</code> 指定一个值，而是使用 <code>scanf</code> 函数进行输入，以防止编译器在优化时直接进行离线计算，将生成的结果直接写入目标位置。</p>
@@ -312,21 +309,21 @@
 <li>GCC: 4.8.2</li>
 </ul>
 <p>由于完整的代码比较长，这里只摘录部分关键代码。<code>T1</code> 生成的代码中，与 <code>Add1</code> 相关的代码（内联后）片段如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  movl 12(%rsp), %edx</span><br><span class="line">  movl 8(%rsp), %esi</span><br><span class="line">  addl %esi, %ecx</span><br><span class="line">  jo   .L26</span><br><span class="line">  # No Overflow</span><br><span class="line">.L26:</span><br><span class="line">  # Overflow</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">  movl 12(%rsp), %edx</span><br><span class="line">  movl 8(%rsp), %esi</span><br><span class="line">  addl %esi, %ecx</span><br><span class="line">  jo   .L26</span><br><span class="line">  # No Overflow</span><br><span class="line">.L26:</span><br><span class="line">  # Overflow</span><br></pre></td></tr></tbody></table></figure>
 
 <p>很简单，这段汇编代码就是将 <code>scanf</code> 函数的结果存到寄存器中，然后执行 <code>addl</code> 运算，之后（根据溢出位的设置情况）进行条件跳转。</p>
 <p><code>T2</code> 生成的代码中，与 <code>Add2</code> 相关的代码（内联后）片段如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  movl   12(%rsp), %edx</span><br><span class="line">  movl   $2147483648, %edi</span><br><span class="line">  movl   8(%rsp), %esi</span><br><span class="line">  movslq %edx, %rax</span><br><span class="line">  movslq %esi, %rcx</span><br><span class="line">  addq   %rax, %rcx</span><br><span class="line">  movl   $4294967295, %eax</span><br><span class="line">  addq   %rcx, %rdi</span><br><span class="line">  cmpq   %rax, %rdi</span><br><span class="line">  ja     .L30</span><br><span class="line">  # No Overflow</span><br><span class="line">.L30:</span><br><span class="line">  # Overflow</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">  movl   12(%rsp), %edx</span><br><span class="line">  movl   $2147483648, %edi</span><br><span class="line">  movl   8(%rsp), %esi</span><br><span class="line">  movslq %edx, %rax</span><br><span class="line">  movslq %esi, %rcx</span><br><span class="line">  addq   %rax, %rcx</span><br><span class="line">  movl   $4294967295, %eax</span><br><span class="line">  addq   %rcx, %rdi</span><br><span class="line">  cmpq   %rax, %rdi</span><br><span class="line">  ja     .L30</span><br><span class="line">  # No Overflow</span><br><span class="line">.L30:</span><br><span class="line">  # Overflow</span><br></pre></td></tr></tbody></table></figure>
 
 <p><code>movslq</code> 可以将 <code>long</code> 长度的数据移动并进行符号位扩展到 <code>quad</code> 长度的位置。这段代码首先将 <code>scanf</code> 的结果取出到 32 位寄存器 <code>edx</code> 和 <code>esi</code> 中，然后又分别将结果进行符号扩展并移动到 64 位寄存器 <code>rax</code> 和 <code>rcx</code> 中。接下来进行 64 位加法运算，结果保存在 <code>rcx</code> 寄存器中。然后编译器做了一个人脑看来相当复杂的优化，我证明了这个优化是正确的，但是不准备在这里详细展开。</p>
 <p><code>T3</code> 生成的代码中，与 <code>Add3</code> 相关的代码（内联后）片段如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  movl	8(%rsp), %esi</span><br><span class="line">  movl	12(%rsp), %edx</span><br><span class="line">  testl	%esi, %esi</span><br><span class="line">  leal	(%rdx,%rsi), %ecx</span><br><span class="line">  js	.L34</span><br><span class="line">  cmpl	%ecx, %esi</span><br><span class="line">  jg	.L45</span><br><span class="line">.L35:</span><br><span class="line">    # No Overflow</span><br><span class="line">.L34:</span><br><span class="line">  cmpl	%ecx, %esi</span><br><span class="line">  jge	.L35</span><br><span class="line">  movl	%edx, %eax</span><br><span class="line">  shrl	$31, %eax</span><br><span class="line">  testb	%al, %al</span><br><span class="line">  je	.L35</span><br><span class="line">.L36:</span><br><span class="line">    # Overflow</span><br><span class="line">.L45:</span><br><span class="line">  testl	%edx, %edx</span><br><span class="line">  js	.L35</span><br><span class="line">  jmp	.L36</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">  movl	8(%rsp), %esi</span><br><span class="line">  movl	12(%rsp), %edx</span><br><span class="line">  testl	%esi, %esi</span><br><span class="line">  leal	(%rdx,%rsi), %ecx</span><br><span class="line">  js	.L34</span><br><span class="line">  cmpl	%ecx, %esi</span><br><span class="line">  jg	.L45</span><br><span class="line">.L35:</span><br><span class="line">    # No Overflow</span><br><span class="line">.L34:</span><br><span class="line">  cmpl	%ecx, %esi</span><br><span class="line">  jge	.L35</span><br><span class="line">  movl	%edx, %eax</span><br><span class="line">  shrl	$31, %eax</span><br><span class="line">  testb	%al, %al</span><br><span class="line">  je	.L35</span><br><span class="line">.L36:</span><br><span class="line">    # Overflow</span><br><span class="line">.L45:</span><br><span class="line">  testl	%edx, %edx</span><br><span class="line">  js	.L35</span><br><span class="line">  jmp	.L36</span><br></pre></td></tr></tbody></table></figure>
 
 <p>不用分析也知道，这段代码比较复杂，运行效率不会比前两段代码效率更高。</p>
 <h2 id="实验设计简述"><a href="#实验设计简述" class="headerlink" title="实验设计简述"></a>实验设计简述</h2><p>使用预先生成的随机数，分别调用 <code>Add1</code>，<code>Add2</code>，<code>Add3</code> 以及不检查溢出直接进行加法运算，统计时间性能。此时，需对这几个函数稍作修改，不能在发生溢出时调用 <code>exit</code> 函数，而是使用 <code>setjmp</code> 和 <code>longjmp</code> 进行处理。</p>
 <p>主要代码如下：</p>
 <p>（因本人工作平台迁移到 Windows，暂时无法进行实验，后面实验缺失）</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tbody><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <h2 id="实验结果分析"><a href="#实验结果分析" class="headerlink" title="实验结果分析"></a>实验结果分析</h2><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] ARM Processors: Condition Codes 1: Condition Flags and Codes. July, 2010. <a target="_blank" rel="noopener" href="http://community.arm.com/groups/processors/blog/2010/07/16/condition-codes-1-condition-flags-and-codes">http://community.arm.com/groups/processors/blog/2010/07/16/condition-codes-1-condition-flags-and-codes</a></p>
 <p>[2] Ian! D. Allen. The CARRY flag and OVERFLOW flag in binary arithmetic. <a target="_blank" rel="noopener" href="http://teaching.idallen.com/dat2343/10f/notes/040_overflow.txt">http://teaching.idallen.com/dat2343/10f/notes/040_overflow.txt</a></p>
@@ -393,14 +390,14 @@
     <div class="footer-inner">
 
   <div class="copyright">
-    &copy; 2011 – 
+    © 2011 – 
     <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
     <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -423,5 +420,6 @@
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
 
-</body>
-</html>
+
+
+</body></html>
