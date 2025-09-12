@@ -1,0 +1,588 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="CE2QArf5fjsQPPRbfXjtRJhVX-T6HZ1lVgKfTFby_3A">
+  <meta name="baidu-site-verification" content="code-MbGHohQ17H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hcoona.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.24.1","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/config.js" defer=""></script>
+
+    <meta name="description" content="本文介绍了一种新的轻量级标记语法标准 Orgdown，旨在把 Org-mode 的标记语言与其 Emacs 实现区分开来。作者认为目前 Org-mode 被误解为“只有 Emacs 的工具”，而标记语言本身的语法设计有很高的价值，可以被更广泛采用。虽然 Markdown 已经很流行，但它在功能和一致性上存在局限，而 Orgdown 既保持简洁，又能提供更强的表达能力和兼容性指数，适合需要更可靠语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[翻译]Orgdown —— 文本文档全新轻量级标记标准">
+<meta property="og:url" content="http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/index.html">
+<meta property="og:site_name" content="HCOONa's blog">
+<meta property="og:description" content="本文介绍了一种新的轻量级标记语法标准 Orgdown，旨在把 Org-mode 的标记语言与其 Emacs 实现区分开来。作者认为目前 Org-mode 被误解为“只有 Emacs 的工具”，而标记语言本身的语法设计有很高的价值，可以被更广泛采用。虽然 Markdown 已经很流行，但它在功能和一致性上存在局限，而 Orgdown 既保持简洁，又能提供更强的表达能力和兼容性指数，适合需要更可靠语法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://karl-voit.at/2021/11/27/orgdown/2021-11-21%20xkcd%20927%20standards%20--%20publicvoit%20-%20scaled%20width%20630.png">
+<meta property="article:published_time" content="2025-09-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-12T21:49:14.653Z">
+<meta property="article:author" content="Shuai Zhang">
+<meta property="article:tag" content="Lightweight Markup Language">
+<meta property="article:tag" content="Org-mode">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://karl-voit.at/2021/11/27/orgdown/2021-11-21%20xkcd%20927%20standards%20--%20publicvoit%20-%20scaled%20width%20630.png">
+
+
+<link rel="canonical" href="http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/","path":"Discussion/orgdown-translation-zh-hans/","title":"[翻译]Orgdown —— 文本文档全新轻量级标记标准"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[翻译]Orgdown —— 文本文档全新轻量级标记标准 | HCOONa's blog</title>
+  
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FC1VDVXMFD"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-FC1VDVXMFD","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/analytics/google-analytics.js" defer=""></script>
+
+
+
+
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "lk3wjeo70z");
+</script>
+
+
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer=""></script>
+  <script src="https://unpkg.com/pangu@7.2.0/dist/browser/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer=""></script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/utils.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/motion.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/sidebar.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/next-boot.js" defer=""></script><script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/pjax.js" defer=""></script>
+
+  
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://unpkg.com/pdfobject@2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/tags/pdf.js" defer=""></script>
+
+
+
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/fancybox.js" defer=""></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/math/mathjax.js" defer=""></script>
+
+
+  <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/"}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="HCOONa's blog" type="application/atom+xml">
+<link rel="alternate" href="/rss.xml" title="HCOONa's blog" type="application/rss+xml">
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope="" itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HCOONa's blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E9%97%AE%E9%A2%98%E4%B8%80%E4%B8%AA%E6%9C%AF%E8%AF%AD%E6%8C%87%E4%BB%A3%E4%B8%A4%E4%B8%AA%E4%B8%8D%E5%90%8C%E7%9A%84%E4%B8%9C%E8%A5%BF"><span class="nav-number">1.</span> <span class="nav-text">问题：一个术语指代两个不同的东西</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E9%97%AE%E9%A2%98%E7%BC%BA%E5%B0%91%E5%AF%B9_gnuemacs_%E4%B9%8B%E5%A4%96_org_mode_%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5%E7%9A%84%E5%85%AC%E5%BC%80%E5%B1%95%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">问题：缺少对 GNU/Emacs 之外 Org-mode 使用情况的公开展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E9%97%AE%E9%A2%98org_mode_%E6%94%AF%E6%8C%81%E7%9A%84%E4%B8%8D%E5%90%8C%E5%B1%82%E6%AC%A1"><span class="nav-number">3.</span> <span class="nav-text">问题：Org-mode 支持的不同层次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_orgdown"><span class="nav-number">4.</span> <span class="nav-text">Orgdown</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_orgdown_%E7%AD%89%E7%BA%A7levels"><span class="nav-number">5.</span> <span class="nav-text">Orgdown 等级（Levels）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_od1_%E5%85%BC%E5%AE%B9%E6%80%A7%E6%8C%87%E6%95%B0compatibility_index"><span class="nav-number">6.</span> <span class="nav-text">OD1 兼容性指数（Compatibility Index）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E7%9B%AE%E5%89%8D%E7%9A%84%E4%BC%98%E5%8A%BF%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">目前的优势总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#_%E7%8E%B0%E5%9C%A8%E5%BA%94%E8%AF%A5%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">8.</span> <span class="nav-text">现在应该做什么？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Shuai Zhang" src="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+  <p class="site-author-name" itemprop="name">Shuai Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hcoona/" title="GitHub → https://github.com/hcoona/" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://www.zhihu.com/people/zhangshuai89" title="ZhiHu → http://www.zhihu.com/people/zhangshuai89" rel="noopener me" target="_blank"><i class="fab fa-zhihu fa-fw"></i>ZhiHu</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_nd.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
+    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="[翻译]Orgdown —— 文本文档全新轻量级标记标准 | HCOONa's blog">
+      <meta itemprop="description" content="本文介绍了一种新的轻量级标记语法标准 Orgdown，旨在把 Org-mode 的标记语言与其 Emacs 实现区分开来。作者认为目前 Org-mode 被误解为“只有 Emacs 的工具”，而标记语言本身的语法设计有很高的价值，可以被更广泛采用。虽然 Markdown 已经很流行，但它在功能和一致性上存在局限，而 Orgdown 既保持简洁，又能提供更强的表达能力和兼容性指数，适合需要更可靠语法支持的用户与工具生态。Orgdown 第一等级 (“Orgdown1”) 定义了一组基本语法（如标题、列表、链接、表格等），适合大多数文字处理场景，并建立了一个兼容性指数来评估各个工具对这些语法的支持情况。文章还号召社区参与，让 Orgdown 成为一个被广泛理解、标准化、工具可用性良好的标记语言。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [翻译]Orgdown —— 文本文档全新轻量级标记标准
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-12 00:00:00" itemprop="dateCreated datePublished" datetime="2025-09-12T00:00:00+08:00">2025-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-09-13 05:49:14" itemprop="dateModified" datetime="2025-09-13T05:49:14+08:00">2025-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+          <a href="/categories/Discussion/" itemprop="url" rel="index"><span itemprop="name">Discussion</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">本文介绍了一种新的轻量级标记语法标准 Orgdown，旨在把 Org-mode 的标记语言与其 Emacs 实现区分开来。作者认为目前 Org-mode 被误解为“只有 Emacs 的工具”，而标记语言本身的语法设计有很高的价值，可以被更广泛采用。虽然 Markdown 已经很流行，但它在功能和一致性上存在局限，而 Orgdown 既保持简洁，又能提供更强的表达能力和兼容性指数，适合需要更可靠语法支持的用户与工具生态。Orgdown 第一等级 (“Orgdown1”) 定义了一组基本语法（如标题、列表、链接、表格等），适合大多数文字处理场景，并建立了一个兼容性指数来评估各个工具对这些语法的支持情况。文章还号召社区参与，让 Orgdown 成为一个被广泛理解、标准化、工具可用性良好的标记语言。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><div class="paragraph">
+<p>翻译自 <a target="_blank" rel="noopener" href="https://karl-voit.at/2021/11/27/orgdown"><em>Orgdown - a New Lightweight Markup Standard for Text Documents</em></a>。</p>
+</div>
+<div class="paragraph">
+<p>在 <a target="_blank" rel="noopener" href="https://emacsconf.org/2021/">EmacsConf21</a> 上，
+我 <a target="_blank" rel="noopener" href="https://emacsconf.org/2021/talks/org-outside/">宣布了一个新的标准</a>，
+用于一种 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Lightweight_markup_language">轻量级标记语言</a>： <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown">Orgdown</a>。</p>
+</div>
+<div class="paragraph">
+<p><a target="_blank" rel="noopener" href="https://xkcd.com/927/">就像创建每一个新标准那样</a>，在启动这种事情之前，你需要非常谨慎地思考。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" target="_blank" rel="noopener" href="https://xkcd.com/927"><img data-src="https://karl-voit.at/2021/11/27/orgdown/2021-11-21%20xkcd%20927%20standards%20--%20publicvoit%20-%20scaled%20width%20630.png" alt="How Standards Proliferate" width="630" height="356"></a>
+</div>
+<div class="title">Figure 1. xkcd 漫画 “Standards” (Creative Commons Attribution-NonCommercial 2.5 License; <a target="_blank" rel="noopener" href="https://xkcd.com/927" class="bare">https://xkcd.com/927</a>)</div>
+</div>
+<div class="paragraph">
+<p>因此，我准备在这里解释我提出这个新标准的动机。</p>
+</div>
+<div class="paragraph">
+<p>你可以观看一段更精简的版本：
+<a target="_blank" rel="noopener" href="https://tube.graz.social/w/bgJVfjPLQAoJwLJQZoo3Hu">我在 EmacsConf21 上的十二分钟视频</a>。</p>
+</div>
+<div class="sect1">
+<h2 id="_问题一个术语指代两个不同的东西">问题：一个术语指代两个不同的东西</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>不幸的是，术语 “<a target="_blank" rel="noopener" href="https://Karl-Voit.at/orgmode">Org-mode</a>” 被用来指代两件不同的东西。一方面，它指的是一个基于 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Elisp">Elisp</a> 的软件扩展实现，运行在 <a target="_blank" rel="noopener" href="https://Karl-Voit.at/tags/emacs">GNU/Emacs</a> 平台上。另一方面，它也指一种 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Lightweight_markup_language">轻量级标记语言</a>，类似于 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Markdown">Markdown</a>、 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/AsciiDoc">AsciiDoc</a>、 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Wiki#Editing">Wikitext</a> 或 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/ReStructuredText">reStructuredText</a>。</p>
+</div>
+<div class="paragraph">
+<p>这两者我都喜欢。</p>
+</div>
+<div class="paragraph">
+<p>我已经在 GNU/Emacs 上使用 Org-mode 的实现十年了，并且我在本站写过关于我的 <a target="_blank" rel="noopener" href="https://Karl-Voit.at/tags/pim">PIM</a> 工作流的文章。熟悉的读者也许知道我的链接:https://Karl-Voit.at/2019/09/25/using-orgmode[“Using Org-mode Features (UOMF)”] 系列，在那里我尝试弥合 Org-mode 作为工具与其在日常用户工作流应用之间的鸿沟。</p>
+</div>
+<div class="paragraph">
+<p>与此无关，我也喜欢 Org-mode 标记的设计。这就是为什么我在 2017 年写了 <a target="_blank" rel="noopener" href="https://Karl-Voit.at/2017/09/23/orgmode-as-markup-only">《Org Mode 是最合理的文本标记语言之一》</a>。让我惊讶的是，那篇文章获得了大量关注，自发表以来在访问量上一直位于我博客文章前十之列。</p>
+</div>
+<div class="paragraph">
+<p>然而，在那篇文章之后的讨论中出现了很多误解。许多在线讨论里，人们似乎无法区分 Elisp 代码实现与标记语言的设计。我试图表达的观点是：Org-mode 在 GNU/Emacs 之外依然非常有意义。在邮件中、在任何基于文本的个人笔记中、作为论坛或源码仓库的标记、以及所有非 Emacs 中心的工作流里。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_问题缺少对_gnuemacs_之外_org_mode_使用情况的公开展示">问题：缺少对 GNU/Emacs 之外 Org-mode 使用情况的公开展示</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a target="_blank" rel="noopener" href="https://Karl-Voit.at/2017/09/23/orgmode-as-markup-only">在我已经指出了为什么我认为 Org-mode 优于其它轻量级标记语言的主要理由之后</a>，我必须继续处理“实现与标记混淆”的问题。我的意图并不只针对 GNU/Emacs 的用户。我真心相信，即便是永远不会打开 GNU/Emacs 的人，也应该考虑采用 Org-mode 作为文本的标记语言。</p>
+</div>
+<div class="paragraph">
+<p>当然，当某人从标记新手进阶为希望让自己生活更顺畅的用户时， <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/Tool-Support.org">用于编写 Org-mode 文本的工具支持</a> 就是强烈推荐的。所谓“工具支持”，我指的是诸如折叠与展开（大纲）、 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Syntax_highlighting">语法高亮</a>、用于快速插入新元素（如标题）的（键盘）命令、跳转到（内部）链接目标的支持，等等。</p>
+</div>
+<div class="paragraph">
+<p>在此我想强调：<strong>已经有许多工具提供 Org-mode 语法支持</strong>。并不是 “GNU/Emacs 或一无所有”。你已经拥有选择。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_问题org_mode_支持的不同层次">问题：Org-mode 支持的不同层次</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>讨论中的一个问题是：GNU/Emacs 的用户倾向于嘲讽其它工具的用户，因为在我看来，GNU/Emacs 中的 Org-mode 在功能与可用性方面一直领先，并且可能还会继续领先。</p>
+</div>
+<div class="paragraph">
+<p>从我的观点，工具支持对高级用户是必须的，但它——并且应该——完全是可选项。</p>
+</div>
+<div class="paragraph">
+<p>人们往往假设任何支持部分 Org-mode 语法的工具都需要尽可能接近 GNU/Emacs 中的 Org-mode 实现。在我看来，对多数使用场景来说并不必要。</p>
+</div>
+<div class="paragraph">
+<p>当你比较例如不同风味的 Markdown 与 Org-mode，你会注意到 Markdown 有着非常有限的语法。尽管 Markdown 缺少许多实用的 Org-mode 元素，它似乎仍然——远远地——是轻量级标记语言中在工具支持和流行度上的主导者。</p>
+</div>
+<div class="paragraph">
+<p>从这个角度看，普通用户并不需要那些在其它语言（如 Markdown）中缺失的大多数 Org-mode 元素。对于撰写简单文本文档，你并不需要大多数高级元素。</p>
+</div>
+<div class="paragraph">
+<p>不幸的是，没有一个 Org-mode 的“子集”去反映某种语法支持的里程碑。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_orgdown">Orgdown</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>为了解决上述所有问题，我认为需要引入一个新术语指代语法。它比 Org-mode 少，但对大多数普通用户的使用场景已经“足够好”。一个新标准，让工具与用户可以比较工具的特性。</p>
+</div>
+<div class="paragraph">
+<p>因此，我提出名称 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/faq/name-logo.org">Orgdown</a>。</p>
+</div>
+<div class="paragraph">
+<p>它可以缩写为 OD，或者酷一点写成 O↓，甚至是 ⧬。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_orgdown_等级levels">Orgdown 等级（Levels）</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>既然我们有了名字，就需要定义 Orgdown 代表什么。Orgdown 只是用来指代 Org-mode 语法（而非任何实现）的名称。</p>
+</div>
+<div class="paragraph">
+<p>仅有这一点，我们收获并不多。因此，我定义了 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/Orgdown-Levels.org">以不同等级表达 Orgdown</a>。</p>
+</div>
+<div class="paragraph">
+<p>第一个等级称为 Orgdown1（或 OD1 / O↓1 / ⧬1）。它由一个明确定义的 Org-mode 语法元素子集组成：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>简单文本格式</p>
+</li>
+<li>
+<p>标题</p>
+</li>
+<li>
+<p>列表与复选框</p>
+</li>
+<li>
+<p>example、quote 与 src 代码块</p>
+</li>
+<li>
+<p>注释</p>
+</li>
+<li>
+<p>Web 链接</p>
+</li>
+<li>
+<p>表格（不含计算）</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>你当然可以讨论在这个初始 Orgdown 等级中包含哪些 Org-mode 语法元素。我尝试寻找一个适合大多数人的折中方案，从基于 Org-mode 的轻量级标记开始。</p>
+</div>
+<div class="paragraph">
+<p>如果 Orgdown1 不够，我们会用 Orgdown2、Orgdown3 等定义扩展的 Org-mode 语法元素集合。等级越高，支持的元素越多。每个等级支持所有先前等级的语法并增加新元素。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_od1_兼容性指数compatibility_index">OD1 兼容性指数（Compatibility Index）</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>这种等级定义的好处在于你现在可以 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/Tool-Support.org">比较工具支持</a> 了。Orgdown1 可以用 43 个具体特性来概括。每个特性可以以最基础方式（1 分）或高级方式（2 分）被支持。基础支持很容易：不要被这个语法元素搞糊涂。高级支持的定义范围从简单的语法高亮到具备创建或修改该元素的功能。</p>
+</div>
+<div class="paragraph">
+<p>如果你手头有一个具体工具，你可以测试这 43 个特性，导出每个特性的两种支持级别，累加得到一个最高 86（43×2）的结果。通过相对于该最大可能值计算百分比，你得到一个易于理解的 Orgdown1 支持百分比——OD1 兼容性指数。你可以查看类似 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/tools/Orgzly.org">Orgzly 的工具支持页面</a> 来确定一个工具的 OD1 兼容性指数。</p>
+</div>
+<div class="paragraph">
+<p>由于 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown">Orgdown 托管在 GitLab.com</a> 上，你可以提交文档改进、额外的 OD1 兼容性指数评估以及其它工具的支持页面。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_目前的优势总结">目前的优势总结</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>我想为所有人总结 Orgdown 的优势：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>改善非 Emacs 工具中的 Org-mode 支持</p>
+</li>
+<li>
+<p>将精心设计的 Org 语法推广给更广泛的人群</p>
+</li>
+<li>
+<p>促进 Emacs 与非 Emacs 用户之间基于文本文档的协作支持</p>
+</li>
+<li>
+<p>可比较不同工具的 Orgdown 支持度</p>
+</li>
+<li>
+<p>最终：修复标记语言语法与 Org-mode Elisp 实现混淆的问题</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_现在应该做什么">现在应该做什么？</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>如果你对 Orgdown 感兴趣，你现在可以：
+<a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown">访问 GitLab 页面</a>，
+<a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/Learning-Orgdown.org">按循序渐进方式学习如何书写 Orgdown</a>，
+查看 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/Orgdown1-Syntax-Examples.org">Orgdown1 的语法示例</a>，
+在 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/FAQs.org">FAQ 部分</a> 查找更多答案，
+浏览 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/Tool-Support.org">已经支持 Orgdown1 的工具</a>，
+并且也许 <a target="_blank" rel="noopener" href="https://gitlab.com/publicvoit/orgdown/-/blob/master/doc/Contribute.org">学习如何为 Orgdown 的理念与标准做出贡献</a>。</p>
+</div>
+<div class="paragraph">
+<p><strong>我需要你的帮助使它成为一个成功案例！</strong></p>
+</div>
+<div class="paragraph">
+<p>推广这个想法，添加工具，编写更多解析器或改进现有解析器，使用 Orgdown1 这一术语来标注工具特性，通过推广 Orgdown 这一与 Org-mode 及其 Elisp 实现混用区别开的独立术语来扩散理念。</p>
+</div>
+<div class="paragraph">
+<p>如果 Orgdown 真正引起你的共鸣，你可以向该 GitLab 项目添加一个正式规范。我猜测一些现有的 Org-mode 正式定义在删减到 Orgdown1 集合后已经符合要求。</p>
+</div>
+<div class="paragraph">
+<p>你可以为 Orgdown1 创建一个 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Language_Server_Protocol">语言服务器协议（LSP）</a>，这将极大促进 Orgdown1 在各种编辑器中的适配可能性。</p>
+</div>
+<div class="paragraph">
+<p>我确实觉得：Orgdown1 是 <a target="_blank" rel="noopener" href="https://gemini.circumlunar.space/">Gemini 项目</a> 的完美标记候选。这将是一张由纯 Orgdown1 文件构成的链接网络，形成一个没有广告、没有恶意软件、没有臃肿网页的平行互联网，只关注以简单文本文件和链接形式呈现的核心信息价值。虽然这远远超出 Orgdown 的基本想法，但我希望有一天能看到它发生。</p>
+</div>
+<div class="paragraph">
+<p>与此同时，让我们用 Orgdown1 来启动 Orgdown，并通过 Orgdown 这一明确定义的标准传播 Org-mode 的优秀标记设计。</p>
+</div>
+<div class="paragraph">
+<p>原文发布于 2021-11-27T16:56</p>
+</div>
+</div>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>原作者： </strong>Karl Voit
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/" title="[翻译]Orgdown —— 文本文档全新轻量级标记标准">http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Lightweight-Markup-Language/" rel="tag"># Lightweight Markup Language</a>
+              <a href="/tags/Org-mode/" rel="tag"># Org-mode</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Parser-Combinators/monadic-parsing-in-haskell-translation/" rel="prev" title="[翻译] Monadic parsing in Haskell">
+                  <i class="fa fa-angle-left"></i> [翻译] Monadic parsing in Haskell
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    © 2011 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Shuai Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+
+</body></html>

@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/</loc>
+    
+    <lastmod>2025-09-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -38,15 +47,6 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://hcoona.github.io/Tips/csharp-console-app-login-msal-wam/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -65,6 +65,15 @@
   </url>
   
   <url>
+    <loc>http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://hcoona.github.io/about/index.html</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -74,7 +83,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Paper-Note/rum-conjecture/</loc>
+    <loc>http://hcoona.github.io/Paper-Note/seda/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -92,7 +101,16 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Paper-Note/seda/</loc>
+    <loc>http://hcoona.github.io/Paper-Note/rum-conjecture/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -111,15 +129,6 @@
   
   <url>
     <loc>http://hcoona.github.io/Build-System/msbuild-summary/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -155,15 +164,6 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-1/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -173,7 +173,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/</loc>
+    <loc>http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -192,6 +192,15 @@
   
   <url>
     <loc>http://hcoona.github.io/Tips/distributed-systems-101/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -236,7 +245,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Tips/practical-cpp-subset/</loc>
+    <loc>http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -254,7 +263,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/</loc>
+    <loc>http://hcoona.github.io/Tips/practical-cpp-subset/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -281,7 +290,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Paper-Note/facebook-haystack/</loc>
+    <loc>http://hcoona.github.io/Paper-Note/facebook-f4/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -290,7 +299,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/Paper-Note/facebook-f4/</loc>
+    <loc>http://hcoona.github.io/Paper-Note/facebook-haystack/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -326,7 +335,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/interview/split-nature-number-answer/</loc>
+    <loc>http://hcoona.github.io/PL/what-is-const/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -335,7 +344,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/PL/what-is-const/</loc>
+    <loc>http://hcoona.github.io/interview/split-nature-number-answer/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -362,15 +371,6 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/ACM/solution-to-poj-1061/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -380,25 +380,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/Tips/twos-complement/</loc>
+    <loc>http://hcoona.github.io/ACM/solution-to-poj-1061/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -416,7 +398,25 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/PL/reference-type-in-cpp/</loc>
+    <loc>http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/Tips/twos-complement/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -434,15 +434,6 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/ACM/solution-to-poj-1019/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://hcoona.github.io/ACM/solution-to-poj-1045/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -452,7 +443,7 @@
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/ACM/solution-to-poj-1009/</loc>
+    <loc>http://hcoona.github.io/ACM/solution-to-poj-1019/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -462,6 +453,24 @@
   
   <url>
     <loc>http://hcoona.github.io/Tips/export-pdf-using-ghostscript/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/PL/reference-type-in-cpp/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/ACM/solution-to-poj-1009/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -499,7 +508,7 @@
 
   <url>
     <loc>http://hcoona.github.io/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -507,273 +516,266 @@
   
   <url>
     <loc>http://hcoona.github.io/tags/ACM/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/POJ/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/Programming-Language/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Tips/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://hcoona.github.io/tags/Functional-Programming/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/Algorithms/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <loc>http://hcoona.github.io/tags/Programming-Language/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Linux/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Debian/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Functional-Programming/</loc>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Algorithms/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Interview/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Computer-System/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Distributed-System/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/Distributed-Storage/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/Paper-Note/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Consensus-Algorithm/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Consistency-Theory/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Paper-Note/</loc>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Distributed-Storage/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Facebook/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Data-Structure/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Cluster-Management/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Microsoft/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/Google/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Transaction/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Google/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Database/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Hands-on-Lab/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/Storage-Engine/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Architecture/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Storage-Engine/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/CSharp/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/MSBuild/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Build-System/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/ASP-NET/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/OpenTelemetry/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/MSAL/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Authentication/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Azure/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Docker/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/ASP-NET/</loc>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/OpenTelemetry/</loc>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Lightweight-Markup-Language/</loc>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/tags/Org-mode/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Haskell/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/tags/Parser-Combinators/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/C/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/%E5%85%A5%E9%97%A8/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/tags/Java/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -782,77 +784,77 @@
   
   <url>
     <loc>http://hcoona.github.io/categories/ACM/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/categories/PL/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/Tips/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/categories/PL/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/Functional-Programming/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/interview/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/Paper-Note/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/Data-Structure/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/Build-System/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://hcoona.github.io/categories/Discussion/</loc>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://hcoona.github.io/categories/Parser-Combinators/</loc>
-    <lastmod>2025-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://hcoona.github.io/categories/C/</loc>
-    <lastmod>2025-09-08</lastmod>
+    <lastmod>2025-09-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
