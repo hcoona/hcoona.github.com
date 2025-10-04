@@ -93,6 +93,8 @@ http://hcoona.github.io/tags/Lightweight-Markup-Language/
 http://hcoona.github.io/tags/Org-mode/
 http://hcoona.github.io/tags/Haskell/
 http://hcoona.github.io/tags/Parser-Combinators/
+http://hcoona.github.io/tags/Reading-Notes/
+http://hcoona.github.io/tags/Category-Theory/
 http://hcoona.github.io/categories/ACM/
 http://hcoona.github.io/categories/Tips/
 http://hcoona.github.io/categories/PL/
@@ -104,3 +106,4 @@ http://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/
 http://hcoona.github.io/categories/Build-System/
 http://hcoona.github.io/categories/Discussion/
 http://hcoona.github.io/categories/Parser-Combinators/
+http://hcoona.github.io/categories/Reading-Notes/
