@@ -23,12 +23,12 @@
     <meta name="description" content="Anna 是 Berkeley 大学研究的一种 Key-Value 存储 [1]。其开创性的使用 lattice 的方式允许用户自定义冲突解决方式，进而可以自定义一致性级别，在特定场景下极大的提升系统性能。Anna 使用了 Actor 模型而非传统的共享内存模型构建系统，使得系统可以以几乎一致的方式处理单机/分布式场景下的通信和协调，并且充分发挥硬件提供的并发能力。论文中没有详细叙述实现这两者的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="论文笔记：[ICDE'18] Anna: A KVS for any scale">
-<meta property="og:url" content="http://hcoona.github.io/Paper-Note/anna-kvs/index.html">
+<meta property="og:url" content="https://hcoona.github.io/Paper-Note/anna-kvs/index.html">
 <meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="Anna 是 Berkeley 大学研究的一种 Key-Value 存储 [1]。其开创性的使用 lattice 的方式允许用户自定义冲突解决方式，进而可以自定义一致性级别，在特定场景下极大的提升系统性能。Anna 使用了 Actor 模型而非传统的共享内存模型构建系统，使得系统可以以几乎一致的方式处理单机/分布式场景下的通信和协调，并且充分发挥硬件提供的并发能力。论文中没有详细叙述实现这两者的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://hcoona.github.io/images/highly-available-transactions-ordering.png">
-<meta property="og:image" content="http://hcoona.github.io/images/anna-aci-properties.png">
+<meta property="og:image" content="https://hcoona.github.io/images/highly-available-transactions-ordering.png">
+<meta property="og:image" content="https://hcoona.github.io/images/anna-aci-properties.png">
 <meta property="article:published_time" content="2018-04-07T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-08-28T05:15:47.302Z">
 <meta property="article:author" content="Shuai Zhang">
@@ -37,13 +37,13 @@
 <meta property="article:tag" content="Distributed Storage">
 <meta property="article:tag" content="Facebook">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://hcoona.github.io/images/highly-available-transactions-ordering.png">
+<meta name="twitter:image" content="https://hcoona.github.io/images/highly-available-transactions-ordering.png">
 
 
-<link rel="canonical" href="http://hcoona.github.io/Paper-Note/anna-kvs/">
+<link rel="canonical" href="https://hcoona.github.io/Paper-Note/anna-kvs/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/anna-kvs/","path":"Paper-Note/anna-kvs/","title":"论文笔记：[ICDE'18] Anna: A KVS for any scale"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hcoona.github.io/Paper-Note/anna-kvs/","path":"Paper-Note/anna-kvs/","title":"论文笔记：[ICDE'18] Anna: A KVS for any scale"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>论文笔记：[ICDE'18] Anna: A KVS for any scale | HCOONa's blog</title>
@@ -96,7 +96,7 @@
 
 
   <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
-  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/anna-kvs/"}</script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"https://hcoona.github.io/Paper-Note/anna-kvs/"}</script>
   <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
@@ -226,7 +226,7 @@
   
 
   <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
-    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/anna-kvs/">
+    <link itemprop="mainEntityOfPage" href="https://hcoona.github.io/Paper-Note/anna-kvs/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
@@ -377,7 +377,7 @@ network partitions between them</em>。如图 <a href="#figure-1">Partial orderi
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="http://hcoona.github.io/Paper-Note/anna-kvs/" title="论文笔记：[ICDE'18] Anna: A KVS for any scale">http://hcoona.github.io/Paper-Note/anna-kvs/</a>
+      <a href="https://hcoona.github.io/Paper-Note/anna-kvs/" title="论文笔记：[ICDE'18] Anna: A KVS for any scale">https://hcoona.github.io/Paper-Note/anna-kvs/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！

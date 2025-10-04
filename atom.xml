@@ -3,11 +3,11 @@
   <title>HCOONa&#39;s blog</title>
   
   
-  <link href="http://hcoona.github.io/atom.xml" rel="self"/>
+  <link href="https://hcoona.github.io/atom.xml" rel="self"/>
   
-  <link href="http://hcoona.github.io/"/>
+  <link href="https://hcoona.github.io/"/>
   <updated>2025-09-12T21:49:14.653Z</updated>
-  <id>http://hcoona.github.io/</id>
+  <id>https://hcoona.github.io/</id>
   
   <author>
     <name>Shuai Zhang</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>[翻译]Orgdown —— 文本文档全新轻量级标记标准</title>
-    <link href="http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/"/>
-    <id>http://hcoona.github.io/Discussion/orgdown-translation-zh-hans/</id>
+    <link href="https://hcoona.github.io/Discussion/orgdown-translation-zh-hans/"/>
+    <id>https://hcoona.github.io/Discussion/orgdown-translation-zh-hans/</id>
     <published>2025-09-11T16:00:00.000Z</published>
     <updated>2025-09-12T21:49:14.653Z</updated>
     
@@ -30,19 +30,19 @@
     
     
     
-    <category term="Discussion" scheme="http://hcoona.github.io/categories/Discussion/"/>
+    <category term="Discussion" scheme="https://hcoona.github.io/categories/Discussion/"/>
     
     
-    <category term="Lightweight Markup Language" scheme="http://hcoona.github.io/tags/Lightweight-Markup-Language/"/>
+    <category term="Lightweight Markup Language" scheme="https://hcoona.github.io/tags/Lightweight-Markup-Language/"/>
     
-    <category term="Org-mode" scheme="http://hcoona.github.io/tags/Org-mode/"/>
+    <category term="Org-mode" scheme="https://hcoona.github.io/tags/Org-mode/"/>
     
   </entry>
   
   <entry>
     <title>[翻译] Monadic parsing in Haskell</title>
-    <link href="http://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/"/>
-    <id>http://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/</id>
+    <link href="https://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/"/>
+    <id>https://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/</id>
     <published>2025-08-26T16:00:00.000Z</published>
     <updated>2025-08-28T05:45:42.636Z</updated>
     
@@ -56,19 +56,19 @@
     
     
     
-    <category term="Parser Combinators" scheme="http://hcoona.github.io/categories/Parser-Combinators/"/>
+    <category term="Parser Combinators" scheme="https://hcoona.github.io/categories/Parser-Combinators/"/>
     
     
-    <category term="Haskell" scheme="http://hcoona.github.io/tags/Haskell/"/>
+    <category term="Haskell" scheme="https://hcoona.github.io/tags/Haskell/"/>
     
-    <category term="Parser Combinators" scheme="http://hcoona.github.io/tags/Parser-Combinators/"/>
+    <category term="Parser Combinators" scheme="https://hcoona.github.io/tags/Parser-Combinators/"/>
     
   </entry>
   
   <entry>
     <title>使用 Azure Container Registry 缓存 Docker Hub 镜像</title>
-    <link href="http://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/"/>
-    <id>http://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/</id>
+    <link href="https://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/"/>
+    <id>https://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/</id>
     <published>2024-06-08T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.306Z</updated>
     
@@ -79,21 +79,21 @@
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Azure" scheme="http://hcoona.github.io/tags/Azure/"/>
+    <category term="Azure" scheme="https://hcoona.github.io/tags/Azure/"/>
     
-    <category term="Docker" scheme="http://hcoona.github.io/tags/Docker/"/>
+    <category term="Docker" scheme="https://hcoona.github.io/tags/Docker/"/>
     
   </entry>
   
   <entry>
     <title>C# 命令行应用使用 MSAL 和 Web Account Manager 机制验证用户身份</title>
-    <link href="http://hcoona.github.io/Tips/csharp-console-app-login-msal-wam/"/>
-    <id>http://hcoona.github.io/Tips/csharp-console-app-login-msal-wam/</id>
+    <link href="https://hcoona.github.io/Tips/csharp-console-app-login-msal-wam/"/>
+    <id>https://hcoona.github.io/Tips/csharp-console-app-login-msal-wam/</id>
     <published>2024-06-03T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.306Z</updated>
     
@@ -104,23 +104,23 @@
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="CSharp" scheme="http://hcoona.github.io/tags/CSharp/"/>
+    <category term="CSharp" scheme="https://hcoona.github.io/tags/CSharp/"/>
     
-    <category term="MSAL" scheme="http://hcoona.github.io/tags/MSAL/"/>
+    <category term="MSAL" scheme="https://hcoona.github.io/tags/MSAL/"/>
     
-    <category term="Authentication" scheme="http://hcoona.github.io/tags/Authentication/"/>
+    <category term="Authentication" scheme="https://hcoona.github.io/tags/Authentication/"/>
     
   </entry>
   
   <entry>
     <title>ASP.NET Core 让 OpenTelemetry 适配自定义 HTTP Header</title>
-    <link href="http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/"/>
-    <id>http://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/</id>
+    <link href="https://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/"/>
+    <id>https://hcoona.github.io/Tips/aspnetcore-opentelemetry-adapt-custom-trace-id/</id>
     <published>2024-05-30T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.306Z</updated>
     
@@ -131,23 +131,23 @@
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="CSharp" scheme="http://hcoona.github.io/tags/CSharp/"/>
+    <category term="CSharp" scheme="https://hcoona.github.io/tags/CSharp/"/>
     
-    <category term="ASP.NET" scheme="http://hcoona.github.io/tags/ASP-NET/"/>
+    <category term="ASP.NET" scheme="https://hcoona.github.io/tags/ASP-NET/"/>
     
-    <category term="OpenTelemetry" scheme="http://hcoona.github.io/tags/OpenTelemetry/"/>
+    <category term="OpenTelemetry" scheme="https://hcoona.github.io/tags/OpenTelemetry/"/>
     
   </entry>
   
   <entry>
     <title>让 .NET 的 Logger 结构化的打印 Scope</title>
-    <link href="http://hcoona.github.io/Tips/dotnet-structure-log-scope/"/>
-    <id>http://hcoona.github.io/Tips/dotnet-structure-log-scope/</id>
+    <link href="https://hcoona.github.io/Tips/dotnet-structure-log-scope/"/>
+    <id>https://hcoona.github.io/Tips/dotnet-structure-log-scope/</id>
     <published>2024-05-29T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.305Z</updated>
     
@@ -158,19 +158,19 @@
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="CSharp" scheme="http://hcoona.github.io/tags/CSharp/"/>
+    <category term="CSharp" scheme="https://hcoona.github.io/tags/CSharp/"/>
     
   </entry>
   
   <entry>
     <title>MSBuild 总结</title>
-    <link href="http://hcoona.github.io/Build-System/msbuild-summary/"/>
-    <id>http://hcoona.github.io/Build-System/msbuild-summary/</id>
+    <link href="https://hcoona.github.io/Build-System/msbuild-summary/"/>
+    <id>https://hcoona.github.io/Build-System/msbuild-summary/</id>
     <published>2022-07-26T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.305Z</updated>
     
@@ -181,21 +181,21 @@
     
     
     
-    <category term="Build System" scheme="http://hcoona.github.io/categories/Build-System/"/>
+    <category term="Build System" scheme="https://hcoona.github.io/categories/Build-System/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="MSBuild" scheme="http://hcoona.github.io/tags/MSBuild/"/>
+    <category term="MSBuild" scheme="https://hcoona.github.io/tags/MSBuild/"/>
     
-    <category term="Build System" scheme="http://hcoona.github.io/tags/Build-System/"/>
+    <category term="Build System" scheme="https://hcoona.github.io/tags/Build-System/"/>
     
   </entry>
   
   <entry>
     <title>C++ 侵入式链表总结</title>
-    <link href="http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/"/>
-    <id>http://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/</id>
+    <link href="https://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/"/>
+    <id>https://hcoona.github.io/Data-Structure/instrusive-linked-list-summary/</id>
     <published>2022-06-04T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.305Z</updated>
     
@@ -206,19 +206,19 @@
     
     
     
-    <category term="Data Structure" scheme="http://hcoona.github.io/categories/Data-Structure/"/>
+    <category term="Data Structure" scheme="https://hcoona.github.io/categories/Data-Structure/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Data Structure" scheme="http://hcoona.github.io/tags/Data-Structure/"/>
+    <category term="Data Structure" scheme="https://hcoona.github.io/tags/Data-Structure/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[SOSP&#39;01] SEDA: An Architecture for Well-Conditioned, Scalable Internet Services</title>
-    <link href="http://hcoona.github.io/Paper-Note/seda/"/>
-    <id>http://hcoona.github.io/Paper-Note/seda/</id>
+    <link href="https://hcoona.github.io/Paper-Note/seda/"/>
+    <id>https://hcoona.github.io/Paper-Note/seda/</id>
     <published>2022-02-28T14:36:11.000Z</published>
     <updated>2025-08-28T05:15:47.305Z</updated>
     
@@ -236,21 +236,21 @@
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Architecture" scheme="http://hcoona.github.io/tags/Architecture/"/>
+    <category term="Architecture" scheme="https://hcoona.github.io/tags/Architecture/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[EDBT&#39;16] Designing Access Methods: The RUM Conjecture</title>
-    <link href="http://hcoona.github.io/Paper-Note/rum-conjecture/"/>
-    <id>http://hcoona.github.io/Paper-Note/rum-conjecture/</id>
+    <link href="https://hcoona.github.io/Paper-Note/rum-conjecture/"/>
+    <id>https://hcoona.github.io/Paper-Note/rum-conjecture/</id>
     <published>2020-05-07T13:59:54.000Z</published>
     <updated>2025-08-28T05:15:47.305Z</updated>
     
@@ -298,21 +298,21 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Database" scheme="http://hcoona.github.io/tags/Database/"/>
+    <category term="Database" scheme="https://hcoona.github.io/tags/Database/"/>
     
-    <category term="Storage Engine" scheme="http://hcoona.github.io/tags/Storage-Engine/"/>
+    <category term="Storage Engine" scheme="https://hcoona.github.io/tags/Storage-Engine/"/>
     
   </entry>
   
   <entry>
     <title>自制分布式存储系统入门篇：系统概要设计</title>
-    <link href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/"/>
-    <id>http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/</id>
+    <link href="https://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/"/>
+    <id>https://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-3/</id>
     <published>2020-02-08T05:01:05.000Z</published>
     <updated>2025-08-28T05:15:47.305Z</updated>
     
@@ -324,21 +324,21 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Distributed Storage From Scratch(Easy)" scheme="http://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/"/>
+    <category term="Distributed Storage From Scratch(Easy)" scheme="https://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Hands-on Lab" scheme="http://hcoona.github.io/tags/Hands-on-Lab/"/>
+    <category term="Hands-on Lab" scheme="https://hcoona.github.io/tags/Hands-on-Lab/"/>
     
   </entry>
   
   <entry>
     <title>自制分布式存储系统入门篇：背景介绍</title>
-    <link href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/"/>
-    <id>http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/</id>
+    <link href="https://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/"/>
+    <id>https://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-2/</id>
     <published>2019-12-28T04:52:50.000Z</published>
     <updated>2025-08-28T05:15:47.304Z</updated>
     
@@ -355,21 +355,21 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Distributed Storage From Scratch(Easy)" scheme="http://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/"/>
+    <category term="Distributed Storage From Scratch(Easy)" scheme="https://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Hands-on Lab" scheme="http://hcoona.github.io/tags/Hands-on-Lab/"/>
+    <category term="Hands-on Lab" scheme="https://hcoona.github.io/tags/Hands-on-Lab/"/>
     
   </entry>
   
   <entry>
     <title>自制分布式存储系统入门篇：序章</title>
-    <link href="http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-1/"/>
-    <id>http://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-1/</id>
+    <link href="https://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-1/"/>
+    <id>https://hcoona.github.io/Distributed-Storage-From-Scratch-Easy/distributed-storage-from-scratch-1/</id>
     <published>2019-12-26T04:52:50.000Z</published>
     <updated>2025-08-28T05:15:47.304Z</updated>
     
@@ -389,21 +389,21 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Distributed Storage From Scratch(Easy)" scheme="http://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/"/>
+    <category term="Distributed Storage From Scratch(Easy)" scheme="https://hcoona.github.io/categories/Distributed-Storage-From-Scratch-Easy/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Hands-on Lab" scheme="http://hcoona.github.io/tags/Hands-on-Lab/"/>
+    <category term="Hands-on Lab" scheme="https://hcoona.github.io/tags/Hands-on-Lab/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[OSDI&#39;16] Slicer: Auto-Sharding for Datacenter Applications</title>
-    <link href="http://hcoona.github.io/Paper-Note/google-slicer/"/>
-    <id>http://hcoona.github.io/Paper-Note/google-slicer/</id>
+    <link href="https://hcoona.github.io/Paper-Note/google-slicer/"/>
+    <id>https://hcoona.github.io/Paper-Note/google-slicer/</id>
     <published>2019-10-13T04:52:50.000Z</published>
     <updated>2025-08-28T05:15:47.304Z</updated>
     
@@ -431,23 +431,23 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Google" scheme="http://hcoona.github.io/tags/Google/"/>
+    <category term="Google" scheme="https://hcoona.github.io/tags/Google/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[FTNDB&#39;07] Architecture of a Database System</title>
-    <link href="http://hcoona.github.io/Paper-Note/architecture-of-a-database-system/"/>
-    <id>http://hcoona.github.io/Paper-Note/architecture-of-a-database-system/</id>
+    <link href="https://hcoona.github.io/Paper-Note/architecture-of-a-database-system/"/>
+    <id>https://hcoona.github.io/Paper-Note/architecture-of-a-database-system/</id>
     <published>2019-07-07T10:47:52.000Z</published>
     <updated>2025-08-28T05:15:47.304Z</updated>
     
@@ -462,19 +462,19 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Database" scheme="http://hcoona.github.io/tags/Database/"/>
+    <category term="Database" scheme="https://hcoona.github.io/tags/Database/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[OSDI&#39;10] Large-scale Incremental Processing Using Distributed Transactions and Notifications</title>
-    <link href="http://hcoona.github.io/Paper-Note/percolator/"/>
-    <id>http://hcoona.github.io/Paper-Note/percolator/</id>
+    <link href="https://hcoona.github.io/Paper-Note/percolator/"/>
+    <id>https://hcoona.github.io/Paper-Note/percolator/</id>
     <published>2019-06-09T07:46:15.000Z</published>
     <updated>2025-08-28T05:15:47.304Z</updated>
     
@@ -492,23 +492,23 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Google" scheme="http://hcoona.github.io/tags/Google/"/>
+    <category term="Google" scheme="https://hcoona.github.io/tags/Google/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[CONCUR&#39;15] A Framework for Transactional Consistency Models with Atomic Visibility</title>
-    <link href="http://hcoona.github.io/Paper-Note/transactional-consistency-models/"/>
-    <id>http://hcoona.github.io/Paper-Note/transactional-consistency-models/</id>
+    <link href="https://hcoona.github.io/Paper-Note/transactional-consistency-models/"/>
+    <id>https://hcoona.github.io/Paper-Note/transactional-consistency-models/</id>
     <published>2019-05-26T15:38:22.000Z</published>
     <updated>2025-08-28T05:15:47.303Z</updated>
     
@@ -526,25 +526,25 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Consistency Theory" scheme="http://hcoona.github.io/tags/Consistency-Theory/"/>
+    <category term="Consistency Theory" scheme="https://hcoona.github.io/tags/Consistency-Theory/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Transaction" scheme="http://hcoona.github.io/tags/Transaction/"/>
+    <category term="Transaction" scheme="https://hcoona.github.io/tags/Transaction/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[FAST&#39;03] ARC: A Self-Tuning, Low Overhead Replacement Cache</title>
-    <link href="http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/"/>
-    <id>http://hcoona.github.io/Paper-Note/arc-one-up-on-lru/</id>
+    <link href="https://hcoona.github.io/Paper-Note/arc-one-up-on-lru/"/>
+    <id>https://hcoona.github.io/Paper-Note/arc-one-up-on-lru/</id>
     <published>2019-03-30T12:21:02.000Z</published>
     <updated>2025-08-28T05:15:47.303Z</updated>
     
@@ -578,19 +578,19 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Algorithms" scheme="http://hcoona.github.io/tags/Algorithms/"/>
+    <category term="Algorithms" scheme="https://hcoona.github.io/tags/Algorithms/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
   </entry>
   
   <entry>
     <title>分布式系统入门介绍</title>
-    <link href="http://hcoona.github.io/Tips/distributed-systems-101/"/>
-    <id>http://hcoona.github.io/Tips/distributed-systems-101/</id>
+    <link href="https://hcoona.github.io/Tips/distributed-systems-101/"/>
+    <id>https://hcoona.github.io/Tips/distributed-systems-101/</id>
     <published>2019-03-22T13:23:34.000Z</published>
     <updated>2025-08-28T05:15:47.303Z</updated>
     
@@ -624,19 +624,19 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
   </entry>
   
   <entry>
     <title>大规模集群管理和运维自动化</title>
-    <link href="http://hcoona.github.io/Tips/cluster-management-and-devops/"/>
-    <id>http://hcoona.github.io/Tips/cluster-management-and-devops/</id>
+    <link href="https://hcoona.github.io/Tips/cluster-management-and-devops/"/>
+    <id>https://hcoona.github.io/Tips/cluster-management-and-devops/</id>
     <published>2018-08-29T15:07:13.000Z</published>
     <updated>2025-08-28T05:15:47.303Z</updated>
     
@@ -672,21 +672,21 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Cluster Management" scheme="http://hcoona.github.io/tags/Cluster-Management/"/>
+    <category term="Cluster Management" scheme="https://hcoona.github.io/tags/Cluster-Management/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[Operating Systems Review 2007] Autopilot: Automatic Data Center Management</title>
-    <link href="http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/"/>
-    <id>http://hcoona.github.io/Paper-Note/Microsoft-Autopilot/</id>
+    <link href="https://hcoona.github.io/Paper-Note/Microsoft-Autopilot/"/>
+    <id>https://hcoona.github.io/Paper-Note/Microsoft-Autopilot/</id>
     <published>2018-07-14T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.303Z</updated>
     
@@ -717,23 +717,23 @@ goal of creating RUM-aware and RUM-adaptive access methods.&lt;/p&gt;
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Cluster Management" scheme="http://hcoona.github.io/tags/Cluster-Management/"/>
+    <category term="Cluster Management" scheme="https://hcoona.github.io/tags/Cluster-Management/"/>
     
-    <category term="Microsoft" scheme="http://hcoona.github.io/tags/Microsoft/"/>
+    <category term="Microsoft" scheme="https://hcoona.github.io/tags/Microsoft/"/>
     
   </entry>
   
   <entry>
     <title>CAP，ACID，我们能做什么</title>
-    <link href="http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/"/>
-    <id>http://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/</id>
+    <link href="https://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/"/>
+    <id>https://hcoona.github.io/Tips/CAP-ACID-what-can-we-do/</id>
     <published>2018-05-20T09:56:05.000Z</published>
     <updated>2025-08-28T05:15:47.302Z</updated>
     
@@ -753,23 +753,23 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Consistency Theory" scheme="http://hcoona.github.io/tags/Consistency-Theory/"/>
+    <category term="Consistency Theory" scheme="https://hcoona.github.io/tags/Consistency-Theory/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
   </entry>
   
   <entry>
     <title>哈希表总结及其高级话题讨论</title>
-    <link href="http://hcoona.github.io/Data-Structure/hash-table-summary-and-advanced-topics/"/>
-    <id>http://hcoona.github.io/Data-Structure/hash-table-summary-and-advanced-topics/</id>
+    <link href="https://hcoona.github.io/Data-Structure/hash-table-summary-and-advanced-topics/"/>
+    <id>https://hcoona.github.io/Data-Structure/hash-table-summary-and-advanced-topics/</id>
     <published>2018-04-14T06:48:16.000Z</published>
     <updated>2025-08-28T05:15:47.302Z</updated>
     
@@ -794,19 +794,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Data Structure" scheme="http://hcoona.github.io/categories/Data-Structure/"/>
+    <category term="Data Structure" scheme="https://hcoona.github.io/categories/Data-Structure/"/>
     
     
-    <category term="Algorithms" scheme="http://hcoona.github.io/tags/Algorithms/"/>
+    <category term="Algorithms" scheme="https://hcoona.github.io/tags/Algorithms/"/>
     
-    <category term="Data Structure" scheme="http://hcoona.github.io/tags/Data-Structure/"/>
+    <category term="Data Structure" scheme="https://hcoona.github.io/tags/Data-Structure/"/>
     
   </entry>
   
   <entry>
     <title>工作中常用到的 C++ 功能子集</title>
-    <link href="http://hcoona.github.io/Tips/practical-cpp-subset/"/>
-    <id>http://hcoona.github.io/Tips/practical-cpp-subset/</id>
+    <link href="https://hcoona.github.io/Tips/practical-cpp-subset/"/>
+    <id>https://hcoona.github.io/Tips/practical-cpp-subset/</id>
     <published>2018-04-09T06:45:05.000Z</published>
     <updated>2025-08-28T05:15:47.302Z</updated>
     
@@ -821,19 +821,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Programming Language" scheme="http://hcoona.github.io/tags/Programming-Language/"/>
+    <category term="Programming Language" scheme="https://hcoona.github.io/tags/Programming-Language/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[ICDE&#39;18] Anna: A KVS for any scale</title>
-    <link href="http://hcoona.github.io/Paper-Note/anna-kvs/"/>
-    <id>http://hcoona.github.io/Paper-Note/anna-kvs/</id>
+    <link href="https://hcoona.github.io/Paper-Note/anna-kvs/"/>
+    <id>https://hcoona.github.io/Paper-Note/anna-kvs/</id>
     <published>2018-04-07T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.302Z</updated>
     
@@ -848,23 +848,23 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Facebook" scheme="http://hcoona.github.io/tags/Facebook/"/>
+    <category term="Facebook" scheme="https://hcoona.github.io/tags/Facebook/"/>
     
   </entry>
   
   <entry>
     <title>每个程序员都应该会点形式化证明</title>
-    <link href="http://hcoona.github.io/Tips/programmer-should-know-formal-verification/"/>
-    <id>http://hcoona.github.io/Tips/programmer-should-know-formal-verification/</id>
+    <link href="https://hcoona.github.io/Tips/programmer-should-know-formal-verification/"/>
+    <id>https://hcoona.github.io/Tips/programmer-should-know-formal-verification/</id>
     <published>2018-04-05T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.301Z</updated>
     
@@ -879,21 +879,21 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Algorithms" scheme="http://hcoona.github.io/tags/Algorithms/"/>
+    <category term="Algorithms" scheme="https://hcoona.github.io/tags/Algorithms/"/>
     
-    <category term="Interview" scheme="http://hcoona.github.io/tags/Interview/"/>
+    <category term="Interview" scheme="https://hcoona.github.io/tags/Interview/"/>
     
   </entry>
   
   <entry>
     <title>单机存储引擎的基础方法</title>
-    <link href="http://hcoona.github.io/Tips/storage-engine-basic/"/>
-    <id>http://hcoona.github.io/Tips/storage-engine-basic/</id>
+    <link href="https://hcoona.github.io/Tips/storage-engine-basic/"/>
+    <id>https://hcoona.github.io/Tips/storage-engine-basic/</id>
     <published>2018-04-05T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.302Z</updated>
     
@@ -908,17 +908,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[OSDI&#39;14] F4: Facebook&#39;s Warm BLOB Storage System</title>
-    <link href="http://hcoona.github.io/Paper-Note/facebook-f4/"/>
-    <id>http://hcoona.github.io/Paper-Note/facebook-f4/</id>
+    <link href="https://hcoona.github.io/Paper-Note/facebook-f4/"/>
+    <id>https://hcoona.github.io/Paper-Note/facebook-f4/</id>
     <published>2018-04-01T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.301Z</updated>
     
@@ -933,23 +933,23 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Facebook" scheme="http://hcoona.github.io/tags/Facebook/"/>
+    <category term="Facebook" scheme="https://hcoona.github.io/tags/Facebook/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[OSDI&#39;10] Finding a needle in Haystack: Facebook&#39;s photo storage</title>
-    <link href="http://hcoona.github.io/Paper-Note/facebook-haystack/"/>
-    <id>http://hcoona.github.io/Paper-Note/facebook-haystack/</id>
+    <link href="https://hcoona.github.io/Paper-Note/facebook-haystack/"/>
+    <id>https://hcoona.github.io/Paper-Note/facebook-haystack/</id>
     <published>2018-03-31T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.301Z</updated>
     
@@ -964,23 +964,23 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
-    <category term="Facebook" scheme="http://hcoona.github.io/tags/Facebook/"/>
+    <category term="Facebook" scheme="https://hcoona.github.io/tags/Facebook/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[USENIX ATC&#39;14] In Search of an Understandable Consensus Algorithm (Raft)</title>
-    <link href="http://hcoona.github.io/Paper-Note/raft/"/>
-    <id>http://hcoona.github.io/Paper-Note/raft/</id>
+    <link href="https://hcoona.github.io/Paper-Note/raft/"/>
+    <id>https://hcoona.github.io/Paper-Note/raft/</id>
     <published>2018-03-29T03:23:00.000Z</published>
     <updated>2025-08-28T05:15:47.301Z</updated>
     
@@ -995,23 +995,23 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Consensus Algorithm" scheme="http://hcoona.github.io/tags/Consensus-Algorithm/"/>
+    <category term="Consensus Algorithm" scheme="https://hcoona.github.io/tags/Consensus-Algorithm/"/>
     
-    <category term="Consistency Theory" scheme="http://hcoona.github.io/tags/Consistency-Theory/"/>
+    <category term="Consistency Theory" scheme="https://hcoona.github.io/tags/Consistency-Theory/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：Paxos Made Simple</title>
-    <link href="http://hcoona.github.io/Paper-Note/paxos-made-simple/"/>
-    <id>http://hcoona.github.io/Paper-Note/paxos-made-simple/</id>
+    <link href="https://hcoona.github.io/Paper-Note/paxos-made-simple/"/>
+    <id>https://hcoona.github.io/Paper-Note/paxos-made-simple/</id>
     <published>2018-03-16T13:44:00.000Z</published>
     <updated>2025-08-28T05:15:47.301Z</updated>
     
@@ -1026,23 +1026,23 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Consensus Algorithm" scheme="http://hcoona.github.io/tags/Consensus-Algorithm/"/>
+    <category term="Consensus Algorithm" scheme="https://hcoona.github.io/tags/Consensus-Algorithm/"/>
     
-    <category term="Consistency Theory" scheme="http://hcoona.github.io/tags/Consistency-Theory/"/>
+    <category term="Consistency Theory" scheme="https://hcoona.github.io/tags/Consistency-Theory/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
   </entry>
   
   <entry>
     <title>论文笔记：[SOSP 2007] Dynamo: Amazon&#39;s Highly Available Key-value Store</title>
-    <link href="http://hcoona.github.io/Paper-Note/amazon-dynamo/"/>
-    <id>http://hcoona.github.io/Paper-Note/amazon-dynamo/</id>
+    <link href="https://hcoona.github.io/Paper-Note/amazon-dynamo/"/>
+    <id>https://hcoona.github.io/Paper-Note/amazon-dynamo/</id>
     <published>2018-03-11T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.300Z</updated>
     
@@ -1053,21 +1053,21 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/categories/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/categories/Paper-Note/"/>
     
     
-    <category term="Distributed System" scheme="http://hcoona.github.io/tags/Distributed-System/"/>
+    <category term="Distributed System" scheme="https://hcoona.github.io/tags/Distributed-System/"/>
     
-    <category term="Paper Note" scheme="http://hcoona.github.io/tags/Paper-Note/"/>
+    <category term="Paper Note" scheme="https://hcoona.github.io/tags/Paper-Note/"/>
     
-    <category term="Distributed Storage" scheme="http://hcoona.github.io/tags/Distributed-Storage/"/>
+    <category term="Distributed Storage" scheme="https://hcoona.github.io/tags/Distributed-Storage/"/>
     
   </entry>
   
   <entry>
     <title>什么是 C++ 中的 const</title>
-    <link href="http://hcoona.github.io/PL/what-is-const/"/>
-    <id>http://hcoona.github.io/PL/what-is-const/</id>
+    <link href="https://hcoona.github.io/PL/what-is-const/"/>
+    <id>https://hcoona.github.io/PL/what-is-const/</id>
     <published>2015-04-28T14:44:00.000Z</published>
     <updated>2025-08-28T05:15:47.300Z</updated>
     
@@ -1082,17 +1082,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="PL" scheme="http://hcoona.github.io/categories/PL/"/>
+    <category term="PL" scheme="https://hcoona.github.io/categories/PL/"/>
     
     
-    <category term="Programming Language" scheme="http://hcoona.github.io/tags/Programming-Language/"/>
+    <category term="Programming Language" scheme="https://hcoona.github.io/tags/Programming-Language/"/>
     
   </entry>
   
   <entry>
     <title>对“编程小练习：拆分自然数”的解答</title>
-    <link href="http://hcoona.github.io/interview/split-nature-number-answer/"/>
-    <id>http://hcoona.github.io/interview/split-nature-number-answer/</id>
+    <link href="https://hcoona.github.io/interview/split-nature-number-answer/"/>
+    <id>https://hcoona.github.io/interview/split-nature-number-answer/</id>
     <published>2014-08-18T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.300Z</updated>
     
@@ -1103,17 +1103,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="interview" scheme="http://hcoona.github.io/categories/interview/"/>
+    <category term="interview" scheme="https://hcoona.github.io/categories/interview/"/>
     
     
-    <category term="Interview" scheme="http://hcoona.github.io/tags/Interview/"/>
+    <category term="Interview" scheme="https://hcoona.github.io/tags/Interview/"/>
     
   </entry>
   
   <entry>
     <title>从一道面试题看不同编程语言的表述能力</title>
-    <link href="http://hcoona.github.io/Tips/different-programming-languages/"/>
-    <id>http://hcoona.github.io/Tips/different-programming-languages/</id>
+    <link href="https://hcoona.github.io/Tips/different-programming-languages/"/>
+    <id>https://hcoona.github.io/Tips/different-programming-languages/</id>
     <published>2014-08-02T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.300Z</updated>
     
@@ -1124,19 +1124,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Interview" scheme="http://hcoona.github.io/tags/Interview/"/>
+    <category term="Interview" scheme="https://hcoona.github.io/tags/Interview/"/>
     
   </entry>
   
   <entry>
     <title>检查加法溢出的几种方法的比较</title>
-    <link href="http://hcoona.github.io/Tips/check-overflow-continued/"/>
-    <id>http://hcoona.github.io/Tips/check-overflow-continued/</id>
+    <link href="https://hcoona.github.io/Tips/check-overflow-continued/"/>
+    <id>https://hcoona.github.io/Tips/check-overflow-continued/</id>
     <published>2014-02-19T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.300Z</updated>
     
@@ -1147,17 +1147,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
   </entry>
   
   <entry>
     <title>谈补码</title>
-    <link href="http://hcoona.github.io/Tips/twos-complement/"/>
-    <id>http://hcoona.github.io/Tips/twos-complement/</id>
+    <link href="https://hcoona.github.io/Tips/twos-complement/"/>
+    <id>https://hcoona.github.io/Tips/twos-complement/</id>
     <published>2014-01-24T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.299Z</updated>
     
@@ -1168,19 +1168,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Computer System" scheme="http://hcoona.github.io/tags/Computer-System/"/>
+    <category term="Computer System" scheme="https://hcoona.github.io/tags/Computer-System/"/>
     
   </entry>
   
   <entry>
     <title>使用内嵌汇编检查溢出</title>
-    <link href="http://hcoona.github.io/Tips/check-overflow-via-inline-asm/"/>
-    <id>http://hcoona.github.io/Tips/check-overflow-via-inline-asm/</id>
+    <link href="https://hcoona.github.io/Tips/check-overflow-via-inline-asm/"/>
+    <id>https://hcoona.github.io/Tips/check-overflow-via-inline-asm/</id>
     <published>2013-10-27T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.299Z</updated>
     
@@ -1191,19 +1191,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Interview" scheme="http://hcoona.github.io/tags/Interview/"/>
+    <category term="Interview" scheme="https://hcoona.github.io/tags/Interview/"/>
     
   </entry>
   
   <entry>
     <title>重载和覆盖的区别</title>
-    <link href="http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/"/>
-    <id>http://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/</id>
+    <link href="https://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/"/>
+    <id>https://hcoona.github.io/interview/the-differences-between-overloading-and-overriding/</id>
     <published>2013-10-07T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.299Z</updated>
     
@@ -1214,17 +1214,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="interview" scheme="http://hcoona.github.io/categories/interview/"/>
+    <category term="interview" scheme="https://hcoona.github.io/categories/interview/"/>
     
     
-    <category term="Interview" scheme="http://hcoona.github.io/tags/Interview/"/>
+    <category term="Interview" scheme="https://hcoona.github.io/tags/Interview/"/>
     
   </entry>
   
   <entry>
     <title>面向对象技术中的三大特征</title>
-    <link href="http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/"/>
-    <id>http://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/</id>
+    <link href="https://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/"/>
+    <id>https://hcoona.github.io/interview/three-characteristics-of-object-oriented-programming/</id>
     <published>2013-10-06T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.299Z</updated>
     
@@ -1235,17 +1235,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="interview" scheme="http://hcoona.github.io/categories/interview/"/>
+    <category term="interview" scheme="https://hcoona.github.io/categories/interview/"/>
     
     
-    <category term="Interview" scheme="http://hcoona.github.io/tags/Interview/"/>
+    <category term="Interview" scheme="https://hcoona.github.io/tags/Interview/"/>
     
   </entry>
   
   <entry>
     <title>一道面试题的多种解法</title>
-    <link href="http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/"/>
-    <id>http://hcoona.github.io/interview/different-solutions-to-an-interview-problem/</id>
+    <link href="https://hcoona.github.io/interview/different-solutions-to-an-interview-problem/"/>
+    <id>https://hcoona.github.io/interview/different-solutions-to-an-interview-problem/</id>
     <published>2013-09-04T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.299Z</updated>
     
@@ -1256,17 +1256,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="interview" scheme="http://hcoona.github.io/categories/interview/"/>
+    <category term="interview" scheme="https://hcoona.github.io/categories/interview/"/>
     
     
-    <category term="Interview" scheme="http://hcoona.github.io/tags/Interview/"/>
+    <category term="Interview" scheme="https://hcoona.github.io/tags/Interview/"/>
     
   </entry>
   
   <entry>
     <title>Solution to POJ 1061</title>
-    <link href="http://hcoona.github.io/ACM/solution-to-poj-1061/"/>
-    <id>http://hcoona.github.io/ACM/solution-to-poj-1061/</id>
+    <link href="https://hcoona.github.io/ACM/solution-to-poj-1061/"/>
+    <id>https://hcoona.github.io/ACM/solution-to-poj-1061/</id>
     <published>2013-08-12T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.299Z</updated>
     
@@ -1277,19 +1277,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/categories/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/categories/ACM/"/>
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/tags/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/tags/ACM/"/>
     
-    <category term="POJ" scheme="http://hcoona.github.io/tags/POJ/"/>
+    <category term="POJ" scheme="https://hcoona.github.io/tags/POJ/"/>
     
   </entry>
   
   <entry>
     <title>在Debian上部署GoAgent客户端</title>
-    <link href="http://hcoona.github.io/Tips/GoAgent-local-on-Debian/"/>
-    <id>http://hcoona.github.io/Tips/GoAgent-local-on-Debian/</id>
+    <link href="https://hcoona.github.io/Tips/GoAgent-local-on-Debian/"/>
+    <id>https://hcoona.github.io/Tips/GoAgent-local-on-Debian/</id>
     <published>2013-07-24T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.299Z</updated>
     
@@ -1300,21 +1300,21 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Linux" scheme="http://hcoona.github.io/tags/Linux/"/>
+    <category term="Linux" scheme="https://hcoona.github.io/tags/Linux/"/>
     
-    <category term="Debian" scheme="http://hcoona.github.io/tags/Debian/"/>
+    <category term="Debian" scheme="https://hcoona.github.io/tags/Debian/"/>
     
   </entry>
   
   <entry>
     <title>使用 GhostScript 将 PDF 中的指定页面导出为清晰的 PNG 文件</title>
-    <link href="http://hcoona.github.io/Tips/export-pdf-using-ghostscript/"/>
-    <id>http://hcoona.github.io/Tips/export-pdf-using-ghostscript/</id>
+    <link href="https://hcoona.github.io/Tips/export-pdf-using-ghostscript/"/>
+    <id>https://hcoona.github.io/Tips/export-pdf-using-ghostscript/</id>
     <published>2013-07-23T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.298Z</updated>
     
@@ -1325,17 +1325,17 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/categories/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/categories/Tips/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
   </entry>
   
   <entry>
     <title>尾递归、CPS和将递归转化为循环的一般方法</title>
-    <link href="http://hcoona.github.io/Functional-Programming/tail-recursion-cps-and-recursion-to-loop/"/>
-    <id>http://hcoona.github.io/Functional-Programming/tail-recursion-cps-and-recursion-to-loop/</id>
+    <link href="https://hcoona.github.io/Functional-Programming/tail-recursion-cps-and-recursion-to-loop/"/>
+    <id>https://hcoona.github.io/Functional-Programming/tail-recursion-cps-and-recursion-to-loop/</id>
     <published>2013-07-17T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.298Z</updated>
     
@@ -1346,19 +1346,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="Functional Programming" scheme="http://hcoona.github.io/categories/Functional-Programming/"/>
+    <category term="Functional Programming" scheme="https://hcoona.github.io/categories/Functional-Programming/"/>
     
     
-    <category term="Functional Programming" scheme="http://hcoona.github.io/tags/Functional-Programming/"/>
+    <category term="Functional Programming" scheme="https://hcoona.github.io/tags/Functional-Programming/"/>
     
-    <category term="Algorithms" scheme="http://hcoona.github.io/tags/Algorithms/"/>
+    <category term="Algorithms" scheme="https://hcoona.github.io/tags/Algorithms/"/>
     
   </entry>
   
   <entry>
     <title>Solution to POJ 1009</title>
-    <link href="http://hcoona.github.io/ACM/solution-to-poj-1009/"/>
-    <id>http://hcoona.github.io/ACM/solution-to-poj-1009/</id>
+    <link href="https://hcoona.github.io/ACM/solution-to-poj-1009/"/>
+    <id>https://hcoona.github.io/ACM/solution-to-poj-1009/</id>
     <published>2013-06-30T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.298Z</updated>
     
@@ -1369,19 +1369,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/categories/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/categories/ACM/"/>
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/tags/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/tags/ACM/"/>
     
-    <category term="POJ" scheme="http://hcoona.github.io/tags/POJ/"/>
+    <category term="POJ" scheme="https://hcoona.github.io/tags/POJ/"/>
     
   </entry>
   
   <entry>
     <title>Solution to POJ 1018</title>
-    <link href="http://hcoona.github.io/ACM/solution-to-poj-1018/"/>
-    <id>http://hcoona.github.io/ACM/solution-to-poj-1018/</id>
+    <link href="https://hcoona.github.io/ACM/solution-to-poj-1018/"/>
+    <id>https://hcoona.github.io/ACM/solution-to-poj-1018/</id>
     <published>2013-06-25T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.298Z</updated>
     
@@ -1392,19 +1392,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/categories/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/categories/ACM/"/>
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/tags/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/tags/ACM/"/>
     
-    <category term="POJ" scheme="http://hcoona.github.io/tags/POJ/"/>
+    <category term="POJ" scheme="https://hcoona.github.io/tags/POJ/"/>
     
   </entry>
   
   <entry>
     <title>Solution to POJ 1045</title>
-    <link href="http://hcoona.github.io/ACM/solution-to-poj-1045/"/>
-    <id>http://hcoona.github.io/ACM/solution-to-poj-1045/</id>
+    <link href="https://hcoona.github.io/ACM/solution-to-poj-1045/"/>
+    <id>https://hcoona.github.io/ACM/solution-to-poj-1045/</id>
     <published>2013-06-25T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.298Z</updated>
     
@@ -1415,19 +1415,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/categories/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/categories/ACM/"/>
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/tags/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/tags/ACM/"/>
     
-    <category term="POJ" scheme="http://hcoona.github.io/tags/POJ/"/>
+    <category term="POJ" scheme="https://hcoona.github.io/tags/POJ/"/>
     
   </entry>
   
   <entry>
     <title>Solution to POJ 1019</title>
-    <link href="http://hcoona.github.io/ACM/solution-to-poj-1019/"/>
-    <id>http://hcoona.github.io/ACM/solution-to-poj-1019/</id>
+    <link href="https://hcoona.github.io/ACM/solution-to-poj-1019/"/>
+    <id>https://hcoona.github.io/ACM/solution-to-poj-1019/</id>
     <published>2013-06-25T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.298Z</updated>
     
@@ -1438,19 +1438,19 @@ Consistency，但是对于Availability却没有一个对应的分类。这有悖
     
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/categories/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/categories/ACM/"/>
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/tags/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/tags/ACM/"/>
     
-    <category term="POJ" scheme="http://hcoona.github.io/tags/POJ/"/>
+    <category term="POJ" scheme="https://hcoona.github.io/tags/POJ/"/>
     
   </entry>
   
   <entry>
     <title>C++ 的引用类型</title>
-    <link href="http://hcoona.github.io/PL/reference-type-in-cpp/"/>
-    <id>http://hcoona.github.io/PL/reference-type-in-cpp/</id>
+    <link href="https://hcoona.github.io/PL/reference-type-in-cpp/"/>
+    <id>https://hcoona.github.io/PL/reference-type-in-cpp/</id>
     <published>2012-11-22T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.298Z</updated>
     
@@ -1468,19 +1468,19 @@ Placement new
     
     
     
-    <category term="PL" scheme="http://hcoona.github.io/categories/PL/"/>
+    <category term="PL" scheme="https://hcoona.github.io/categories/PL/"/>
     
     
-    <category term="Tips" scheme="http://hcoona.github.io/tags/Tips/"/>
+    <category term="Tips" scheme="https://hcoona.github.io/tags/Tips/"/>
     
-    <category term="Programming Language" scheme="http://hcoona.github.io/tags/Programming-Language/"/>
+    <category term="Programming Language" scheme="https://hcoona.github.io/tags/Programming-Language/"/>
     
   </entry>
   
   <entry>
     <title>POJ 1001 解题分析</title>
-    <link href="http://hcoona.github.io/ACM/solution-to-poj-1001/"/>
-    <id>http://hcoona.github.io/ACM/solution-to-poj-1001/</id>
+    <link href="https://hcoona.github.io/ACM/solution-to-poj-1001/"/>
+    <id>https://hcoona.github.io/ACM/solution-to-poj-1001/</id>
     <published>2010-07-09T16:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.297Z</updated>
     
@@ -1491,19 +1491,19 @@ Placement new
     
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/categories/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/categories/ACM/"/>
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/tags/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/tags/ACM/"/>
     
-    <category term="POJ" scheme="http://hcoona.github.io/tags/POJ/"/>
+    <category term="POJ" scheme="https://hcoona.github.io/tags/POJ/"/>
     
   </entry>
   
   <entry>
     <title>POJ 1002 解题分析</title>
-    <link href="http://hcoona.github.io/ACM/solution-to-poj-1002/"/>
-    <id>http://hcoona.github.io/ACM/solution-to-poj-1002/</id>
+    <link href="https://hcoona.github.io/ACM/solution-to-poj-1002/"/>
+    <id>https://hcoona.github.io/ACM/solution-to-poj-1002/</id>
     <published>2010-07-04T17:00:00.000Z</published>
     <updated>2025-08-28T05:15:47.297Z</updated>
     
@@ -1514,12 +1514,12 @@ Placement new
     
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/categories/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/categories/ACM/"/>
     
     
-    <category term="ACM" scheme="http://hcoona.github.io/tags/ACM/"/>
+    <category term="ACM" scheme="https://hcoona.github.io/tags/ACM/"/>
     
-    <category term="POJ" scheme="http://hcoona.github.io/tags/POJ/"/>
+    <category term="POJ" scheme="https://hcoona.github.io/tags/POJ/"/>
     
   </entry>
   

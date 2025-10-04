@@ -23,14 +23,14 @@
     <meta name="description" content="在数据库领域，Transaction是一个非常重要的抽象，其关键在于保证并发请求的正确性。由于Serialisability级别的一致性所需要付出的代价较高，所以通常会使用弱一些的一致性级别来换取性能提升。特别的，在一些特殊场景下，使用弱一致性并不会带来错误。遗憾的是，ANSI SQL对于一致性级别的分类还不够细致，特别的，对于一些常见的弱一致性实现没有形式化规范。这导致人们很难确认特定供应商提">
 <meta property="og:type" content="article">
 <meta property="og:title" content="论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility">
-<meta property="og:url" content="http://hcoona.github.io/Paper-Note/transactional-consistency-models/index.html">
+<meta property="og:url" content="https://hcoona.github.io/Paper-Note/transactional-consistency-models/index.html">
 <meta property="og:site_name" content="HCOONa's blog">
 <meta property="og:description" content="在数据库领域，Transaction是一个非常重要的抽象，其关键在于保证并发请求的正确性。由于Serialisability级别的一致性所需要付出的代价较高，所以通常会使用弱一些的一致性级别来换取性能提升。特别的，在一些特殊场景下，使用弱一致性并不会带来错误。遗憾的是，ANSI SQL对于一致性级别的分类还不够细致，特别的，对于一些常见的弱一致性实现没有形式化规范。这导致人们很难确认特定供应商提">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://hcoona.github.io/images/transactional-consistency-models-figure-1.png">
-<meta property="og:image" content="http://hcoona.github.io/images/ramp-figure-1.png">
-<meta property="og:image" content="http://hcoona.github.io/images/transactional-consistency-models-figure-3.png">
-<meta property="og:image" content="http://hcoona.github.io/images/hat-figure-2.png">
+<meta property="og:image" content="https://hcoona.github.io/images/transactional-consistency-models-figure-1.png">
+<meta property="og:image" content="https://hcoona.github.io/images/ramp-figure-1.png">
+<meta property="og:image" content="https://hcoona.github.io/images/transactional-consistency-models-figure-3.png">
+<meta property="og:image" content="https://hcoona.github.io/images/hat-figure-2.png">
 <meta property="article:published_time" content="2019-05-26T15:38:22.000Z">
 <meta property="article:modified_time" content="2025-08-28T05:15:47.303Z">
 <meta property="article:author" content="Shuai Zhang">
@@ -40,13 +40,13 @@
 <meta property="article:tag" content="Distributed Storage">
 <meta property="article:tag" content="Transaction">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://hcoona.github.io/images/transactional-consistency-models-figure-1.png">
+<meta name="twitter:image" content="https://hcoona.github.io/images/transactional-consistency-models-figure-1.png">
 
 
-<link rel="canonical" href="http://hcoona.github.io/Paper-Note/transactional-consistency-models/">
+<link rel="canonical" href="https://hcoona.github.io/Paper-Note/transactional-consistency-models/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://hcoona.github.io/Paper-Note/transactional-consistency-models/","path":"Paper-Note/transactional-consistency-models/","title":"论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hcoona.github.io/Paper-Note/transactional-consistency-models/","path":"Paper-Note/transactional-consistency-models/","title":"论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility | HCOONa's blog</title>
@@ -99,7 +99,7 @@
 
 
   <script src="https://unpkg.com/quicklink@3.0.1/dist/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer=""></script>
-  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"http://hcoona.github.io/Paper-Note/transactional-consistency-models/"}</script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"https://hcoona.github.io/Paper-Note/transactional-consistency-models/"}</script>
   <script src="https://unpkg.com/hexo-theme-next@8.24.1/source/js/third-party/quicklink.js" defer=""></script>
 
   <noscript>
@@ -229,7 +229,7 @@
   
 
   <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="zh-CN" data-clarity-region="article">
-    <link itemprop="mainEntityOfPage" href="http://hcoona.github.io/Paper-Note/transactional-consistency-models/">
+    <link itemprop="mainEntityOfPage" href="https://hcoona.github.io/Paper-Note/transactional-consistency-models/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
@@ -722,7 +722,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="http://hcoona.github.io/Paper-Note/transactional-consistency-models/" title="论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility">http://hcoona.github.io/Paper-Note/transactional-consistency-models/</a>
+      <a href="https://hcoona.github.io/Paper-Note/transactional-consistency-models/" title="论文笔记：[CONCUR'15] A Framework for Transactional Consistency Models with Atomic Visibility">https://hcoona.github.io/Paper-Note/transactional-consistency-models/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
