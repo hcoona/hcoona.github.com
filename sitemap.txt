@@ -1,3 +1,4 @@
+https://hcoona.github.io/Discussion/why-static-languages-suffer-from-complexity-zh-Hans/
 https://hcoona.github.io/Tips/azure-container-registry-cache-dockerhub/
 https://hcoona.github.io/Discussion/orgdown-translation-zh-hans/
 https://hcoona.github.io/Parser-Combinators/monadic-parsing-in-haskell-translation/
@@ -95,6 +96,7 @@ https://hcoona.github.io/tags/Haskell/
 https://hcoona.github.io/tags/Parser-Combinators/
 https://hcoona.github.io/tags/Reading-Notes/
 https://hcoona.github.io/tags/Category-Theory/
+https://hcoona.github.io/tags/Translation/
 https://hcoona.github.io/categories/ACM/
 https://hcoona.github.io/categories/Tips/
 https://hcoona.github.io/categories/PL/

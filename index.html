@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -176,7 +176,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -204,6 +204,165 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="" data-clarity-region="article">
+    <link itemprop="mainEntityOfPage" href="https://hcoona.github.io/Discussion/why-static-languages-suffer-from-complexity-zh-Hans/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
+      <meta itemprop="name" content="Shuai Zhang">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | HCOONa's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/Discussion/why-static-languages-suffer-from-complexity-zh-Hans/" class="post-title-link" itemprop="url">为什么静态语言会陷入复杂性</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-10-13 23:13:39" itemprop="dateCreated datePublished" datetime="2025-10-13T23:13:39+08:00">2025-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-14 14:32:48" itemprop="dateModified" datetime="2025-10-14T14:32:48+08:00">2025-10-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+          <a href="/categories/Discussion/" itemprop="url" rel="index"><span itemprop="name">Discussion</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>这篇文章翻译自 <a target="_blank" rel="noopener" href="https://hirrolot.github.io/posts/why-static-languages-suffer-from-complexity.html#the-unfortunate-consequences-of-being-static">Why Static Languages Suffer from Complexity</a>，原文由 hirrolot 于 2022-01-19 发布在其个人博客。</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="https://hirrolot.github.io/media/content/why-static-languages-suffer-from-complexity/preview.jpg" alt="image:https://hirrolot.github.io/media/content/why-static-languages-suffer-from-complexity/preview"></span></p>
+</div>
+<div class="paragraph">
+<p>编程语言设计社区的人们力图让语言更具“表达力”，尤其是通过强大的类型系统，以减少最终软件中的代码重复、提升易用性；然而，语言越是追求表达力，重复就越凶猛地渗入语言自身。</p>
+</div>
+<div class="paragraph">
+<p>我称之为 <strong>静态-动态二象性（statics-dynamics biformity）</strong>：当你向语言引入一个新的语言学抽象时，它可能落在静态层、动态层，或者同时落在两者。前两种（只在某一层）会向语言引入 <em>不一致性</em>；后一种（两层各有一套）不可避免地引入 <em>特性二象性</em>。</p>
+</div>
+<div class="paragraph">
+<p>在这里，<strong>静态层</strong> 是所有语言机制在编译期执行的地方；<strong>动态层</strong> 则是代码在运行期执行的地方。因此典型的控制流操作符（<code>if</code>/<code>while</code>/<code>for</code>/<code>return</code>）、数据结构与过程是动态的，而静态类型系统特性、语法宏是静态的。本质上，大多数静态语言抽象在动态空间都有对应物，反之亦然：</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">动态 (Dynamics)</th>
+<th class="tableblock halign-left valign-top">静态 (Statics)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Record type / Tuple / <a target="_blank" rel="noopener" href="https://beachape.com/frunk/frunk/hlist/index.html">异质列表 HList</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tree (数据结构)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sum type / <a target="_blank" rel="noopener" href="https://beachape.com/frunk/frunk/coproduct/index.html">Coproduct</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">泛型 / <a target="_blank" rel="noopener" href="https://doc.rust-lang.org/rust-by-example/generics/assoc_items/types.html">关联类型</a> <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Loop / 递归</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">类型层归纳 (type-level induction)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If-then-else / 模式匹配</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">多个 trait 实现 (multiple trait impls)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">函数签名</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>trait F&lt;In…​&gt; { type Out; }</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">函数实现</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>impl F&lt;…​&gt; for T { type Out = …​; }</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">函数调用</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;T as F&lt;…​&gt;&gt;::Out</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>接下来，在进一步阐述问题之前，让我展示如何用静态与动态两种方式实现逻辑等价的程序。大多数示例使用 Rust，但也适用于其它拥有足够表达力类型系统的通用语言；请记住，本文与具体实现无关，而 <strong>编程语言理论</strong>（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Programming_language_theory">PLT</a>）相关。如果你很忙，可以直接跳到 <a href="#the-unfortunate-consequences-of-being-static">主章节</a> 看问题阐释。</p>
+</div>
+<div class="paragraph">
+<p>
+          <!--noindex-->
+            </p><div class="post-button">
+              <a class="btn" href="/Discussion/why-static-languages-suffer-from-complexity-zh-Hans/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div></div></div></article>
+</div>
+
+
+
 
     
 
@@ -1021,135 +1180,6 @@
           <!--noindex-->
             </p><div class="post-button">
               <a class="btn" href="/Paper-Note/seda/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div></article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-content" lang="" data-clarity-region="article">
-    <link itemprop="mainEntityOfPage" href="https://hcoona.github.io/Paper-Note/rum-conjecture/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="//www.gravatar.com/avatar/80d20dde8a29396d8ec78af0289a3e88">
-      <meta itemprop="name" content="Shuai Zhang">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HCOONa's blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden="" itemprop="post" itemscope="" itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | HCOONa's blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/Paper-Note/rum-conjecture/" class="post-title-link" itemprop="url">论文笔记：[EDBT'16] Designing Access Methods: The RUM Conjecture</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-05-07 21:59:54" itemprop="dateCreated datePublished" datetime="2020-05-07T21:59:54+08:00">2020-05-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-08-28 13:15:47" itemprop="dateModified" datetime="2025-08-28T13:15:47+08:00">2025-08-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-          <a href="/categories/Paper-Note/" itemprop="url" rel="index"><span itemprop="name">Paper Note</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="paragraph">
-<p>RUM 猜想指的是在 <strong>R</strong>ead Overhead，<strong>U</strong>pdate Overhead 和 <strong>M</strong>emory (or Storage) Overhead 中，同时优化 2 项时需要以剩余的 1 项劣化作为代价。论文原作者进一步解释了一下，在一定程度以内（还没有达到最优的情况下）优化，不遵循 RUM 猜想，但是达到一定阈值后，就需要付出代价才能进一步进行优化。这里的 Update Overhead 只考虑写放大，不考虑写时寻址的代价。</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>The RUM Conjecture: Read, Update, Memory – Optimize Two at the Expense of the Third.</p>
-</div>
-</blockquote>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>designing access methods that set an upper bound for two of the
-RUM overheads, leads to a hard lower bound for the third overhead
-which cannot be further reduced.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>论文原作者解释，提出这一猜想不是说大家啥都不用干了，而是说在达到优化阈值后，如果不想付出某一项性能劣化的代价，应当考虑自适应调整之类的方法，根据数据的特征在这三个重要的参数之间进行平衡。</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>RUM-Aware Access Method Design. Accepting that a perfect access
-method does not exist, does not mean the research community
-should stop striving to improve; quite the opposite. The RUM Conjecture
-opens the path for exciting research challenges towards the
-goal of creating RUM-aware and RUM-adaptive access methods.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>P.S. 这篇论文也由相同的作者在 SIGMOD'16 上发表了几乎相同的内容<a href="#2">[2]</a>。</p>
-</div>
-<div class="paragraph">
-<p>
-          <!--noindex-->
-            </p><div class="post-button">
-              <a class="btn" href="/Paper-Note/rum-conjecture/#more" rel="contents">
                 阅读全文 »
               </a>
             </div>
